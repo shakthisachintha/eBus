@@ -2,11 +2,30 @@ import React, {useState} from 'react';
 import {View, Text, Button, StyleSheet, ScrollView, TouchableWithoutFeedback, Keyboard} from 'react-native';
 
 import {Formik} from 'formik';
+import * as yup from 'yup';
 import {TextInput} from 'react-native-paper';
 // import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import Icon  from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import Card from '../components/Card'
+import Card from '../components/Card';
+
+const reviewSchema = yup.object({
+    name: yup.string()
+        .required(),
+    email: yup.string()
+        .required()
+        .email(),
+    nic: yup.string()
+        .required()
+        .min(10)
+        .max(12),
+    password: yup.string()
+        .required('Password is required')
+        .min(8),
+    confirmpassword: yup.string()
+        .required()
+        .oneOf([yup.ref('password'), null], 'Passwords must match')
+})
 
 const PassegerRegistartion = props => {
 
@@ -15,7 +34,7 @@ const PassegerRegistartion = props => {
     var regx = /^([a-z 0-9\.]+)@([a-z0-9-]+).([a-z]{2,8})(.[a-z]{2,8})?$/;
 
     const emailInputHandler = (email) => {
-        console.log(email);
+        console.log("email touched");
     };
 
     return (
@@ -25,6 +44,7 @@ const PassegerRegistartion = props => {
         <ScrollView>
         <Formik
             initialValues={{name:'',email:'',nic:'',img:'',password:'',confirmpassword:''}}
+            validationSchema={reviewSchema}
             onSubmit={(values)=>  {
                 console.log(values);
             }}
