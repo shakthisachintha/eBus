@@ -1,9 +1,10 @@
 import React, {useState} from 'react';
-import {View, Text, Button, StyleSheet, ScrollView, TouchableWithoutFeedback, Keyboard} from 'react-native';
+import {View, Text, StyleSheet, ScrollView, TouchableWithoutFeedback, Keyboard} from 'react-native';
 
 import {Formik} from 'formik';
 import * as yup from 'yup';
 import {TextInput} from 'react-native-paper';
+import { Button } from 'react-native-paper';
 // import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import Icon  from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -29,14 +30,6 @@ const reviewSchema = yup.object({
 
 const PassegerRegistartion = props => {
 
-    const [enteredEmail, setEnteredEmail] = useState();
-
-    var regx = /^([a-z 0-9\.]+)@([a-z0-9-]+).([a-z]{2,8})(.[a-z]{2,8})?$/;
-
-    const emailInputHandler = (email) => {
-        console.log("email touched");
-    };
-
     return (
     <TouchableWithoutFeedback onPress={()=>{Keyboard.dismiss();}}>
     <View style={styles.screen}>
@@ -58,7 +51,7 @@ const PassegerRegistartion = props => {
                     <Text style={styles.errorText}>{props.touched.name && props.errors.name}</Text>
                     <View style={styles.inputContainer}>
                         <Icon style={{flex:1, marginRight:10}} name="email" size={30} color="#a7287b"/>
-                        <TextInput style={{flex:12}} label="Email" mode="outlined" onEndEditing={emailInputHandler} keyboardType='email-address' value={enteredEmail} onChangeText={props.handleChange('email')} value={props.values.email} onBlur={props.handleBlur('email')} />
+                        <TextInput style={{flex:12}} label="Email" mode="outlined" keyboardType='email-address' onChangeText={props.handleChange('email')} value={props.values.email} onBlur={props.handleBlur('email')} />
                     </View>
                     <Text style={styles.errorText}>{props.touched.email && props.errors.email}</Text>
                     <View style={styles.inputContainer}>
@@ -82,8 +75,8 @@ const PassegerRegistartion = props => {
                     </View>
                     <Text style={styles.errorText}>{props.touched.confirmpassword && props.errors.confirmpassword}</Text>
                     <View style={styles.buttonContainer}>
-                        <View style={styles.button}><Button title="Cancel" color="#ff0000" /></View>
-                        <View style={styles.button}><Button title="Confirm" color="#a7287b" onPress={props.handleSubmit} /></View>
+                        <View style={styles.button}><Button color="#ff0000" mode="contained">Cancel</Button></View>
+                        <View style={styles.button}><Button color="#a7287b" mode="contained" onPress={props.handleSubmit}>Register</Button></View>
                     </View>
                 </Card>
             )}
@@ -104,8 +97,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         width: '100%',
         justifyContent: 'space-between',
-        paddingHorizontal:75,
-        paddingTop: 20,
+        paddingHorizontal:10,
+        paddingTop: 10,
         paddingBottom: 15
     },
      title: {
@@ -113,15 +106,14 @@ const styles = StyleSheet.create({
          marginVertical: 10,
      },
      button:{
-         width:100
+         width:150
      },
      inputContainer:{
          flexDirection: 'row',
          flex:1,
          width:'100%',
-         alignItems: "center",
-         justifyContent: 'space-between',
-        // justifyContent: 'center' //align in vertically
+         alignItems: 'center',
+         //justifyContent: 'center',
      },
      errorText: {
         paddingLeft: 40,
