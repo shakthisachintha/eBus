@@ -1,11 +1,28 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Image ,TouchableOpacity,ImageBackground} from 'react-native';
+import { View, Text, StyleSheet, Image ,TouchableOpacity,ImageBackground,Modal} from 'react-native';
 import {TextInput,Button} from 'react-native-paper';
-
+import ResetPassword from './resetPassword';
 export default class Login extends React.Component{
+
+  state = {
+    addPasswordVisible: false
+  };
+
+  toggleAddModal(){
+    this.setState({addPasswordVisible: !this.state.addPasswordVisible})
+  }
+
    render(){
         return(
             <View style={StyleSheet.container}>
+                <Modal
+                  animationType="slide"
+                  //transparent={true}
+                  visible={this.state.addPasswordVisible}
+                  onRequestClose={() => this.toggleAddModal() }
+                >
+                  <ResetPassword  closeModal={() => this.toggleAddModal()} />
+                </Modal>
                 <ImageBackground source={require('../image/screen.png')} style={styles.backgroundImage} >
                 
                 <Image 
@@ -61,12 +78,17 @@ export default class Login extends React.Component{
                     </TouchableOpacity>
                 </View>
                 <View style={{flexDirection:'row'}}>
-                    <Text style={styles.textUnder}>Already onBoard ? </Text>
+                    <Text style={styles.textUnder}>Don't Have an Account ? </Text>
                     <TouchableOpacity>
                         <Text style={{fontSize:18,color:'purple'}}>Sign up</Text>
                     </TouchableOpacity>
                 </View>
                 
+                <View>
+                    <TouchableOpacity onPress={()=> this.toggleAddModal() }>
+                        <Text style={{fontSize:16,color:'#94076e',marginTop:20}}>Forgot Password?</Text>
+                    </TouchableOpacity>
+                </View>
             </ImageBackground>
             </View>
         );
