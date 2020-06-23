@@ -8,6 +8,7 @@ import {Router , Scene} from 'react-native-router-flux';
 
 import LoadingScreen from './screens/loadingScreen';
 import IndexScreen from './screens/index';
+import Login from './components/Login';
 
 class App extends React.Component{
   render(){
@@ -16,6 +17,7 @@ class App extends React.Component{
         <Scene key="root">
             <Scene key="loading" component={LoadingScreen} hideNavBar={true} initial={true}></Scene>
             <Scene key="index" component={IndexScreen} hideNavBar={true}></Scene>
+            <Scene key="login" component={Login} hideNavBar={true}></Scene>
         </Scene>
       </Router>
     );
