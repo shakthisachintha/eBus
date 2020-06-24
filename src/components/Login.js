@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, Image ,TouchableOpacity,ImageBackground,Modal} from 'react-native';
 import {TextInput,Button} from 'react-native-paper';
-import ResetPassword from './resetPassword';
+import {Actions} from 'react-native-router-flux';
 export default class Login extends React.Component{
 
   state = {
@@ -9,20 +9,13 @@ export default class Login extends React.Component{
   };
 
   toggleAddModal(){
-    this.setState({addPasswordVisible: !this.state.addPasswordVisible})
+    Actions.replace('reset');
   }
 
    render(){
         return(
             <View style={StyleSheet.container}>
-                <Modal
-                  animationType="slide"
-                  //transparent={true}
-                  visible={this.state.addPasswordVisible}
-                  onRequestClose={() => this.toggleAddModal() }
-                >
-                  <ResetPassword  closeModal={() => this.toggleAddModal()} />
-                </Modal>
+                
                 <ImageBackground source={require('../image/screen.png')} style={styles.backgroundImage} >
                 
                 <Image 

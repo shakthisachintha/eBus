@@ -1,27 +1,50 @@
 import React from 'react';
-import {View, Text , KeyboardAvoidingView,TouchableOpacity,StyleSheet} from 'react-native';
-import {TextInput,Button} from 'react-native-paper';
-
+import {View,Text,TouchableOpacity,StyleSheet} from 'react-native';
+import {Appbar,Button,TextInput,Card, Paragraph} from 'react-native-paper';
+import {Actions} from 'react-native-router-flux';
 export default class ResetPassword extends React.Component{
+
+    sendEmail(){
+        Actions.replace('verify');
+    }
+    goBack(){
+        Actions.replace('login');
+    }
+
     render(){
     return (
-    <KeyboardAvoidingView style={styles.container} behavior="padding">
-        <TouchableOpacity style={styles.opacity} onPress={this.props.closeModal}>
-            <Button icon="close" color='black' mode="contained" style={{backgroundColor:'purple'}} />
-        </TouchableOpacity>
-    </KeyboardAvoidingView>
+        <View style={styles.container}>
+        <Appbar.Header style={{backgroundColor:'purple'}}>
+            <Appbar.BackAction onPress={()=>this.goBack()} />
+            <Appbar.Content 
+                title="Reset Password"
+            />
+         </Appbar.Header>
+         <Card>
+                <Card.Cover source={require('../image/forgot.png') } />
+            </Card>
+                <Text style={{justifyContent:'center',fontSize:20,alignSelf:'center',marginTop:20}}>Forgot Your Password</Text>
+                <Text style={{color:'grey',justifyContent:'center',fontSize:16,marginHorizontal:10,marginTop:10}}>To recover your Password ,You need to Enter</Text>
+                <Text style={{color:'grey',justifyContent:'center',fontSize:16,marginHorizontal:10}}>your registration Email address.We will sent the </Text>
+                <Text style={{color:'grey',justifyContent:'center',fontSize:16,marginHorizontal:70}}>Recovery code to your Email</Text>
+       
+           <TextInput 
+            style={{height: 40,marginTop:10,width:300,marginHorizontal:30}}
+            placeholder="Email"
+            label="Email" 
+            mode="outlined"
+           />
+           <TouchableOpacity onPress={()=>this.sendEmail()}>
+           <Button icon="share" mode="contained" style={{width:300,marginHorizontal:30,marginTop:20,backgroundColor:'purple'}}>Send</Button>
+           </TouchableOpacity>
+ 
+    </View>
   );
 }
 }
 
 const styles = StyleSheet.create({
     container:{
-        flex:1,
-        justifyContent:'center',
-        alignItems:'center'
-    },
-    opacity:{
-        position:'absolute',
-        top:2,right:2
-    }
+        flex:1
+     }
 });
