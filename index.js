@@ -6,6 +6,7 @@ import App from './src/App';
 
 import PassegerRegistartion from './src/screens/passengerRegistration';
 import UserProfile from './src/screens/userProfile';
+import EditDetails from './src/screens/editDetails';
 
 const theme = {
   ...DefaultTheme,
@@ -29,10 +30,10 @@ export default function Main() {
   return (
     <PaperProvider theme={theme}>
       {/* <App /> */}
-      <UserProfile />
+      <EditDetails />
 
     </PaperProvider>
   );
 }
 
-AppRegistry.registerComponent(appName, () => UserProfile);
+AppRegistry.registerComponent(appName, () => EditDetails);

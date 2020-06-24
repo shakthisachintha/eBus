@@ -1,22 +1,18 @@
-import React, {useState} from 'react';
-import {View, Text, StyleSheet, ScrollView, TouchableWithoutFeedback, Keyboard, Image} from 'react-native';
-
+import React from 'react';
+import {StyleSheet,Text,View,TouchableWithoutFeedback, Keyboard,ScrollView,} from 'react-native';
 import {Formik} from 'formik';
 import * as yup from 'yup';
 import {TextInput, Button} from 'react-native-paper';
-
-// import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
+import Card from '../components/Card';
 import Icon  from 'react-native-vector-icons/MaterialCommunityIcons';
 
-
-import Card from '../components/Card';
 
 
 const reviewSchema = yup.object({
     fname: yup.string()
-        .required(),
+        .required('First name is required'),
     lname: yup.string()
-        .required(),
+        .required('Last name is required'),
     email: yup.string()
         .required()
         .email(),
@@ -24,22 +20,19 @@ const reviewSchema = yup.object({
         .required('National Identity Card Number is required')
         .min(10, 'National Identity Card Number must be at least 10 characters')
         .max(12, 'National Identity Card Number must be at most 12 characters'),
-    password: yup.string()
-        .required('Password is required')
-        .min(8),
-    confirmpassword: yup.string()
-        .required('Confirm password is required')
-        .oneOf([yup.ref('password'), null], 'Passwords must match')
+    address: yup.string(),
+    number: yup.number()
+        .min(10)
 })
 
-const PassegerRegistartion = props => {
+const EditDetails = props => {
     return (
     <TouchableWithoutFeedback onPress={()=>{Keyboard.dismiss();}}>
     <View style={styles.screen}>
-        <Text style={styles.title}>Register With Us!</Text>
+        <Text style={styles.title}>Edit details</Text>
         <ScrollView>
         <Formik
-            initialValues={{fname:'',lname:'',email:'',nic:'',password:'',confirmpassword:''}}
+            initialValues={{fname:'John',lname:'Doe',email:'johndoe@gmail.com',nic:'965550550V',address:'',number:''}}
             validationSchema={reviewSchema}
             onSubmit={(values)=>  {
                 console.log(values);
@@ -67,24 +60,20 @@ const PassegerRegistartion = props => {
                         <TextInput style={{flex:12}} label="National Identity Card No." mode="outlined" onChangeText={props.handleChange('nic')} value={props.values.nic} onBlur={props.handleBlur('nic')} />
                     </View>
                     <Text style={styles.errorText}>{props.touched.nic && props.errors.nic}</Text>
-                    {/* <View style={styles.inputContainer}>
-                        <Icon style={{flex:1, marginRight:10}} name="account-circle" size={30} color="#a7287b" />
-                        <TextInput style={{flex:12}} label="Image" mode="outlined" onChangeText={props.handleChange('img')} value={props.values.img} onBlur={props.handleBlur('img')} />
-                    </View>
-                    <Text style={styles.errorText}>{props.touched.img && props.errors.img}</Text> */}
                     <View style={styles.inputContainer}>
-                        <Icon style={{flex:1, marginRight:10}} name="shield-lock" size={30} color="#a7287b" />
-                        <TextInput secureTextEntry={true} style={{flex:12}} label="Password" mode="outlined" onChangeText={props.handleChange('password')} value={props.values.password} onBlur={props.handleBlur('password')} />
+                        <Icon style={{flex:1, marginRight:10}} name="home-map-marker" size={30} color="#a7287b" />
+                        <TextInput multiline style={{flex:12}} label="Address" mode="outlined" onChangeText={props.handleChange('address')} value={props.values.address} onBlur={props.handleBlur('address')} />
                     </View>
-                    <Text style={styles.errorText}>{props.touched.password && props.errors.password}</Text>
+                    <Text style={styles.errorText}>{props.touched.address && props.errors.address}</Text>
                     <View style={styles.inputContainer}>
-                        <Icon style={{flex:1, marginRight:10}} name="shield-check" size={30} color="#a7287b" />
-                        <TextInput secureTextEntry={true} style={{flex:12}} label="Confirm Password" mode="outlined" onChangeText={props.handleChange('confirmpassword')} value={props.values.confirmpassword} onBlur={props.handleBlur('confirmpassword')} />
+                        <Icon style={{flex:1, marginRight:10}} name="cellphone-basic" size={30} color="#a7287b" />
+                        <TextInput style={{flex:12}} label="Phone number" mode="outlined" onChangeText={props.handleChange('number')} value={props.values.number} onBlur={props.handleBlur('number')} keyboardType='numeric'/>
                     </View>
-                    <Text style={styles.errorText}>{props.touched.confirmpassword && props.errors.confirmpassword}</Text>
+                    <Text style={styles.errorText}>{props.touched.number && props.errors.number}</Text>
+                    
                     <View style={styles.buttonContainer}>
                         <View style={styles.button}><Button color="#ff0000" mode="contained">Cancel</Button></View>
-                        <View style={styles.button}><Button color="#a7287b" mode="contained" onPress={props.handleSubmit}>Register</Button></View>
+                        <View style={styles.button}><Button color="#a7287b" mode="contained" onPress={props.handleSubmit}>Save</Button></View>
                     </View>
                 </Card>
             )}
@@ -134,4 +123,4 @@ const styles = StyleSheet.create({
      }
 });
 
-export default PassegerRegistartion;
+export default EditDetails;
