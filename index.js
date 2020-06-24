@@ -4,7 +4,8 @@ import {DefaultTheme, Provider as PaperProvider} from 'react-native-paper';
 import {name as appName} from './app.json';
 import App from './src/App';
 
-import PassegerRegistartion from './src/screens/passengerRegistration'
+import PassegerRegistartion from './src/screens/passengerRegistration';
+import UserProfile from './src/screens/userProfile';
 
 const theme = {
   ...DefaultTheme,
@@ -28,10 +29,10 @@ export default function Main() {
   return (
     <PaperProvider theme={theme}>
       {/* <App /> */}
-      <PassegerRegistartion />
+      <UserProfile />
 
     </PaperProvider>
   );
 }
 
-AppRegistry.registerComponent(appName, () => PassegerRegistartion);
+AppRegistry.registerComponent(appName, () => UserProfile);

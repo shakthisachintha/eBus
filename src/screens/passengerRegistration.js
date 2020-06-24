@@ -3,8 +3,8 @@ import {View, Text, StyleSheet, ScrollView, TouchableWithoutFeedback, Keyboard, 
 
 import {Formik} from 'formik';
 import * as yup from 'yup';
-import {TextInput} from 'react-native-paper';
-import { Button } from 'react-native-paper';
+import {TextInput, Button} from 'react-native-paper';
+
 // import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import Icon  from 'react-native-vector-icons/MaterialCommunityIcons';
 
