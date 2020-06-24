@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {View, Text, StyleSheet, ScrollView, TouchableWithoutFeedback, Keyboard} from 'react-native';
+import {View, Text, StyleSheet, ScrollView, TouchableWithoutFeedback, Keyboard, Image} from 'react-native';
 
 import {Formik} from 'formik';
 import * as yup from 'yup';
@@ -8,10 +8,14 @@ import { Button } from 'react-native-paper';
 // import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import Icon  from 'react-native-vector-icons/MaterialCommunityIcons';
 
+
 import Card from '../components/Card';
 
+
 const reviewSchema = yup.object({
-    name: yup.string()
+    fname: yup.string()
+        .required(),
+    lname: yup.string()
         .required(),
     email: yup.string()
         .required()
@@ -29,14 +33,13 @@ const reviewSchema = yup.object({
 })
 
 const PassegerRegistartion = props => {
-
     return (
     <TouchableWithoutFeedback onPress={()=>{Keyboard.dismiss();}}>
     <View style={styles.screen}>
         <Text style={styles.title}>Register With Us!</Text>
         <ScrollView>
         <Formik
-            initialValues={{name:'',email:'',nic:'',img:'',password:'',confirmpassword:''}}
+            initialValues={{fname:'',lname:'',email:'',nic:'',password:'',confirmpassword:''}}
             validationSchema={reviewSchema}
             onSubmit={(values)=>  {
                 console.log(values);
@@ -46,9 +49,14 @@ const PassegerRegistartion = props => {
                 <Card>
                     <View style={styles.inputContainer}>
                         <Icon style={{flex:1, marginRight:10}} name="account" size={30} color="#a7287b" />
-                        <TextInput style={{flex:12}} label="Name" mode="outlined" onChangeText={props.handleChange('name')} value={props.values.name} onBlur={props.handleBlur('name')} />
+                        <TextInput style={{flex:12}} label="First Name" mode="outlined" onChangeText={props.handleChange('fname')} value={props.values.name} onBlur={props.handleBlur('fname')} />
                     </View>
-                    <Text style={styles.errorText}>{props.touched.name && props.errors.name}</Text>
+                    <Text style={styles.errorText}>{props.touched.fname && props.errors.fname}</Text>
+                    <View style={styles.inputContainer}>
+                        <Icon style={{flex:1, marginRight:10}} name="account-circle" size={30} color="#a7287b" />
+                        <TextInput style={{flex:12}} label="Last Name" mode="outlined" onChangeText={props.handleChange('lname')} value={props.values.name} onBlur={props.handleBlur('lname')} />
+                    </View>
+                    <Text style={styles.errorText}>{props.touched.lname && props.errors.lname}</Text>
                     <View style={styles.inputContainer}>
                         <Icon style={{flex:1, marginRight:10}} name="email" size={30} color="#a7287b"/>
                         <TextInput style={{flex:12}} label="Email" mode="outlined" keyboardType='email-address' onChangeText={props.handleChange('email')} value={props.values.email} onBlur={props.handleBlur('email')} />
@@ -59,11 +67,11 @@ const PassegerRegistartion = props => {
                         <TextInput style={{flex:12}} label="National Identity Card No." mode="outlined" onChangeText={props.handleChange('nic')} value={props.values.nic} onBlur={props.handleBlur('nic')} />
                     </View>
                     <Text style={styles.errorText}>{props.touched.nic && props.errors.nic}</Text>
-                    <View style={styles.inputContainer}>
+                    {/* <View style={styles.inputContainer}>
                         <Icon style={{flex:1, marginRight:10}} name="account-circle" size={30} color="#a7287b" />
                         <TextInput style={{flex:12}} label="Image" mode="outlined" onChangeText={props.handleChange('img')} value={props.values.img} onBlur={props.handleBlur('img')} />
                     </View>
-                    <Text style={styles.errorText}>{props.touched.img && props.errors.img}</Text>
+                    <Text style={styles.errorText}>{props.touched.img && props.errors.img}</Text> */}
                     <View style={styles.inputContainer}>
                         <Icon style={{flex:1, marginRight:10}} name="shield-lock" size={30} color="#a7287b" />
                         <TextInput secureTextEntry={true} style={{flex:12}} label="Password" mode="outlined" onChangeText={props.handleChange('password')} value={props.values.password} onBlur={props.handleBlur('password')} />
@@ -119,6 +127,10 @@ const styles = StyleSheet.create({
         paddingLeft: 40,
         color: 'crimson',
         fontWeight: 'bold'
+     },
+     image:{
+        justifyContent:'flex-start',
+        alignItems:'flex-start'
      }
 });
 

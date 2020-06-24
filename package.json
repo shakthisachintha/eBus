@@ -13,6 +13,7 @@
     "formik": "^2.1.4",
     "react": "16.11.0",
     "react-native": "0.62.2",
+    "react-native-image-picker": "^2.3.1",
     "react-native-paper": "^3.10.1",
     "react-native-vector-icons": "^6.6.0",
     "yup": "^0.29.1"
