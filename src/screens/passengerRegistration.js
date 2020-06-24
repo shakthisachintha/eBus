@@ -66,12 +66,12 @@ const PassegerRegistartion = props => {
                     <Text style={styles.errorText}>{props.touched.img && props.errors.img}</Text>
                     <View style={styles.inputContainer}>
                         <Icon style={{flex:1, marginRight:10}} name="shield-lock" size={30} color="#a7287b" />
-                        <TextInput style={{flex:12}} label="Password" mode="outlined" onChangeText={props.handleChange('password')} value={props.values.password} onBlur={props.handleBlur('password')} />
+                        <TextInput secureTextEntry={true} style={{flex:12}} label="Password" mode="outlined" onChangeText={props.handleChange('password')} value={props.values.password} onBlur={props.handleBlur('password')} />
                     </View>
                     <Text style={styles.errorText}>{props.touched.password && props.errors.password}</Text>
                     <View style={styles.inputContainer}>
                         <Icon style={{flex:1, marginRight:10}} name="shield-check" size={30} color="#a7287b" />
-                        <TextInput style={{flex:12}} label="Confirm Password" mode="outlined" onChangeText={props.handleChange('confirmpassword')} value={props.values.confirmpassword} onBlur={props.handleBlur('confirmpassword')} />
+                        <TextInput secureTextEntry={true} style={{flex:12}} label="Confirm Password" mode="outlined" onChangeText={props.handleChange('confirmpassword')} value={props.values.confirmpassword} onBlur={props.handleBlur('confirmpassword')} />
                     </View>
                     <Text style={styles.errorText}>{props.touched.confirmpassword && props.errors.confirmpassword}</Text>
                     <View style={styles.buttonContainer}>
