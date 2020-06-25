@@ -11,6 +11,7 @@ import IndexScreen from './screens/index';
 import Login from './components/Login';
 import ResetPassword from './components/resetPassword';
 import VerifyPassword from './components/verifyPassword';
+import NewPassword from './components/NewPassword';
 class App extends React.Component{
   render(){
     return(
@@ -21,6 +22,7 @@ class App extends React.Component{
             <Scene key="login" component={Login} hideNavBar={true}></Scene>
             <Scene key="reset" component={ResetPassword} hideNavBar={true}></Scene>
             <Scene key="verify" component={VerifyPassword} hideNavBar={true}></Scene>
+            <Scene key='submit' component={NewPassword} hideNavBar={true}></Scene>
         </Scene>
       </Router>
     );

@@ -17,7 +17,7 @@ export default class ResetPassword extends React.Component{
         <Appbar.Header style={{backgroundColor:'purple'}}>
             <Appbar.BackAction onPress={()=>this.goBack()} />
             <Appbar.Content 
-                title="Reset Password"
+                title="Forgot Password"
             />
          </Appbar.Header>
          <Card>

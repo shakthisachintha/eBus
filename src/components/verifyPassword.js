@@ -8,6 +8,9 @@ export default class VerifyPassword extends React.Component{
      sendEmail(){
          Actions.replace('reset');
      }
+     submitButton(){
+         Actions.replace('submit');
+     }
 
     render(){
     return (
@@ -27,7 +30,7 @@ export default class VerifyPassword extends React.Component{
                 placeholder= 'Enter Verification Code'
                  mode="flat"
              />
-             <TouchableOpacity>
+             <TouchableOpacity onPress={() => this.submitButton()}>
                 <Button icon="forward" mode="contained" style={{width:300,marginHorizontal:30,marginTop:20,backgroundColor:'purple'}}>Submit</Button>
             </TouchableOpacity>
          </View>
