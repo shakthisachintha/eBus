@@ -31,10 +31,10 @@ export default function Main() {
   return (
     <PaperProvider theme={theme}>
       {/* <App /> */}
-      <ChangePassword />
+      <UserProfile />
 
     </PaperProvider>
   );
 }
 
-AppRegistry.registerComponent(appName, () => ChangePassword);
+AppRegistry.registerComponent(appName, () => UserProfile);

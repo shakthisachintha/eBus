@@ -36,17 +36,17 @@ const ChangePassword = props => {
             {(props)=>(
                 <Card>
                     <View style={styles.inputContainer}>
-                        <Icon style={{flex:1, marginRight:10}} name="shield-remove-outline" size={30} color="#a7287b" />
+                        <Icon style={{flex:1, marginRight:10}} name="shield-remove" size={30} color="#a7287b" />
                         <TextInput secureTextEntry={true} style={{flex:12}} label="Old Password" mode="outlined" onChangeText={props.handleChange('oldPassword')} value={props.values.oldPassword} onBlur={props.handleBlur('oldPassword')} />
                     </View>
                     <Text style={styles.errorText}>{props.touched.oldPassword && props.errors.oldPassword}</Text>
                     <View style={styles.inputContainer}>
-                        <Icon style={{flex:1, marginRight:10}} name="shield-plus-outline" size={30} color="#a7287b" />
+                        <Icon style={{flex:1, marginRight:10}} name="shield-plus" size={30} color="#a7287b" />
                         <TextInput secureTextEntry={true} style={{flex:12}} label="New Password" mode="outlined" onChangeText={props.handleChange('newPassword')} value={props.values.newPassword} onBlur={props.handleBlur('newPassword')} />
                     </View>
                     <Text style={styles.errorText}>{props.touched.newPassword && props.errors.newPassword}</Text>
                     <View style={styles.inputContainer}>
-                        <Icon style={{flex:1, marginRight:10}} name="shield-check-outline" size={30} color="#a7287b"/>
+                        <Icon style={{flex:1, marginRight:10}} name="shield-check" size={30} color="#a7287b"/>
                         <TextInput secureTextEntry={true} style={{flex:12}} label="Re-enter the new password" mode="outlined" onChangeText={props.handleChange('confirmNewPassword')} value={props.values.confirmNewPassword} onBlur={props.handleBlur('confirmNewPassword')} />
                     </View>
                     <Text style={styles.errorText}>{props.touched.confirmNewPassword && props.errors.confirmNewPassword}</Text>
