@@ -6,7 +6,7 @@ import {Actions} from 'react-native-router-flux';
 import Logo from '../image/G1.png';
 
 const swithToAuth = () =>{
-    Actions.replace('index');
+    Actions.replace('login');
 };
     
 class LoadingScreen extends React.Component{
