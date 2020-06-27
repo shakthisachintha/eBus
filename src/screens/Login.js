@@ -8,10 +8,12 @@ export default class Login extends React.Component{
     addPasswordVisible: false
   };
 
-  toggleAddModal(){
+  reset(){
     Actions.replace('reset');
   }
-
+  login(){
+    Actions.replace('dashbord');
+  }
    render(){
         return(
             <View style={StyleSheet.container}>
@@ -38,7 +40,7 @@ export default class Login extends React.Component{
                     label="Password" 
                     mode="outlined"
                 />
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={()=>this.login()}>
                     <Button mode="contained" style={styles.button}>
                         Sign In
                     </Button>
@@ -78,7 +80,7 @@ export default class Login extends React.Component{
                 </View>
                 
                 <View>
-                    <TouchableOpacity onPress={()=> this.toggleAddModal() }>
+                    <TouchableOpacity onPress={()=> this.reset() }>
                         <Text style={{fontSize:16,color:'#94076e',marginTop:20}}>Forgot Password?</Text>
                     </TouchableOpacity>
                 </View>

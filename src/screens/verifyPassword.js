@@ -31,7 +31,7 @@ export default class VerifyPassword extends React.Component{
                  mode="flat"
              />
              <TouchableOpacity onPress={() => this.submitButton()}>
-                <Button icon="forward" mode="contained" style={{width:300,marginHorizontal:30,marginTop:20,backgroundColor:'purple'}}>Submit</Button>
+                <Button icon="forward" mode="contained" style={{width:300,alignSelf:'center',marginTop:20,backgroundColor:'purple'}}>Submit</Button>
             </TouchableOpacity>
          </View>
     </View>

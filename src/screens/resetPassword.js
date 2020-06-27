@@ -23,19 +23,18 @@ export default class ResetPassword extends React.Component{
          <Card>
                 <Card.Cover source={require('../image/forgot.png') } />
             </Card>
-                <Text style={{justifyContent:'center',fontSize:20,alignSelf:'center',marginTop:20}}>Forgot Your Password</Text>
-                <Text style={{color:'grey',justifyContent:'center',fontSize:16,marginHorizontal:10,marginTop:10}}>To recover your Password ,You need to Enter</Text>
-                <Text style={{color:'grey',justifyContent:'center',fontSize:16,marginHorizontal:10}}>your registration Email address.We will sent the </Text>
-                <Text style={{color:'grey',justifyContent:'center',fontSize:16,marginHorizontal:70}}>Recovery code to your Email</Text>
+                <Text style={{color:'grey',justifyContent:'center',fontSize:16,alignSelf:'center',marginTop:10}}>To recover your Password ,You need to Enter</Text>
+                <Text style={{color:'grey',justifyContent:'center',fontSize:16,alignSelf:'center'}}>your registration Email address.We will sent the </Text>
+                <Text style={{color:'grey',justifyContent:'center',fontSize:16,alignSelf:'center'}}>Recovery code to your Email</Text>
        
            <TextInput 
-            style={{height: 40,marginTop:10,width:300,marginHorizontal:30}}
+            style={{height: 40,marginTop:10,width:300,alignSelf:'center'}}
             placeholder="Email"
             label="Email" 
             mode="outlined"
            />
            <TouchableOpacity onPress={()=>this.sendEmail()}>
-           <Button icon="share" mode="contained" style={{width:300,marginHorizontal:30,marginTop:20,backgroundColor:'purple'}}>Send</Button>
+           <Button icon="share" mode="contained" style={{width:300,alignSelf:'center',marginTop:20,backgroundColor:'purple'}}>Send</Button>
            </TouchableOpacity>
  
     </View>

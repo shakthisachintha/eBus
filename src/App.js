@@ -8,10 +8,11 @@ import {Router , Scene} from 'react-native-router-flux';
 
 import LoadingScreen from './screens/loadingScreen';
 import IndexScreen from './screens/index';
-import Login from './components/Login';
-import ResetPassword from './components/resetPassword';
-import VerifyPassword from './components/verifyPassword';
-import NewPassword from './components/NewPassword';
+import Login from './screens/Login';
+import ResetPassword from './screens/resetPassword';
+import VerifyPassword from './screens/verifyPassword';
+import NewPassword from './screens/NewPassword';
+import Dashboard from './screens/Dashboard';
 class App extends React.Component{
   render(){
     return(
@@ -23,6 +24,7 @@ class App extends React.Component{
             <Scene key="reset" component={ResetPassword} hideNavBar={true}></Scene>
             <Scene key="verify" component={VerifyPassword} hideNavBar={true}></Scene>
             <Scene key='submit' component={NewPassword} hideNavBar={true}></Scene>
+            <Scene key='dashbord' component={Dashboard} hideNavBar={true}></Scene>
         </Scene>
       </Router>
     );
