@@ -30,11 +30,10 @@ const theme = {
 export default function Main() {
   return (
     <PaperProvider theme={theme}>
-      {/* <App /> */}
-      <UserProfile />
+      <App />
 
     </PaperProvider>
   );
 }
 
-AppRegistry.registerComponent(appName, () => UserProfile);
+AppRegistry.registerComponent(appName, () => App);
