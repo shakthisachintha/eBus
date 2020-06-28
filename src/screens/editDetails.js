@@ -22,7 +22,7 @@ const reviewSchema = yup.object({
         .min(10, 'Phone number must be at least 10 characters')
 })
 
-const EditDetails = props => {
+const EditDetails = ({ navigation }) => {
     return (
     <TouchableWithoutFeedback onPress={()=>{Keyboard.dismiss();}}>
     <View style={styles.screen}>
@@ -64,7 +64,7 @@ const EditDetails = props => {
                     <Text style={styles.errorText}>{props.touched.number && props.errors.number}</Text>
                     
                     <View style={styles.buttonContainer}>
-                        <View style={styles.button}><Button color="#ff0000" mode="contained">Cancel</Button></View>
+                        <View style={styles.button}><Button color="#ff0000" mode="contained" onPress={() => navigation.goBack()}>Cancel</Button></View>
                         <View style={styles.button}><Button color="#a7287b" mode="contained" onPress={props.handleSubmit}>Save</Button></View>
                     </View>
                 </Card>

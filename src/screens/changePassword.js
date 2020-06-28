@@ -20,7 +20,7 @@ const reviewSchema = yup.object({
         .oneOf([yup.ref('newPassword'), null], 'Passwords must match')
 })
 
-const ChangePassword = props => {
+const ChangePassword = ({ navigation }) => {
     return (
     <TouchableWithoutFeedback onPress={()=>{Keyboard.dismiss();}}>
     <View style={styles.screen}>
@@ -52,7 +52,7 @@ const ChangePassword = props => {
                     <Text style={styles.errorText}>{props.touched.confirmNewPassword && props.errors.confirmNewPassword}</Text>
                    
                     <View style={styles.buttonContainer}>
-                        <View style={styles.button}><Button color="#ff0000" mode="contained">Cancel</Button></View>
+                        <View style={styles.button}><Button color="#ff0000" mode="contained" onPress={() => navigation.goBack()}>Cancel</Button></View>
                         <View style={styles.button}><Button color="#a7287b" mode="contained" onPress={props.handleSubmit}>Change</Button></View>
                     </View>
                 </Card>
