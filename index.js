@@ -34,7 +34,7 @@ export default function Main() {
   return (
     <NavigationContainer>
       <PaperProvider theme={theme}>
-        <UserProfile />
+        <App />
 
       </PaperProvider>
     </NavigationContainer>
@@ -42,4 +42,4 @@ export default function Main() {
   );
 };
 
-AppRegistry.registerComponent(appName, () => UserProfile);
+AppRegistry.registerComponent(appName, () => App);
