@@ -132,7 +132,7 @@ const Stack = createStackNavigator();
 
 const App = () => {
     return(
-        <NavigationContainer>
+        // <NavigationContainer>
             <Stack.Navigator screenOptions= {{
                 headerStyle: {
                     backgroundColor: 'purple'
@@ -146,7 +146,7 @@ const App = () => {
                 <Stack.Screen name="ChangePassword" component={ChangePassword} options={{headerTitleAlign: 'center', title: 'Change Password'}} />
                 <Stack.Screen name="EditDetails" component={EditDeatils} options={{headerTitleAlign: 'center', title: 'Edit Details'}} />
             </Stack.Navigator>
-        </NavigationContainer>
+        // </NavigationContainer>
     );
 };
 
