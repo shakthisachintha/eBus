@@ -7,12 +7,17 @@ import {
   ScrollView,
 } from 'react-native';
 import {TextInput, IconButton, Colors, Button} from 'react-native-paper';
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
 
 import Card from '../components/Card';
+import ChangePassword from '../screens/changePassword';
+import EditDeatils from '../screens/editDetails'
 
 
-const UserProfile = props => {
+const UserProfile = ({navigation}) => {
     return (
+        <ScrollView>
         <View style={styles.container}>
             <View style={styles.header}><Image style={{width:'100%', height:'100%'}} source={require('../shared/bg_profile.jpg')}/></View>
             <Image style={styles.avatar} source={{uri: 'https://bootdey.com/img/Content/avatar/avatar6.png'}}/>
@@ -49,10 +54,33 @@ const UserProfile = props => {
                 </View>
             </Card>
             <View style={styles.buttonContainer}>
-                <Button mode="outlined" icon="shield-key" labelStyle={{fontSize:13}} onPress={()=>{}} >Change Password</Button>
-                <Button mode="outlined" icon="account-edit" labelStyle={{fontSize:13}} onPress={()=>{}} >Edit Details</Button>
+                <Button mode="outlined" icon="shield-key" labelStyle={{fontSize:13}} onPress={()=>navigation.navigate('Change Password')}>Change Password</Button>
+                <Button mode="outlined" icon="account-edit" labelStyle={{fontSize:13}} onPress={()=>navigation.navigate('Edit Details')} >Edit Details</Button>
             </View>
         </View>
+        </ScrollView>
+    );
+};
+
+const Stack = createStackNavigator();
+
+const App = () => {
+    return(
+        <NavigationContainer>
+            <Stack.Navigator screenOptions= {{
+                headerStyle: {
+                    backgroundColor: 'purple'
+                },
+                headerTintColor:'#fff',
+                headerTitleStyle: {
+                    fontWeight: 'bold'
+                }
+            }}>
+                <Stack.Screen name="User Profile" component={UserProfile} options={{headerTitleAlign: 'center'}} />
+                <Stack.Screen name="Change Password" component={ChangePassword} options={{headerTitleAlign: 'center'}} />
+                <Stack.Screen name="Edit Details" component={EditDeatils} options={{headerTitleAlign: 'center'}} />
+            </Stack.Navigator>
+        </NavigationContainer>
     );
 };
 
@@ -96,10 +124,11 @@ const styles = StyleSheet.create({
     buttonContainer: {
         flexDirection:'row',
         justifyContent: 'space-around',
-        padding:30
+        padding:30,
+        paddingBottom: 60
     },
     firstcard: {
-        marginTop: 50,
+        // marginTop: 10,
         alignSelf:'center',
         width:'95%'
     },
@@ -122,4 +151,4 @@ const styles = StyleSheet.create({
     }
   });
 
-export default UserProfile;
+export default App;

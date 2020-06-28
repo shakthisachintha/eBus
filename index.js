@@ -1,8 +1,11 @@
+import 'react-native-gesture-handler';
 import * as React from 'react';
 import {AppRegistry} from 'react-native';
 import {DefaultTheme, Provider as PaperProvider} from 'react-native-paper';
 import {name as appName} from './app.json';
 import App from './src/App';
+import { NavigationContainer } from '@react-navigation/native';
+
 
 import PassegerRegistartion from './src/screens/passengerRegistration';
 import UserProfile from './src/screens/userProfile';
@@ -29,11 +32,14 @@ const theme = {
 
 export default function Main() {
   return (
-    <PaperProvider theme={theme}>
-      <App />
+    <NavigationContainer>
+      <PaperProvider theme={theme}>
+        <App />
 
-    </PaperProvider>
+      </PaperProvider>
+    </NavigationContainer>
+    
   );
-}
+};
 
 AppRegistry.registerComponent(appName, () => App);
