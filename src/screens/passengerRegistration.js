@@ -13,17 +13,11 @@ import Card from '../components/Card';
 
 
 const reviewSchema = yup.object({
-    fname: yup.string()
-        .required(),
-    lname: yup.string()
+    name: yup.string()
         .required(),
     email: yup.string()
         .required()
         .email(),
-    nic: yup.string()
-        .required('National Identity Card Number is required')
-        .min(10, 'National Identity Card Number must be at least 10 characters')
-        .max(12, 'National Identity Card Number must be at most 12 characters'),
     password: yup.string()
         .required('Password is required')
         .min(8),
@@ -39,7 +33,7 @@ const PassegerRegistartion = props => {
         <Text style={styles.title}>Register With Us!</Text>
         <ScrollView>
         <Formik
-            initialValues={{fname:'',lname:'',email:'',nic:'',password:'',confirmpassword:''}}
+            initialValues={{name:'',email:'',password:'',confirmpassword:''}}
             validationSchema={reviewSchema}
             onSubmit={(values)=>  {
                 console.log(values);
@@ -49,29 +43,14 @@ const PassegerRegistartion = props => {
                 <Card>
                     <View style={styles.inputContainer}>
                         <Icon style={{flex:1, marginRight:10}} name="account" size={30} color="#a7287b" />
-                        <TextInput style={{flex:12}} label="First Name" mode="outlined" onChangeText={props.handleChange('fname')} value={props.values.fname} onBlur={props.handleBlur('fname')} />
+                        <TextInput style={{flex:12}} label="Name" mode="outlined" onChangeText={props.handleChange('name')} value={props.values.name} onBlur={props.handleBlur('name')} />
                     </View>
-                    <Text style={styles.errorText}>{props.touched.fname && props.errors.fname}</Text>
-                    <View style={styles.inputContainer}>
-                        <Icon style={{flex:1, marginRight:10}} name="account-circle" size={30} color="#a7287b" />
-                        <TextInput style={{flex:12}} label="Last Name" mode="outlined" onChangeText={props.handleChange('lname')} value={props.values.lname} onBlur={props.handleBlur('lname')} />
-                    </View>
-                    <Text style={styles.errorText}>{props.touched.lname && props.errors.lname}</Text>
+                    <Text style={styles.errorText}>{props.touched.name && props.errors.name}</Text>
                     <View style={styles.inputContainer}>
                         <Icon style={{flex:1, marginRight:10}} name="email" size={30} color="#a7287b"/>
                         <TextInput style={{flex:12}} label="Email" mode="outlined" keyboardType='email-address' onChangeText={props.handleChange('email')} value={props.values.email} onBlur={props.handleBlur('email')} />
                     </View>
                     <Text style={styles.errorText}>{props.touched.email && props.errors.email}</Text>
-                    <View style={styles.inputContainer}>
-                        <Icon style={{flex:1, marginRight:10}} name="account-card-details" size={30} color="#a7287b" />
-                        <TextInput style={{flex:12}} label="National Identity Card No." mode="outlined" onChangeText={props.handleChange('nic')} value={props.values.nic} onBlur={props.handleBlur('nic')} />
-                    </View>
-                    <Text style={styles.errorText}>{props.touched.nic && props.errors.nic}</Text>
-                    {/* <View style={styles.inputContainer}>
-                        <Icon style={{flex:1, marginRight:10}} name="account-circle" size={30} color="#a7287b" />
-                        <TextInput style={{flex:12}} label="Image" mode="outlined" onChangeText={props.handleChange('img')} value={props.values.img} onBlur={props.handleBlur('img')} />
-                    </View>
-                    <Text style={styles.errorText}>{props.touched.img && props.errors.img}</Text> */}
                     <View style={styles.inputContainer}>
                         <Icon style={{flex:1, marginRight:10}} name="shield-lock" size={30} color="#a7287b" />
                         <TextInput secureTextEntry={true} style={{flex:12}} label="Password" mode="outlined" onChangeText={props.handleChange('password')} value={props.values.password} onBlur={props.handleBlur('password')} />

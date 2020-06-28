@@ -9,20 +9,17 @@ import Icon  from 'react-native-vector-icons/MaterialCommunityIcons';
 
 
 const reviewSchema = yup.object({
-    fname: yup.string()
+    name: yup.string()
         .required('First name is required'),
-    lname: yup.string()
-        .required('Last name is required'),
     email: yup.string()
         .required()
         .email(),
     nic: yup.string()
-        .required('National Identity Card Number is required')
         .min(10, 'National Identity Card Number must be at least 10 characters')
         .max(12, 'National Identity Card Number must be at most 12 characters'),
     address: yup.string(),
     number: yup.number()
-        .min(10)
+        .min(10, 'Phone number must be at least 10 characters')
 })
 
 const EditDetails = props => {
@@ -32,7 +29,7 @@ const EditDetails = props => {
         <Text style={styles.title}>Edit details</Text>
         <ScrollView>
         <Formik
-            initialValues={{fname:'John',lname:'Doe',email:'johndoe@gmail.com',nic:'965550550V',address:'',number:''}}
+            initialValues={{name:'John Doe',email:'johndoe@gmail.com',nic:'',address:'',number:''}}
             validationSchema={reviewSchema}
             onSubmit={(values)=>  {
                 console.log(values);
@@ -42,14 +39,9 @@ const EditDetails = props => {
                 <Card>
                     <View style={styles.inputContainer}>
                         <Icon style={{flex:1, marginRight:10}} name="account" size={30} color="#a7287b" />
-                        <TextInput style={{flex:12}} label="First Name" mode="outlined" onChangeText={props.handleChange('fname')} value={props.values.fname} onBlur={props.handleBlur('fname')} />
+                        <TextInput style={{flex:12}} label="First Name" mode="outlined" onChangeText={props.handleChange('name')} value={props.values.name} onBlur={props.handleBlur('name')} />
                     </View>
-                    <Text style={styles.errorText}>{props.touched.fname && props.errors.fname}</Text>
-                    <View style={styles.inputContainer}>
-                        <Icon style={{flex:1, marginRight:10}} name="account-circle" size={30} color="#a7287b" />
-                        <TextInput style={{flex:12}} label="Last Name" mode="outlined" onChangeText={props.handleChange('lname')} value={props.values.lname} onBlur={props.handleBlur('lname')} />
-                    </View>
-                    <Text style={styles.errorText}>{props.touched.lname && props.errors.lname}</Text>
+                    <Text style={styles.errorText}>{props.touched.name && props.errors.name}</Text>
                     <View style={styles.inputContainer}>
                         <Icon style={{flex:1, marginRight:10}} name="email" size={30} color="#a7287b"/>
                         <TextInput style={{flex:12}} label="Email" mode="outlined" keyboardType='email-address' onChangeText={props.handleChange('email')} value={props.values.email} onBlur={props.handleBlur('email')} />
