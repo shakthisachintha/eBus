@@ -91,8 +91,8 @@ const UserProfile = ({navigation}) => {
                 </View>
             </Card>
             <View style={styles.buttonContainer}>
-                <Button mode="outlined" icon="shield-key" labelStyle={{fontSize:13}} onPress={()=>navigation.navigate('Change Password')}>Change Password</Button>
-                <Button mode="outlined" icon="account-edit" labelStyle={{fontSize:13}} onPress={()=>navigation.navigate('Edit Details')} >Edit Details</Button>
+                <Button mode="outlined" icon="shield-key" labelStyle={{fontSize:13}} onPress={()=>navigation.navigate('ChangePassword')}>Change Password</Button>
+                <Button mode="outlined" icon="account-edit" labelStyle={{fontSize:13}} onPress={()=>navigation.navigate('EditDetails')} >Edit Details</Button>
             </View>
         </View>
 
@@ -142,9 +142,9 @@ const App = () => {
                     fontWeight: 'bold'
                 }
             }}>
-                <Stack.Screen name="User Profile" component={UserProfile} options={{headerTitleAlign: 'center'}} />
-                <Stack.Screen name="Change Password" component={ChangePassword} options={{headerTitleAlign: 'center'}} />
-                <Stack.Screen name="Edit Details" component={EditDeatils} options={{headerTitleAlign: 'center'}} />
+                <Stack.Screen name="UserProfile" component={UserProfile} options={{headerTitleAlign: 'center', title: 'User Profile'}} />
+                <Stack.Screen name="ChangePassword" component={ChangePassword} options={{headerTitleAlign: 'center', title: 'Change Password'}} />
+                <Stack.Screen name="EditDetails" component={EditDeatils} options={{headerTitleAlign: 'center', title: 'Edit Details'}} />
             </Stack.Navigator>
         </NavigationContainer>
     );
