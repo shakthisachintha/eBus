@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   StyleSheet,
   Text,
@@ -6,9 +6,16 @@ import {
   Image,
   ScrollView,
 } from 'react-native';
+import Dialog, {
+    DialogTitle,
+    DialogContent,
+    DialogButton,
+    ScaleAnimation,
+  } from 'react-native-popup-dialog';
 import {TextInput, IconButton, Colors, Button} from 'react-native-paper';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
+import ImagePicker from 'react-native-image-picker';
 
 import Card from '../components/Card';
 import ChangePassword from '../screens/changePassword';
@@ -16,16 +23,46 @@ import EditDeatils from '../screens/editDetails'
 
 
 const UserProfile = ({navigation}) => {
+
+    const [popvisibility, setPopvisibility] = useState(false);
+    const [photo, setphoto] = useState(null);
+
+    //choose a photo from storage
+    const handleChoosePhoto = () => {
+        const options = {
+            noData: true,
+        };
+        ImagePicker.launchImageLibrary(options, response => {
+        if (response.uri) {
+            setPopvisibility(false);
+            console.log("response", response);
+            setphoto(response);
+        }
+        });
+    };
+    //take a photo
+    const handleTakePhoto = () => {
+        const options = {
+            noData: true,
+        };
+        ImagePicker.launchCamera(options, response => {
+        if (response.uri) {
+            setPopvisibility(false);
+            console.log("response", response);
+            setphoto(response);
+        }
+        });
+    };
     return (
         <ScrollView>
         <View style={styles.container}>
             <View style={styles.header}><Image style={{width:'100%', height:'100%'}} source={require('../shared/bg_profile.jpg')}/></View>
             <Image style={styles.avatar} source={{uri: 'https://bootdey.com/img/Content/avatar/avatar6.png'}}/>
             <IconButton
-                icon="camera"
+                icon="camera-account"
                 color={Colors.red500}
                 size={30}
-                onPress={() => console.log('Pressed')}
+                onPress={() => setPopvisibility(true)}
                 name="Edit Profile"
                 style={{position: 'absolute',marginTop:190, marginLeft:230}}
             />
@@ -58,6 +95,35 @@ const UserProfile = ({navigation}) => {
                 <Button mode="outlined" icon="account-edit" labelStyle={{fontSize:13}} onPress={()=>navigation.navigate('Edit Details')} >Edit Details</Button>
             </View>
         </View>
+
+        {/* popup window */}
+        <Dialog
+          onTouchOutside={() => {
+            setPopvisibility(false);
+          }}
+          width={0.9}
+          visible={popvisibility}
+          dialogAnimation={new ScaleAnimation()}
+          onHardwareBackPress={() => {
+            setPopvisibility(false);
+            return true;
+          }}
+          dialogTitle={
+            <DialogTitle
+              title="Change Profile Picture"
+              hasTitleBar={false}
+            />
+          }>
+          <DialogContent>
+            <View style={styles.photobuttons}>
+              <Button icon="camera-image" onPress={handleChoosePhoto}>Upload a photo</Button>
+            </View>
+            <View style={styles.photobuttons}>
+              <Button icon="camera" onPress={handleTakePhoto}>Take a photo</Button>
+            </View>
+          </DialogContent>
+        </Dialog>
+
         </ScrollView>
     );
 };
@@ -148,6 +214,9 @@ const styles = StyleSheet.create({
         fontSize: 15,
         fontWeight:'bold',
         width:'80%'
+    },
+    photobuttons: {
+        paddingVertical: 7
     }
   });
 

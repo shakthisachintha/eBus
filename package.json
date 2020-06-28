@@ -20,6 +20,7 @@
     "react-native-gesture-handler": "^1.6.1",
     "react-native-image-picker": "^2.3.1",
     "react-native-paper": "^3.10.1",
+    "react-native-popup-dialog": "^0.18.3",
     "react-native-reanimated": "^1.9.0",
     "react-native-router-flux": "^4.2.0",
     "react-native-safe-area-context": "^3.0.7",
