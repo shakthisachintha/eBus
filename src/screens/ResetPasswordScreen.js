@@ -1,7 +1,8 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { Appbar, Button, TextInput, Card, Paragraph } from 'react-native-paper';
+import { View, Text, StyleSheet } from 'react-native';
+import { Button, TextInput, Card } from 'react-native-paper';
 import { Actions } from 'react-native-router-flux';
+import navigationTheme from '../navigations/navigationTheme';
 
 export default class ResetPasswordScreen extends React.Component {
 
@@ -12,15 +13,10 @@ export default class ResetPasswordScreen extends React.Component {
         Actions.replace('login');
     }
 
-    render() {
+    render({ navigation } = this.props) {
         return (
             <View style={styles.container}>
-                <Appbar.Header style={{ backgroundColor: 'purple' }}>
-                    <Appbar.BackAction onPress={() => this.goBack()} />
-                    <Appbar.Content
-                        title="Forgot Password"
-                    />
-                </Appbar.Header>
+
                 <Card>
                     <Card.Cover source={require('../image/forgot.png')} />
                 </Card>
@@ -34,9 +30,14 @@ export default class ResetPasswordScreen extends React.Component {
                     label="Email"
                     mode="outlined"
                 />
-                <TouchableOpacity onPress={() => this.sendEmail()}>
-                    <Button icon="share" mode="contained" style={{ width: 300, alignSelf: 'center', marginTop: 20, backgroundColor: 'purple' }}>Send</Button>
-                </TouchableOpacity>
+
+                <Button onPress={() => navigation.navigate("LinkVerify")}
+                    icon="share"
+                    mode="contained"
+                    style={{ width: 300, alignSelf: 'center', marginTop: 20, backgroundColor: 'purple' }}>
+                    Send
+                </Button>
+
 
             </View>
         );
@@ -45,6 +46,7 @@ export default class ResetPasswordScreen extends React.Component {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1
+        flex: 1,
+        paddingVertical: 20
     }
 });

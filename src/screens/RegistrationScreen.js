@@ -10,6 +10,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 
 import Card from '../components/Card';
+import navigationTheme from '../navigations/navigationTheme';
 
 
 const reviewSchema = yup.object({
@@ -26,7 +27,7 @@ const reviewSchema = yup.object({
         .oneOf([yup.ref('password'), null], 'Passwords must match')
 })
 
-const RegistrationScreen = props => {
+const RegistrationScreen = ({ navigation }) => {
     return (
         <TouchableWithoutFeedback onPress={() => { Keyboard.dismiss(); }}>
             <View style={styles.screen}>
@@ -62,7 +63,7 @@ const RegistrationScreen = props => {
                                 </View>
                                 <Text style={styles.errorText}>{props.touched.confirmpassword && props.errors.confirmpassword}</Text>
                                 <View style={styles.buttonContainer}>
-                                    <View style={styles.button}><Button color="#ff0000" mode="contained">Cancel</Button></View>
+                                    <View style={styles.button}><Button onPress={() => navigation.navigate('Login')} color="#ff0000" mode="contained">Cancel</Button></View>
                                     <View style={styles.button}><Button color="#a7287b" mode="contained" onPress={props.handleSubmit}>Register</Button></View>
                                 </View>
                             </Card>

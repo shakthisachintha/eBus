@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, ImageBackground, Modal } from 'react-native';
 import { TextInput, Button } from 'react-native-paper';
 import { CommonActions } from '@react-navigation/native';
+import colors from '../utils/colors';
 
 export default class LoginScreen extends React.Component {
 
@@ -48,7 +49,7 @@ export default class LoginScreen extends React.Component {
               mode="outlined"
             />
 
-            <Button onPress={() => navigation.navigate('Dashboard')} style={styles.button}>
+            <Button style={styles.button} mode="contained" onPress={() => navigation.navigate('Dashboard')} >
               Sign In
             </Button>
 
@@ -80,7 +81,7 @@ export default class LoginScreen extends React.Component {
           </View>
           <View style={{ flexDirection: 'row' }}>
             <Text style={styles.textUnder}>Don't Have an Account ? </Text>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate('Register')}>
               <Text style={{ fontSize: 18, color: 'purple' }}>Sign up</Text>
             </TouchableOpacity>
           </View>
@@ -103,19 +104,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center'
   },
   button: {
-    backgroundColor: 'white',
-    height: 35,
-    marginHorizontal: 3,
-    borderRadius: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: 150,
-    backgroundColor: '#a503fc',
-    marginTop: 10,
-    marginBottom: 10,
-    justifyContent: 'center',
+    height: 40,
+    backgroundColor: colors.primary,
+    marginVertical: 20,
     alignSelf: 'center',
-    width: 250
+    width: 150,
   },
   icon: {
     flexDirection: 'row',
