@@ -1,17 +1,9 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Button, TextInput, Card } from 'react-native-paper';
-import { Actions } from 'react-native-router-flux';
 import images from '../../utils/images';
 
 export default class ResetPasswordScreen extends React.Component {
-
-    sendEmail() {
-        Actions.replace('verify');
-    }
-    goBack() {
-        Actions.replace('login');
-    }
 
     render({ navigation } = this.props) {
         return (

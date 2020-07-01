@@ -1,16 +1,10 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Appbar, TextInput, Button } from 'react-native-paper';
-import { Actions } from 'react-native-router-flux';
 
 export default class SetNewPasswordScreen extends React.Component {
 
-    sendBack() {
-        Actions.replace('verify');
-    }
-    success() {
-        Actions.replace('login');
-    }
+
     render() {
         return (
             <View style={styles.container}>
