@@ -2,12 +2,13 @@ import React from 'react'
 import { createStackNavigator } from "@react-navigation/stack"
 
 
-import LoginScreen from "../screens/LoginScreen";
-import RegistrationScreen from '../screens/RegistrationScreen';
-import LoadingScreen from '../screens/LoadingScreen';
-import ResetPasswordScreen from '../screens/ResetPasswordScreen';
 import Dashboard from '../screens/Dashboard';
-import SetNewPasswordScreen from '../screens/SetNewPasswordScreen';
+import LoginScreen from "../screens/Authentication/LoginScreen";
+import LoadingScreen from '../screens/LoadingScreen';
+import RegistrationScreen from '../screens/Authentication/RegistrationScreen';
+import ResetPasswordScreen from '../screens/Authentication/ResetPasswordScreen';
+import SetNewPasswordScreen from '../screens/Authentication/SetNewPasswordScreen';
+
 
 const Stack = createStackNavigator();
 

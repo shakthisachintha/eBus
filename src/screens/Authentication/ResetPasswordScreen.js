@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Button, TextInput, Card } from 'react-native-paper';
 import { Actions } from 'react-native-router-flux';
-import navigationTheme from '../navigations/navigationTheme';
+import images from '../../utils/images';
 
 export default class ResetPasswordScreen extends React.Component {
 
@@ -18,7 +18,7 @@ export default class ResetPasswordScreen extends React.Component {
             <View style={styles.container}>
 
                 <Card>
-                    <Card.Cover source={require('../image/forgot.png')} />
+                    <Card.Cover source={images.FORGOT_PASSWORD_BACKROUND} />
                 </Card>
                 <Text style={{ color: 'grey', justifyContent: 'center', fontSize: 16, alignSelf: 'center', marginTop: 10 }}>To recover your Password ,You need to Enter</Text>
                 <Text style={{ color: 'grey', justifyContent: 'center', fontSize: 16, alignSelf: 'center' }}>your registration Email address.We will sent the </Text>

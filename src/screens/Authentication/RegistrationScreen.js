@@ -9,8 +9,8 @@ import { TextInput, Button } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 
-import Card from '../components/Card';
-import navigationTheme from '../navigations/navigationTheme';
+import Card from '../../components/Card';
+import navigationTheme from '../../navigations/navigationTheme';
 
 
 const reviewSchema = yup.object({

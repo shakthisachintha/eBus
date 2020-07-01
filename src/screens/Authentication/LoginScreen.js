@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, ImageBackground, Modal } from 'react-native';
 import { TextInput, Button } from 'react-native-paper';
 import { CommonActions } from '@react-navigation/native';
-import colors from '../utils/colors';
+
+import colors from '../../utils/colors';
+import images from '../../utils/images';
 
 export default class LoginScreen extends React.Component {
 
@@ -26,11 +28,11 @@ export default class LoginScreen extends React.Component {
     return (
       <View style={StyleSheet.container}>
 
-        <ImageBackground source={require('../image/screen.png')} style={styles.backgroundImage} >
+        <ImageBackground source={images.LOGING_BACKGROUND} style={styles.backgroundImage} >
 
           <Image
             style={styles.topImage}
-            source={require('../image/G3.png')}
+            source={images.LOGO}
             resizeMode="contain"
           />
           <Text style={styles.headText}>Login</Text>
@@ -60,21 +62,21 @@ export default class LoginScreen extends React.Component {
             <TouchableOpacity style={styles.image}>
               <Image
                 style={styles.socialIcon}
-                source={require('../image/facebook.png')}
+                source={images.FACEBOOK_ICON}
                 resizeMode="contain"
               />
             </TouchableOpacity>
             <TouchableOpacity style={styles.image}>
               <Image
                 style={styles.image}
-                source={require('../image/google.png')}
+                source={images.GOOGLE_ICON}
                 resizeMode="contain"
               />
             </TouchableOpacity>
             <TouchableOpacity style={styles.image}>
               <Image
                 style={styles.image}
-                source={require('../image/twitter.png')}
+                source={images.TWITTER_ICON}
                 resizeMode="contain"
               />
             </TouchableOpacity>
