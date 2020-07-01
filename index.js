@@ -10,7 +10,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import PassegerRegistartion from './src/screens/passengerRegistration';
 import UserProfile from './src/screens/userProfile';
 import EditDetails from './src/screens/editDetails';
-import ChangePassword from './src/screens/changePassword'
+import ChangePassword from './src/screens/changePassword';
+import Tab from './src/screens/MainTabScreen';
 
 const theme = {
   ...DefaultTheme,
@@ -34,7 +35,7 @@ export default function Main() {
   return (
     <NavigationContainer>
       <PaperProvider theme={theme}>
-        <App />
+        <Tab />
 
       </PaperProvider>
     </NavigationContainer>
@@ -42,4 +43,4 @@ export default function Main() {
   );
 };
 
-AppRegistry.registerComponent(appName, () => App);
+AppRegistry.registerComponent(appName, () => Tab);
