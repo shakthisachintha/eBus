@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, TouchableWithoutFeedback, Keyboard, ScrollView,
 import { Formik } from 'formik';
 import * as yup from 'yup';
 import { TextInput, Button } from 'react-native-paper';
-import Card from '../components/Card';
+import Card from '../../components/Card';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 
@@ -20,7 +20,7 @@ const reviewSchema = yup.object({
         .oneOf([yup.ref('newPassword'), null], 'Passwords must match')
 })
 
-const ChangePassword = ({ navigation }) => {
+const ChangePasswordScreen = ({ navigation }) => {
     return (
         <TouchableWithoutFeedback onPress={() => { Keyboard.dismiss(); }}>
             <View style={styles.screen}>
@@ -103,4 +103,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default ChangePassword;
+export default ChangePasswordScreen;

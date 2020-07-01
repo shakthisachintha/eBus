@@ -2,13 +2,12 @@ import React from 'react'
 import { createStackNavigator } from "@react-navigation/stack"
 
 
-import Dashboard from '../screens/Dashboard';
+import DashboardNavigator from './DashboardNavigator';
 import LoginScreen from "../screens/Authentication/LoginScreen";
 import LoadingScreen from '../screens/LoadingScreen';
 import RegistrationScreen from '../screens/Authentication/RegistrationScreen';
 import ResetPasswordScreen from '../screens/Authentication/ResetPasswordScreen';
 import SetNewPasswordScreen from '../screens/Authentication/SetNewPasswordScreen';
-
 
 const Stack = createStackNavigator();
 
@@ -45,8 +44,8 @@ const AuthNavigator = () => (
 
         <Stack.Screen
             name="Dashboard"
-            component={Dashboard}
-            options={{ title: "Dashboard" }}
+            component={DashboardNavigator}
+            options={{ title: "Dashboard", headerShown: false }}
         />
 
         <Stack.Screen

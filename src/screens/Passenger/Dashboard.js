@@ -1,7 +1,7 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, TouchableOpacity } from 'react-native';
 
-import { Appbar, Card, Avatar } from 'react-native-paper';
+import { Card, Avatar } from 'react-native-paper';
 
 export default class Dashboard extends React.Component {
 
