@@ -13,13 +13,13 @@ const theme = {
   colors: {
     ...DefaultTheme.colors,
     primary: colors.primary,
-    accent: colors.white,
+    // accent: colors.primary,
     // background: colors.gray,
     surface: colors.secondary,
     text: colors.darkGray,
     disabled: '#393e46',
     // placeholder: '#393e46',
-    backdrop: '#393e46',
+    backdrop: colors.secondary,
   },
 };
 

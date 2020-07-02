@@ -4,8 +4,6 @@ import { Button } from 'react-native-paper'
 import { LoginManager, AccessToken, GraphRequest, GraphRequestManager } from 'react-native-fbsdk'
 import ErrorHandler from './ErrorHandler'
 
-// ErrorHandler(new Error("Login Cancelled"))
-
 const FaceBookLogin = ({ loginSuccessCallback }) => {
 
     return (
