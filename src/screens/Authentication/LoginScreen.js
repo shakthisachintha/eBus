@@ -1,20 +1,14 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, ImageBackground, Modal } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, ImageBackground } from 'react-native';
 import { TextInput, Button } from 'react-native-paper';
 import { CommonActions } from '@react-navigation/native';
-import { LoginManager, LoginButton, AccessToken, GraphRequest, GraphRequestManager } from 'react-native-fbsdk';
 
 
 import colors from '../../utils/colors';
 import images from '../../utils/images';
-
-// Somewhere in your code
-signIn = async () => {
-
-};
+import FaceBookLogin from '../../components/FaceBookLogin';
 
 export default class LoginScreen extends React.Component {
-
 
   constructor(props) {
     super();
@@ -24,55 +18,6 @@ export default class LoginScreen extends React.Component {
       email: null,
       image: null,
     };
-    this.loginWithFacebookAlt = this.loginWithFacebookAlt.bind(this);
-  }
-
-
-  loginWithFacebookAlt(that = this) {
-    // Attempt a login using the Facebook login dialog asking for default permissions.
-    LoginManager.logInWithPermissions(["public_profile", "email"]).then(
-      function (result) {
-        if (result.isCancelled) {
-          console.log("Login cancelled");
-        } else {
-          console.log("Login Success", result.grantedPermissions.toString())
-          AccessToken.getCurrentAccessToken().then((accessToken) => {
-            const request = new GraphRequest('/me', {
-              accessToken: accessToken.accessToken, parameters: { fields: { string: 'id, name, email,picture.type(large)' } }, httpMethod: "POST"
-            }, function (error: ?Object, result: ?Object) {
-              if (error) {
-                console.log('Error fetching data: ', error.toString());
-              } else {
-                console.log('Success fetching');
-                that.setState({ isLogged: true });
-                that.setState({ email: result.email });
-                that.setState({ image: result.picture.data.url });
-                that.setState({ name: result.name });
-                console.log(result);
-              }
-            });
-            new GraphRequestManager().addRequest(request).start();
-          })
-        }
-      },
-      function (error) {
-        console.log("Login fail with error: " + error);
-      }
-    );
-  }
-
-  loginWithFacebook(accessToken) {
-    const request = new GraphRequest('/me', {
-      accessToken, parameters: { fields: { string: 'id, name, email, first_name, last_name, gender,picture' } }, httpMethod: "POST"
-    }, function (error: ?Object, result: ?Object) {
-      if (error) {
-        console.log('Error fetching data: ', error.toString());
-      } else {
-        console.log('Success fetching data: ', result);
-      }
-    });
-
-    new GraphRequestManager().addRequest(request).start();
   }
 
   render({ navigation } = this.props) {
@@ -92,51 +37,36 @@ export default class LoginScreen extends React.Component {
       <View style={StyleSheet.container}>
 
         <ImageBackground source={images.LOGING_BACKGROUND} style={styles.backgroundImage} >
-          <LoginButton permissions={["public_profile", "email", "pages_show_list"]}
-            onLoginFinished={
-              (error, result) => {
-                if (error) {
-                  console.log("login has error: " + error);
-                } else if (result.isCancelled) {
-                  console.log("login is cancelled.");
-                } else {
-                  console.log(result);
-                  AccessToken.getCurrentAccessToken().then(
-                    (data) => {
-                      console.log(data);
-                      console.log(data.accessToken.toString())
-                      this.loginWithFacebook(data.accessToken);
-                    }
-                  )
-                }
-              }
-            }
-            onLogoutFinished={() => console.log("logout.")} />
-
-
           <Image
             style={styles.topImage}
             source={images.LOGO}
             resizeMode="contain"
           />
-
-          <Text style={styles.headText}>Login</Text>
-
+          <Text style={styles.headText}>LOGIN</Text>
           <View style={{ flexDirection: 'column', marginTop: 0 }}>
             <TextInput
-              style={{ height: 40, marginTop: 10, width: 300 }}
+              autoCapitalize="none"
+              autoCorrect={false}
+              style={styles.input}
               placeholder="Email"
               label="Email"
               mode="outlined"
             />
             <TextInput
-              style={{ height: 40, marginTop: 10, width: 300 }}
+              autoCapitalize="none"
+              autoCorrect={false}
+              secureTextEntry
+              style={styles.input}
               placeholder="Password"
               label="Password"
               mode="outlined"
             />
-
-            <Button style={styles.button} mode="contained" onPress={() => navigation.navigate('Dashboard')} >
+            <Button
+              contentStyle={styles.buttonContent}
+              style={styles.button}
+              color={colors.primary}
+              mode="contained"
+              onPress={() => navigation.navigate('Dashboard')} >
               Sign In
             </Button>
 
@@ -144,27 +74,11 @@ export default class LoginScreen extends React.Component {
 
           <Text style={styles.textSocial}>or Via Social Media</Text>
           <View style={styles.icon}>
-            <TouchableOpacity onPress={() => this.loginWithFacebookAlt()} style={styles.image}>
-              <Image
-                style={styles.socialIcon}
-                source={images.FACEBOOK_ICON}
-                resizeMode="contain"
-              />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => signIn()} style={styles.image}>
-              <Image
-                style={styles.image}
-                source={images.GOOGLE_ICON}
-                resizeMode="contain"
-              />
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.image}>
-              <Image
-                style={styles.image}
-                source={images.TWITTER_ICON}
-                resizeMode="contain"
-              />
-            </TouchableOpacity>
+
+            <FaceBookLogin loginSuccessCallback={(user) => {
+              alert(`Logged In ${user.name} (${user.email})`)
+            }} />
+
           </View>
           <View style={{ flexDirection: 'row' }}>
             <Text style={styles.textUnder}>Don't Have an Account ? </Text>
@@ -185,29 +99,6 @@ export default class LoginScreen extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  button: {
-    height: 40,
-    backgroundColor: colors.primary,
-    marginVertical: 20,
-    alignSelf: 'center',
-    width: 150,
-  },
-  icon: {
-    flexDirection: 'row',
-    margin: 20,
-    justifyContent: 'center',
-    alignSelf: 'center',
-    marginLeft: 20
-
-  },
-  image: {
-    paddingHorizontal: 10,
-  },
   backgroundImage: {
     resizeMode: 'contain', // or 'stretch'
     width: '100%',
@@ -215,11 +106,48 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: 'center'
   },
+  button: {
+    marginVertical: 20,
+    alignSelf: 'center',
+  },
+  buttonContent: {
+    height: 40,
+    width: 150,
+  },
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  facebookButton: {
+    width: 150,
+    height: 40,
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  facebookButtonLabel: {
+    color: colors.white
+  },
+  icon: {
+    flexDirection: 'row',
+    margin: 20,
+    justifyContent: 'center',
+    alignSelf: 'center',
+    marginLeft: 20
+  },
+  input: {
+    height: 45,
+    marginTop: 10,
+    width: 300
+  },
   headText: {
     fontSize: 30,
     justifyContent: 'center',
     alignSelf: 'center',
     color: 'purple'
+  },
+  image: {
+    paddingHorizontal: 10,
   },
   topImage: {
     width: 200, height: 100,
@@ -232,10 +160,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignSelf: 'center',
     color: 'grey'
-  },
-  socialIcon: {
-    width: 48,
-    height: 48
   },
   textUnder: {
     fontSize: 15,

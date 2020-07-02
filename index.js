@@ -9,17 +9,17 @@ import colors from './src/utils/colors';
 const theme = {
   ...DefaultTheme,
   dark: true,
-  roundness: 8,
+  roundness: 15,
   colors: {
     ...DefaultTheme.colors,
     primary: colors.primary,
-    // accent: '#393e46',
-    // background: '#393e46',
-    // surface: '#393e46',
-    text: '#393e46',
-    // // disabled: '#393e46',
-    // // // placeholder: '#393e46',
-    // // backdrop: '#393e46',
+    accent: colors.white,
+    // background: colors.gray,
+    surface: colors.secondary,
+    text: colors.darkGray,
+    disabled: '#393e46',
+    // placeholder: '#393e46',
+    backdrop: '#393e46',
   },
 };
 
