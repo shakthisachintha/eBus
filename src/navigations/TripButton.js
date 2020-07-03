@@ -3,7 +3,7 @@ import { StyleSheet, View, Text, TouchableOpacity } from 'react-native'
 import colors from '../utils/colors'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-const NewListingButton = function ({ onPress }) {
+const TripButton = function ({ onPress }) {
     return (
         <TouchableOpacity onPress={onPress}>
             <View style={styles.container}>
@@ -28,5 +28,5 @@ const styles = StyleSheet.create({
     }
 })
 
-export default NewListingButton;
+export default TripButton;
 

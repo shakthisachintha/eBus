@@ -6,7 +6,7 @@ import Dashboard from '../screens/Passenger/Dashboard';
 import ProfileNavigator from './ProfileNavigator';
 import colors from '../utils/colors';
 import TripScreen from '../screens/Passenger/TripScreen';
-import NewListingButton from './NewListingButton';
+import TripButton from './TripButton';
 
 
 const Tab = createBottomTabNavigator();
@@ -27,7 +27,7 @@ const AppNavigator = () => (
         />
         <Tab.Screen
             options={({ navigation }) => ({
-                tabBarButton: () => <NewListingButton onPress={() => navigation.navigate("Trip")} />,
+                tabBarButton: () => <TripButton onPress={() => navigation.navigate("Trip")} />,
 
             })}
             name="Trip"
