@@ -26,7 +26,7 @@ const EditDetails = ({ navigation }) => {
     return (
     <TouchableWithoutFeedback onPress={()=>{Keyboard.dismiss();}}>
     <View style={styles.screen}>
-        <Text style={styles.title}>Edit details</Text>
+        {/* <Text style={styles.title}>Edit details</Text> */}
         <ScrollView>
         <Formik
             initialValues={{name:'John Doe',email:'johndoe@gmail.com',nic:'',address:'',number:''}}
