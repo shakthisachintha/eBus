@@ -5,6 +5,7 @@ import EditUserProfileScreen from '../screens/Passenger/EditUserProfileScreen';
 import SetNewPasswordScreen from '../screens/Authentication/SetNewPasswordScreen';
 import ChangePasswordScreen from '../screens/Passenger/ChangePasswordScreen';
 import UserAccountScreen from '../screens/Passenger/UserAccountScreen';
+import WalletScreen from '../screens/Passenger/WalletScreen';
 
 const Stack = createStackNavigator();
 
@@ -49,6 +50,16 @@ const AuthNavigator = () => (
                 headerShown: false,
                 headerLeft: null,
                 title: 'Reset Password'
+            }}
+        />
+
+        <Stack.Screen
+            name="Wallet"
+            component={WalletScreen}
+            options={{
+                headerShown: false,
+                headerLeft: null,
+                title: 'Manage Wallet'
             }}
         />
     </Stack.Navigator>

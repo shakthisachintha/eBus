@@ -15,11 +15,11 @@ const theme = {
     primary: colors.primary,
     // accent: colors.primary,
     // background: colors.gray,
-    surface: colors.secondary,
+    surface: colors.mediumGray,
     text: colors.darkGray,
     disabled: '#393e46',
     // placeholder: '#393e46',
-    backdrop: colors.secondary,
+    backdrop: colors.gray,
   },
 };
 
