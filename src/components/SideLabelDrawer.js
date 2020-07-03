@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import Swipeable from 'react-native-gesture-handler/Swipeable';
-import { StyleSheet, Text, Vibration, View } from 'react-native'
-import { Button, TextInput } from 'react-native-paper';
+import { StyleSheet, Text, Vibration, View, FlatList } from 'react-native'
+import { Button, RadioButton } from 'react-native-paper';
 
 import colors from '../utils/colors';
 import AppText from './AppText';
@@ -9,17 +9,23 @@ import AppModal from './AppModal';
 import AppTextInput from './AppTextInput';
 
 
-const SideLabelDrawer = ({ credit, IconComponent, enableModal = false, titleColor = "white", backgroundColor, position }) => {
-    const [modalVisible, setModalVisible] = useState(false)
+const SideLabelDrawer = ({ backgroundColor, credit, enableModal = false, IconComponent, position, payMethods, rechargeSubmit, titleColor = "white" }) => {
+    const [modalVisible, setModalVisible] = useState(false);
+    const [paymentMethod, setpaymentMethod] = useState(1);
+    const [amount, setAmount] = useState(0);
+    const [btnDisabled, setBtnDisabled] = useState(true);
+
+
 
     return (
         <>
             {enableModal && (
-                <AppModal onOutTouch={() => setModalVisible(false)} modalContentStyle={styles.modalLower} position="bottom" size={50} visible={modalVisible} onRequestClose={() => setModalVisible(false)}>
+                <AppModal onOutTouch={() => setModalVisible(false)} modalContentStyle={styles.modalLower} position="bottom" size={75} visible={modalVisible} onRequestClose={() => setModalVisible(false)}>
                     <View style={styles.modalContent}>
+
                         <View style={styles.modalHeader}>
-                            <AppText style={{ fontSize: 35, fontWeight: "bold", alignSelf: "center", color: "dodgerblue" }}>CREDIT RECHARGE</AppText>
-                            <View style={{ opacity: 1, flexDirection: "row", justifyContent: "space-between", marginVertical: 15 }}>
+                            <AppText style={styles.modalTitle}>CREDIT RECHARGE</AppText>
+                            <View style={{ opacity: 1, flexDirection: "row", justifyContent: "space-between", marginTop: 30, marginBottom: 20 }}>
                                 <Text style={{ fontSize: 20, textTransform: "uppercase", color: colors.darkGray }}>
                                     available balance
                                 </Text>
@@ -28,25 +34,36 @@ const SideLabelDrawer = ({ credit, IconComponent, enableModal = false, titleColo
                                 </Text>
                             </View>
                         </View>
-                        {/* Modal Body */}
-                        <View>
-                            <AppTextInput placeholderTextColor="purple" placeholder="Amount to recharge" icon="coin" keyboardType="decimal-pad" append="LKR" backgroundColor={colors.white}></AppTextInput>
-                        </View>
 
-                        <View style={{ ...styles.modalActionButtons, opacity: 1, marginVertical: 20 }}>
-                            <Button color={colors.success} icon="cash" mode="contained">Recharge Now</Button>
-                            <Button color={colors.danger} icon="close" mode="contained" onPress={() => setModalVisible(false)}>Cancel</Button>
+                        {/* Modal Body */}
+
+                        <View style={styles.modalForm}>
+                            <View style={styles.modalMargin}>
+                                <AppTextInput onChangeText={(amount) => { amount >= 50 ? setBtnDisabled(false) : setBtnDisabled(true); setAmount(amount) }} placeholder="Amount to recharge minimum LKR 50" icon="coin" keyboardType="decimal-pad" append="LKR" backgroundColor={colors.white}></AppTextInput>
+                            </View>
+
+                            <AppText style={{ marginVertical: 5, fontSize: 20, textTransform: "uppercase", color: colors.darkGray }}>Payment method</AppText>
+                            <RadioButton.Group onValueChange={value => setpaymentMethod(value)} value={paymentMethod}>
+                                <FlatList
+                                    data={payMethods}
+                                    renderItem={({ item }) => <RadioButton.Item label={item.label} value={item.id} />}
+                                    keyExtractor={item => item.id.toString()}
+                                />
+                            </RadioButton.Group>
+                            <View style={styles.modalActionButtons}>
+                                <Button disabled={btnDisabled} color={colors.success} onPress={() => rechargeSubmit(paymentMethod, amount)} icon="cash" mode="contained">Recharge Now</Button>
+                                <Button color={colors.danger} icon="close" mode="contained" onPress={() => setModalVisible(false)}>Cancel</Button>
+                            </View>
                         </View>
                     </View>
                 </AppModal>
             )}
 
-
             <View style={[styles.container, { top: position }]}>
                 <Swipeable
                     friction={3.6}
                     overshootFriction={4}
-                    renderLeftActions={() => { return (<View style={{ width: 1 }}><Text style={styles.creditBalance}> 1500</Text></View>) }}
+                    renderLeftActions={() => { return (<View style={{ width: 1 }}><Text style={styles.creditBalance}>{credit}</Text></View>) }}
                     onSwipeableLeftOpen={() => { enableModal && Vibration.vibrate(15, false); setModalVisible(true) }}
                 >
                     <View style={[styles.drawer, { backgroundColor: backgroundColor }]}>
@@ -107,11 +124,21 @@ const styles = StyleSheet.create({
         opacity: 1
     },
     modalHeader: {
-        marginBottom: 10,
 
+    },
+    modalTitle: {
+        fontSize: 35,
+        fontWeight: "bold",
+        alignSelf: "center",
+        color: colors.gray
+    },
+    modalMargin: {
+        marginVertical: 10
     },
     modalActionButtons: {
         flexDirection: "row",
-        justifyContent: "space-between"
+        justifyContent: "space-between",
+        opacity: 1,
+        marginVertical: 20
     }
 })

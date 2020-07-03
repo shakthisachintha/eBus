@@ -8,11 +8,25 @@ import SideLabelDrawer from '../../components/SideLabelDrawer';
 import colors from '../../utils/colors';
 
 export default class Dashboard extends React.Component {
-
+    payMethods = [
+        { id: 1, label: "Primary (xxxx...2147 VISA)" },
+        { id: 2, label: "(xxxx...2156 MASTER)" },
+        { id: 25, label: "Credit/Debit Card" },
+    ]
     render() {
         return (
             <View style={StyleSheet.container}>
-                <SideLabelDrawer credit={100} enableModal={true} backgroundColor={colors.danger} position={65} IconComponent={() => <Icon style={{ marginLeft: 10 }} name="coins" color={colors.white} size={35} />}></SideLabelDrawer>
+
+                <SideLabelDrawer
+                    rechargeSubmit={(method, amount) => alert(`${method}, ${amount}`)}
+                    payMethods={this.payMethods}
+                    credit={200}
+                    enableModal={true}
+                    backgroundColor={colors.danger}
+                    position={65}
+                    IconComponent={() => <Icon style={{ marginLeft: 10 }} name="coins" color={colors.white} size={35} />}>
+                </SideLabelDrawer>
+
                 <View style={{ alignItems: 'center', justifyContent: 'center', marginTop: 50 }}>
                     <View style={{ flexDirection: 'row' }}>
                         <TouchableOpacity>
