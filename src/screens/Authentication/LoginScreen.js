@@ -1,50 +1,75 @@
-import React, { Component } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, ImageBackground } from 'react-native';
-import { TextInput, Button } from 'react-native-paper';
+import React, { useState, useContext } from 'react';
+import { View, Text, TouchableWithoutFeedback, StyleSheet, Image, TouchableOpacity, ImageBackground } from 'react-native';
 import { CommonActions } from '@react-navigation/native';
+import * as Yup from 'yup';
+import jwtDecode from 'jwt-decode';
 
-
+import Auth from '../../api/auth'
 import colors from '../../utils/colors';
 import images from '../../utils/images';
+import { AppForm, AppFormInput, SubmitButton, ErrorMessage } from '../../components/forms'
 import FaceBookLogin from '../../components/FaceBookLogin';
+import AuthContext from '../../auth/context';
+import authStorage from '../../auth/storage';
 
-export default class LoginScreen extends React.Component {
 
-  constructor(props) {
-    super();
-    this.state = {
-      isLogged: false,
-      name: null,
-      email: null,
-      image: null,
-    };
+
+const validationSchema = Yup.object().shape({
+  email: Yup.string().required().label("Email"),
+  password: Yup.string().required().label("Password")
+});
+
+
+const LoginScreen = ({ navigation }) => {
+
+  const authContext = useContext(AuthContext);
+  const [loginState, setloginState] = useState({
+    hasLoginError: false,
+    loginError: null,
+    loginLoader: false,
+  });
+
+  const hadleLogin = async ({ email, password }) => {
+    setloginState({ loginLoader: true });
+    const result = await Auth.login(email, password);
+    setloginState({ loginLoader: false });
+    if (!result.ok) return setloginState({ hasLoginError: true, loginError: "Login failed try again..." });
+    const jwt = result.headers['x-auth-token']
+    const user = jwtDecode(jwt);
+    authContext.setUser(user);
+    authStorage.storeToken(jwt);
   }
 
-  render({ navigation } = this.props) {
+  navigation.dispatch(state => {
+    // Remove the Loading route from the stack
+    const routes = state.routes.filter(r => r.name !== 'Loading');
 
-    navigation.dispatch(state => {
-      // Remove the Loading route from the stack
-      const routes = state.routes.filter(r => r.name !== 'Loading');
-
-      return CommonActions.reset({
-        ...state,
-        routes,
-        index: routes.length - 1,
-      });
+    return CommonActions.reset({
+      ...state,
+      routes,
+      index: routes.length - 1,
     });
+  });
 
-    return (
-      <View style={StyleSheet.container}>
+  return (
+    <View style={StyleSheet.container}>
 
-        <ImageBackground source={images.LOGING_BACKGROUND} style={styles.backgroundImage} >
-          <Image
-            style={styles.topImage}
-            source={images.LOGO}
-            resizeMode="contain"
-          />
-          <Text style={styles.headText}>LOGIN</Text>
+      <ImageBackground source={images.LOGING_BACKGROUND} style={styles.backgroundImage} >
+        <Image
+          style={styles.topImage}
+          source={images.LOGO}
+          resizeMode="contain"
+        />
+        <Text style={styles.headText}>LOGIN</Text>
+        <AppForm
+          initialValues={{ email: "", password: "" }}
+          onSubmit={hadleLogin}
+          validationSchema={validationSchema}
+        >
           <View style={{ flexDirection: 'column', marginTop: 0 }}>
-            <TextInput
+
+            <AppFormInput
+              name="email"
               autoCapitalize="none"
               autoCorrect={false}
               style={styles.input}
@@ -52,7 +77,8 @@ export default class LoginScreen extends React.Component {
               label="Email"
               mode="outlined"
             />
-            <TextInput
+            <AppFormInput
+              name="password"
               autoCapitalize="none"
               autoCorrect={false}
               secureTextEntry
@@ -61,42 +87,52 @@ export default class LoginScreen extends React.Component {
               label="Password"
               mode="outlined"
             />
-            <Button
-              contentStyle={styles.buttonContent}
+            <ErrorMessage style={{ marginTop: 10, alignSelf: "center" }} visible={loginState.hasLoginError} error={loginState.loginError} />
+
+            <SubmitButton
+              loading={loginState.loginLoader}
               style={styles.button}
               color={colors.primary}
-              mode="contained"
-              onPress={() => navigation.navigate('Dashboard')} >
-              Sign In
-            </Button>
-
+              contentStyle={styles.buttonContent}
+              title="Login"
+            />
           </View>
 
-          <Text style={styles.textSocial}>or Via Social Media</Text>
-          <View style={styles.icon}>
+        </AppForm>
 
-            <FaceBookLogin loginSuccessCallback={(user) => {
-              alert(`Logged In ${user.name} (${user.email})`)
-            }} />
+        <Text style={styles.textSocial}>or Via Social Media</Text>
+        <View style={styles.icon}>
 
-          </View>
-          <View style={{ flexDirection: 'row' }}>
-            <Text style={styles.textUnder}>Don't Have an Account ? </Text>
-            <TouchableOpacity onPress={() => navigation.navigate('Register')}>
-              <Text style={{ fontSize: 18, color: 'purple' }}>Sign up</Text>
-            </TouchableOpacity>
-          </View>
+          <FaceBookLogin loginSuccessCallback={(user) => {
+            alert(`Logged In ${user.name} (${user.email})`)
+          }} />
 
-          <View>
-            <TouchableOpacity onPress={() => navigation.navigate('ResetPassword')}>
-              <Text style={{ fontSize: 16, color: '#94076e', marginTop: 20 }}>Forgot Password?</Text>
-            </TouchableOpacity>
-          </View>
-        </ImageBackground>
-      </View>
-    );
-  }
+        </View>
+        <View style={{ flexDirection: 'row' }}>
+          <Text style={styles.textUnder}>Don't Have an Account ? </Text>
+          <TouchableOpacity onPress={() => navigation.navigate('Register')}>
+            <Text style={{ fontSize: 18, color: 'purple' }}>Sign up</Text>
+          </TouchableOpacity>
+        </View>
+
+        <View>
+          <TouchableOpacity onPress={() => navigation.navigate('ResetPassword')}>
+            <Text style={{ fontSize: 16, alignSelf: "center", color: '#94076e', marginTop: 20 }}>Forgot Password?</Text>
+          </TouchableOpacity>
+
+          <TouchableWithoutFeedback onPress={() => navigation.navigate('Dashboard')}>
+            <Text style={{ fontSize: 14, alignSelf: "center", color: '#94076e', marginTop: 20 }}>Dashbard</Text>
+          </TouchableWithoutFeedback>
+
+
+        </View>
+      </ImageBackground>
+    </View>
+  );
 }
+
+export default LoginScreen
+
 
 const styles = StyleSheet.create({
   backgroundImage: {
