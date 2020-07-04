@@ -1,47 +1,17 @@
 import React from 'react';
-import { ToastAndroid, View, Animated, StyleSheet, Image, ActivityIndicator, ImageBackground } from 'react-native';
+import { View, Animated, StyleSheet, Image, ActivityIndicator, ImageBackground } from 'react-native';
 
-import NFC, { NfcDataType, NdefRecordType } from "react-native-nfc";
 
 
 import images from '../utils/images';
-
-
-NFC.addListener((payload) => {
-    switch (payload.type) {
-        case NfcDataType.NDEF:
-            let messages = payload.data;
-            for (let i in messages) {
-                let records = messages[i];
-                for (let j in records) {
-                    let r = records[j];
-                    if (r.type === NdefRecordType.TEXT) {
-                        alert(r.data);
-                        console.log(r);
-                    } else {
-                        ToastAndroid.show(
-                            `Non-TEXT tag of type ${r.type} with data ${r.data}`,
-                            ToastAndroid.SHORT
-                        );
-                    }
-                }
-            }
-            break;
-        case NfcDataType.TAG:
-            ToastAndroid.show(
-                `The TAG is non-NDEF:\n\n${payload.data.description}`,
-                ToastAndroid.SHORT
-            );
-            break;
-    }
-});
 
 class LoadingScreen extends React.Component {
 
     state = {
         LogoAnime: new Animated.Value(0),
         LogoText: new Animated.Value(0),
-        loadingSpinner: false
+        loadingSpinner: false,
+        isLogged: true,
     };
 
     componentDidMount({ navigation } = this.props) {
@@ -64,7 +34,11 @@ class LoadingScreen extends React.Component {
             }, 500);
         });
     };
-    render() {
+
+
+
+    render({ navigation } = this.props) {
+
         return (
             <View style={styles.container}>
                 <ImageBackground source={images.LOADING_BACKGROUND} style={styles.backgroundImage} >
