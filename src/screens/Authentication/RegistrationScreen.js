@@ -15,9 +15,9 @@ import navigationTheme from '../../navigations/navigationTheme';
 
 const reviewSchema = yup.object({
     name: yup.string()
-        .required(),
+        .required('Name is required'),
     email: yup.string()
-        .required()
+        .required('Email is required')
         .email(),
     password: yup.string()
         .required('Password is required')
@@ -31,7 +31,7 @@ const RegistrationScreen = ({ navigation }) => {
     return (
         <TouchableWithoutFeedback onPress={() => { Keyboard.dismiss(); }}>
             <View style={styles.screen}>
-                <Text style={styles.title}>Register With Us!</Text>
+                {/* <Text style={styles.title}>Register With Us!</Text> */}
                 <ScrollView>
                     <Formik
                         initialValues={{ name: '', email: '', password: '', confirmpassword: '' }}
