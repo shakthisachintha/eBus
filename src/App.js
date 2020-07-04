@@ -3,14 +3,17 @@ import { NavigationContainer } from '@react-navigation/native';
 
 import AuthNavigator from './navigations/AuthNavigator';
 import navigationTheme from './navigations/navigationTheme';
+import AppV2 from './screens/Passenger/AppV2';
 
 
 class App extends React.Component {
+
   render() {
     return (
-      <NavigationContainer theme={navigationTheme}>
-        <AuthNavigator />
-      </NavigationContainer>
+      <AppV2 />
+      // {/* <NavigationContainer theme={navigationTheme}>
+      //   <AuthNavigator />
+      // </NavigationContainer> */}
     );
   }
 };
