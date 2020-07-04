@@ -9,7 +9,7 @@ const AppCard = ({ IconComponent, title, image, subTitle, style, titleStyle, onP
         <TouchableHighlight onPress={onPress} underlayColor={colors.mediumGray}>
             <View style={[styles.container, style]}>
                 {IconComponent}
-                {image && <Image source={{ uri: image }} style={styles.image} />}
+                {image != null && <Image source={{ uri: image }} style={styles.image} />}
                 <View style={styles.detailsContainer}>
                     <Text style={[styles.title, titleStyle]}>{title}</Text>
                     {subTitle && <Text style={styles.subTitle}>{subTitle}</Text>}

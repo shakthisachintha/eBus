@@ -10,12 +10,14 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@react-native-community/async-storage": "^1.11.0",
     "@react-native-community/masked-view": "^0.1.10",
     "@react-navigation/bottom-tabs": "^5.6.1",
     "@react-navigation/native": "^5.6.1",
     "@react-navigation/stack": "^5.6.2",
     "apisauce": "^1.1.1",
     "formik": "^2.1.4",
+    "jwt-decode": "^2.2.0",
     "native-base": "^2.13.12",
     "react": "16.11.0",
     "react-native": "0.62.2",

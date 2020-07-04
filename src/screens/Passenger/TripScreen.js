@@ -3,7 +3,9 @@ import { StyleSheet, Text, View } from 'react-native'
 import AppIcon from '../../components/AppIcon'
 import colors from '../../utils/colors'
 
+
 const TripScreen = () => {
+
     return (
         <View style={styles.container}>
             <AppIcon name="crosshairs-gps" size={80} backgroundColor={colors.secondary} iconColor={colors.white}> </AppIcon>

@@ -1,13 +1,18 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
+import NFC, { NfcDataType, NdefRecordType } from "react-native-nfc";
+import { ToastAndroid } from "react-native";
+import jwtDecode from 'jwt-decode';
 
 
 import AuthNavigator from './navigations/AuthNavigator';
+import DashboardNavigator from './navigations/DashboardNavigator';
 import navigationTheme from './navigations/navigationTheme';
 
 
-import NFC, { NfcDataType, NdefRecordType } from "react-native-nfc";
-import { ToastAndroid } from "react-native";
+import AuthContext from './auth/context';
+import authStorage from './auth/storage';
+import { set } from 'react-native-reanimated';
 
 let bus = null;
 let hash = null;
@@ -47,10 +52,24 @@ NFC.addListener((payload) => {
 
 const App = () => {
 
+  const [user, setUser] = useState();
+
+  const restoreToken = async () => {
+    const token = await authStorage.getToken();
+    if (!token) return;
+    setUser(jwtDecode(token));
+  }
+
+  useEffect(() => {
+    restoreToken();
+  }, [])
+
   return (
-    <NavigationContainer theme={navigationTheme}>
-      <AuthNavigator />
-    </NavigationContainer>
+    <AuthContext.Provider value={{ user, setUser }}>
+      <NavigationContainer theme={navigationTheme}>
+        {user ? <DashboardNavigator /> : <AuthNavigator />}
+      </NavigationContainer>
+    </AuthContext.Provider>
   )
 }
 

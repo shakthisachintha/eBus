@@ -7,12 +7,13 @@ import ProfileNavigator from './ProfileNavigator';
 import colors from '../utils/colors';
 import TripScreen from '../screens/Passenger/TripScreen';
 import TripButton from './TripButton';
+import WalletScreen from '../screens/Passenger/WalletScreen';
 
 
 const Tab = createBottomTabNavigator();
 
 const AppNavigator = () => (
-    <Tab.Navigator
+    <Tab.Navigator initialRouteName="Dashboard"
         tabBarOptions={{
             activeTintColor: colors.white,
             inactiveTintColor: colors.black,
@@ -23,7 +24,7 @@ const AppNavigator = () => (
                 tabBarIcon: ({ color, size }) => <Icon name="format-list-bulleted-type" color={color} size={size} />
             }}
             name="Dashboard"
-            component={Dashboard}
+            component={WalletScreen}
         />
         <Tab.Screen
             options={({ navigation }) => ({
@@ -33,6 +34,7 @@ const AppNavigator = () => (
             name="Trip"
             component={TripScreen}
         />
+
         <Tab.Screen
             options={{
                 tabBarIcon: ({ color, size }) => <Icon name="account" color={color} size={size} />,

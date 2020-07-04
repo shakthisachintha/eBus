@@ -1,14 +1,16 @@
 import React, { Component } from 'react'
 import { View, Text, StyleSheet, Vibration } from 'react-native'
+import Icon from 'react-native-vector-icons/FontAwesome5';
 
 import AppCard from '../../components/AppCard'
 import AppText from '../../components/AppText';
 import { Button } from 'react-native-paper';
 import colors from '../../utils/colors';
 import AppIcon from '../../components/AppIcon';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+
 
 import Swipeable from 'react-native-gesture-handler/Swipeable';
+import SideLabelDrawer from '../../components/SideLabelDrawer';
 
 // import colors from '../../utils/colors'
 // import AppIcon from '../../components/AppIcon'
@@ -23,28 +25,27 @@ export class WalletScreen extends Component {
         due: Number
     }
 
-    com
-
     constructor(props) {
         super(props);
         this.state = { due: 0, name: "Shakthi Sachintha", email: "shakthisachintha@gmail.com", image: 'https://images.pexels.com/photos/556667/pexels-photo-556667.jpeg?' };
     }
-
+    payMethods = [
+        { id: 1, label: "Primary (xxxx...2147 VISA)" },
+        { id: 2, label: "(xxxx...2156 MASTER)" },
+        { id: 25, label: "Credit/Debit Card" },
+    ]
     render({ name, email, image, due } = this.state, { navigation } = this.props) {
         return (
             <View style={{ minHeight: 100, position: "absolute" }}>
-                {/* <AppCard
-                    titleStyle={styles.name}
-                    title={name}
-                    subTitle={email}
-                    image={image}
-                /> */}
-                <Swipeable friction={3} overshootFriction={2} onSwipeableWillOpen={() => Vibration.vibrate(15, false)} renderLeftActions={() => <Icon size={40} style={{ alignSelf: "center" }} name="plus-circle-multiple-outline" />}>
-                    <View style={styles.columnOne}>
-                        {/* <Icon name="diamond-stone" color={colors.white} size={30} /> */}
-                        <AppText style={styles.creditBalance}>LKR 1500</AppText>
-                    </View>
-                </Swipeable>
+                <SideLabelDrawer
+                    rechargeSubmit={(method, amount) => alert(`${method}, ${amount}`)}
+                    payMethods={this.payMethods}
+                    credit={200}
+                    enableModal={true}
+                    backgroundColor={colors.danger}
+                    position={65}
+                    IconComponent={() => <Icon style={{ marginLeft: 10 }} name="coins" color={colors.white} size={35} />}>
+                </SideLabelDrawer>
 
                 {due > 0 && (
                     <View style={styles.columnTwo}>
