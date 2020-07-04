@@ -49,5 +49,5 @@ public class ReactNativeNFCPackage implements ReactPackage {
 }
 ```
 ### Important 
-* If you encounter any errors in the gradle build delete `android\app\build` folder and run `npx react-native run-android` again.
+* If you encounter any errors in the gradle build, delete `android\app\build` folder and run `npx react-native run-android` again.
 
