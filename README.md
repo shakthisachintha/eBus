@@ -16,7 +16,7 @@ Mobile application is developed by using React-Native.
 3. comment out  the line **21** ` @override `
 4. file should look like this after comenting out the line 21
 
-`
+```
 package com.novadart.reactnativenfc;
 
 import com.facebook.react.ReactPackage;
@@ -47,7 +47,7 @@ public class ReactNativeNFCPackage implements ReactPackage {
         return Collections.emptyList();
     }
 }
-`
+```
 ### Important 
 * If you encounter any errors in the gradle build delete `android\app\build` folder and run `npx react-native run-android` again.
 
