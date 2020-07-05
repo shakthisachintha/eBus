@@ -1,25 +1,16 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React from 'react'
 import { StyleSheet, View, Text } from 'react-native'
 
 import AppCard from '../../components/AppCard'
 import AppText from '../../components/AppText'
 import AppIcon from '../../components/AppIcon'
 import colors from '../../utils/colors'
-import userAPI from '../../api/user';
-import { Button } from 'react-native-paper'
-import useAPI from '../../hooks/useAPI'
-import AuthContext from '../../auth/context'
-import authStorage from '../../auth/storage'
+import useAuth from '../../auth/useAuth'
 
 
 
 const UserAccountScreen = ({ navigation }) => {
-    const { user, setUser } = useContext(AuthContext);
-
-    const handleLogOut = () => {
-        setUser(null);
-        authStorage.removeToken();
-    }
+    const { user, logOut } = useAuth();
 
     return (
         <View>
@@ -35,7 +26,7 @@ const UserAccountScreen = ({ navigation }) => {
                 <AppCard title="My Messages" IconComponent={<AppIcon name="forum-outline" backgroundColor={colors.primary} />} />
                 <AppCard title="Settings" style={{ marginVertical: 30 }} IconComponent={<AppIcon name="settings" backgroundColor={'#5515ee'} />} />
 
-                <AppCard title="Logout" onPress={() => handleLogOut()} IconComponent={<AppIcon name="logout" backgroundColor={'#F5d529'} />} />
+                <AppCard title="Logout" onPress={() => logOut()} IconComponent={<AppIcon name="logout" backgroundColor={'#F5d529'} />} />
 
             </View>
         </View>

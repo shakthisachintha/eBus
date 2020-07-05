@@ -35,6 +35,7 @@ function loginWithFacebook(successCallback) {
                         if (error) {
                             ErrorHandler(error);
                         } else {
+                            console.log(result);
                             successCallback(result)
                         }
                     });

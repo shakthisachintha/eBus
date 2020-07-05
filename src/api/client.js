@@ -1,10 +1,14 @@
 import { create } from 'apisauce';
+import authStorage from '../auth/storage';
 
 const apiClient = create({
     baseURL: 'http://192.168.1.5:3000/api',
-    headers: {
-        'x-auth-token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVlZjViNTJkMTdiMDhhNDhiOGJmNDlkMiIsImlhdCI6MTU5MzE2MTAwNX0.0TFhlbMgPKPHBvJaBFSPFV8DzZ_8Cgbl-wiqKNg5uGo',
-    },
 });
+
+apiClient.addAsyncRequestTransform(async (request) => {
+    const authToken = authStorage.getToken();
+    if (!authToken) return;
+    request.headers['x-auth-token'] = authToken;
+})
 
 export default apiClient;

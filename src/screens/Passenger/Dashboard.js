@@ -16,7 +16,6 @@ export default class Dashboard extends React.Component {
     render() {
         return (
             <View style={StyleSheet.container}>
-
                 <SideLabelDrawer
                     rechargeSubmit={(method, amount) => alert(`${method}, ${amount}`)}
                     payMethods={this.payMethods}

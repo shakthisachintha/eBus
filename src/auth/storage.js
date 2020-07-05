@@ -1,11 +1,13 @@
-import SecureStore from '@react-native-community/async-storage';
+import RNSecureKeyStore, { ACCESSIBLE } from "react-native-secure-key-store";
 import ErrorHandler from '../components/ErrorHandler';
+import jwtDecode from 'jwt-decode';
+
 
 const key = "authToken";
 
 const storeToken = async authToken => {
     try {
-        await SecureStore.setItem(key, authToken)
+        return await RNSecureKeyStore.set(key, authToken, { accessible: ACCESSIBLE.ALWAYS_THIS_DEVICE_ONLY })
     } catch (error) {
         <ErrorHandler error={error} />
     }
@@ -13,7 +15,7 @@ const storeToken = async authToken => {
 
 const getToken = async () => {
     try {
-        return await SecureStore.getItem(key);
+        return await RNSecureKeyStore.get(key);
     } catch (error) {
         <ErrorHandler error={error} />
     }
@@ -21,14 +23,20 @@ const getToken = async () => {
 
 const removeToken = async () => {
     try {
-        return await SecureStore.removeItem(key);
+        return await RNSecureKeyStore.remove(key);
     } catch (error) {
         <ErrorHandler error={error} />
     }
 }
 
+const getUser = async () => {
+    const token = await getToken();
+    return (token) ? jwtDecode(token) : null;
+}
+
 export default {
-    storeToken,
+    getUser,
     getToken,
+    storeToken,
     removeToken
 }

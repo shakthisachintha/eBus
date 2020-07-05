@@ -1,17 +1,15 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { View, Text, TouchableWithoutFeedback, StyleSheet, Image, TouchableOpacity, ImageBackground } from 'react-native';
 import { CommonActions } from '@react-navigation/native';
 import * as Yup from 'yup';
-import jwtDecode from 'jwt-decode';
+
 
 import Auth from '../../api/auth'
 import colors from '../../utils/colors';
 import images from '../../utils/images';
 import { AppForm, AppFormInput, SubmitButton, ErrorMessage } from '../../components/forms'
 import FaceBookLogin from '../../components/FaceBookLogin';
-import AuthContext from '../../auth/context';
-import authStorage from '../../auth/storage';
-
+import useAuth from '../../auth/useAuth';
 
 
 const validationSchema = Yup.object().shape({
@@ -22,7 +20,8 @@ const validationSchema = Yup.object().shape({
 
 const LoginScreen = ({ navigation }) => {
 
-  const authContext = useContext(AuthContext);
+  const auth = useAuth();
+
   const [loginState, setloginState] = useState({
     hasLoginError: false,
     loginError: null,
@@ -34,10 +33,7 @@ const LoginScreen = ({ navigation }) => {
     const result = await Auth.login(email, password);
     setloginState({ loginLoader: false });
     if (!result.ok) return setloginState({ hasLoginError: true, loginError: "Login failed try again..." });
-    const jwt = result.headers['x-auth-token']
-    const user = jwtDecode(jwt);
-    authContext.setUser(user);
-    authStorage.storeToken(jwt);
+    auth.logIn(result.headers['x-auth-token']);
   }
 
   navigation.dispatch(state => {
