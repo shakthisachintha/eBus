@@ -4,8 +4,7 @@ import { Appbar, Button, TextInput, Card } from 'react-native-paper';
 
 export default class SetNewPasswordScreen extends React.Component {
 
-
-    render() {
+    render({navigation}= this.props) {
         return (
             <View style={styles.container}>
                 <View>
@@ -17,7 +16,7 @@ export default class SetNewPasswordScreen extends React.Component {
                         placeholder='Enter Verification Code'
                         mode="flat"
                     />
-                    <TouchableOpacity onPress={() => this.submitButton()}>
+                    <TouchableOpacity onPress={() => navigation.navigate('Login')}>
                         <Button icon="forward" mode="contained" style={{ width: 300, alignSelf: 'center', marginTop: 20, backgroundColor: 'purple' }}>Submit</Button>
                     </TouchableOpacity>
                 </View>

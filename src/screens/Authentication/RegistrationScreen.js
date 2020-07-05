@@ -1,117 +1,154 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableWithoutFeedback, Keyboard, Image } from 'react-native';
-
-import { Formik } from 'formik';
+import { Text, StyleSheet, ScrollView, ImageBackground, Image } from 'react-native';
 import * as yup from 'yup';
-import { TextInput, Button } from 'react-native-paper';
+import _ from "lodash";
 
-// import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-
-
-import Card from '../../components/Card';
-import navigationTheme from '../../navigations/navigationTheme';
-
+import { AppForm, AppFormInput, SubmitButton, ErrorMessage } from '../../components/forms';
+import colors from '../../utils/colors';
+import images from '../../utils/images';
+import userAPI from '../../api/user';
+import useAuth from '../../auth/useAuth';
 
 const reviewSchema = yup.object({
-    name: yup.string()
-        .required('Name is required'),
-    email: yup.string()
-        .required('Email is required')
-        .email(),
-    password: yup.string()
-        .required('Password is required')
-        .min(8),
-    confirmpassword: yup.string()
-        .required('Confirm password is required')
+    name: yup.string().required().label("Name"),
+    email: yup.string().required().email().label("Email"),
+    password: yup.string().required('Password is required').min(6),
+    confirmpassword: yup.string().required('Confirm password is required')
         .oneOf([yup.ref('password'), null], 'Passwords must match')
-})
+});
+
 
 const RegistrationScreen = ({ navigation }) => {
+
+    const auth = useAuth();
+
+    const [registerState, setRegisterState] = useState({
+        regError: null,
+        regLoader: false,
+    });
+
+    const handleRegister = async (user) => {
+        setRegisterState({ regLoader: true });
+        const result = await userAPI.register(_.pick(user, ["name", "email", "password"]));
+        setRegisterState({ regLoader: false });
+        if (!result.ok) {
+            if (result.data) setRegisterState({ regError: result.data.error });
+            else {
+                setRegisterState({ regError: "An unknown error occurred." });
+                console.log(result);
+            }
+            return;
+        }
+        auth.logIn(result.headers['x-auth-token']);
+    }
+
     return (
-        <TouchableWithoutFeedback onPress={() => { Keyboard.dismiss(); }}>
-            <View style={styles.screen}>
-                {/* <Text style={styles.title}>Register With Us!</Text> */}
-                <ScrollView>
-                    <Formik
-                        initialValues={{ name: '', email: '', password: '', confirmpassword: '' }}
-                        validationSchema={reviewSchema}
-                        onSubmit={(values) => {
-                            console.log(values);
-                        }}
-                    >
-                        {(props) => (
-                            <Card>
-                                <View style={styles.inputContainer}>
-                                    <Icon style={{ flex: 1, marginRight: 10 }} name="account" size={30} color="#a7287b" />
-                                    <TextInput style={{ flex: 12 }} label="Name" mode="outlined" onChangeText={props.handleChange('name')} value={props.values.name} onBlur={props.handleBlur('name')} />
-                                </View>
-                                <Text style={styles.errorText}>{props.touched.name && props.errors.name}</Text>
-                                <View style={styles.inputContainer}>
-                                    <Icon style={{ flex: 1, marginRight: 10 }} name="email" size={30} color="#a7287b" />
-                                    <TextInput style={{ flex: 12 }} label="Email" mode="outlined" keyboardType='email-address' onChangeText={props.handleChange('email')} value={props.values.email} onBlur={props.handleBlur('email')} />
-                                </View>
-                                <Text style={styles.errorText}>{props.touched.email && props.errors.email}</Text>
-                                <View style={styles.inputContainer}>
-                                    <Icon style={{ flex: 1, marginRight: 10 }} name="shield-lock" size={30} color="#a7287b" />
-                                    <TextInput secureTextEntry={true} style={{ flex: 12 }} label="Password" mode="outlined" onChangeText={props.handleChange('password')} value={props.values.password} onBlur={props.handleBlur('password')} />
-                                </View>
-                                <Text style={styles.errorText}>{props.touched.password && props.errors.password}</Text>
-                                <View style={styles.inputContainer}>
-                                    <Icon style={{ flex: 1, marginRight: 10 }} name="shield-check" size={30} color="#a7287b" />
-                                    <TextInput secureTextEntry={true} style={{ flex: 12 }} label="Confirm Password" mode="outlined" onChangeText={props.handleChange('confirmpassword')} value={props.values.confirmpassword} onBlur={props.handleBlur('confirmpassword')} />
-                                </View>
-                                <Text style={styles.errorText}>{props.touched.confirmpassword && props.errors.confirmpassword}</Text>
-                                <View style={styles.buttonContainer}>
-                                    <View style={styles.button}><Button onPress={() => navigation.navigate('Login')} color="#ff0000" mode="contained">Cancel</Button></View>
-                                    <View style={styles.button}><Button color="#a7287b" mode="contained" onPress={props.handleSubmit}>Register</Button></View>
-                                </View>
-                            </Card>
-                        )}
-                    </Formik>
-                </ScrollView>
-            </View>
-        </TouchableWithoutFeedback>
+        <ScrollView style={styles.scrollView}>
+            <ImageBackground source={images.LOGING_BACKGROUND} style={styles.backgroundImage} >
+                <Image
+                    style={styles.topImage}
+                    source={images.LOGO}
+                    resizeMode="contain"
+                />
+                <Text style={styles.headText}>REGISTER</Text>
+                <AppForm
+                    initialValues={{ name: "", email: "", password: "", confirmpassword: "" }}
+                    validationSchema={reviewSchema}
+                    onSubmit={handleRegister}
+                >
+                    <AppFormInput
+                        autoFocus={true}
+                        name="name"
+                        autoCapitalize="words"
+                        autoCorrect={false}
+                        style={styles.input}
+                        label="Name"
+                        mode="outlined"
+                    />
+
+                    <AppFormInput
+                        name="email"
+                        autoCapitalize="none"
+                        autoCorrect={false}
+                        style={styles.input}
+                        label="Email"
+                        mode="outlined"
+                    />
+
+                    <AppFormInput
+                        name="password"
+                        autoCapitalize="none"
+                        autoCorrect={false}
+                        secureTextEntry
+                        style={styles.input}
+                        label="Password"
+                        mode="outlined"
+                    />
+                    <AppFormInput
+                        name="confirmpassword"
+                        autoCapitalize="none"
+                        autoCorrect={false}
+                        secureTextEntry
+                        style={styles.input}
+                        label="Confirm Password"
+                        mode="outlined"
+                    />
+
+                    {registerState.regError && <ErrorMessage error={registerState.regError} />}
+
+                    <SubmitButton
+                        loading={registerState.regLoader}
+                        style={styles.button}
+                        color={colors.primary}
+                        contentStyle={styles.buttonContent}
+                        title="Register"
+                    />
+                </AppForm>
+            </ImageBackground>
+        </ScrollView>
+
     );
 };
 
 const styles = StyleSheet.create({
-    screen: {
-        padding: 10,
-        // alignItems: "center", //align center in horizontally
-        justifyContent: 'center' //align in vertically
+    container: {
+        flex: 1
     },
-    buttonContainer: {
-        flexDirection: 'row',
-        width: '100%',
-        justifyContent: 'space-between',
-        paddingHorizontal: 10,
-        paddingTop: 10,
-        paddingBottom: 15
+    backgroundImage: {
+        resizeMode: "stretch",
+        justifyContent: "center",
+        alignItems: 'center',
+    },
+    button: {
+        marginTop: 40,
+        alignSelf: 'auto',
+    },
+    headText: {
+        fontSize: 30,
+        justifyContent: 'center',
+        alignSelf: 'center',
+        color: 'purple'
+    },
+    buttonContent: {
+        height: 40,
+        width: 150,
     },
     title: {
         fontSize: 20,
         marginVertical: 10,
     },
-    button: {
-        width: 150
+    topImage: {
+        width: 200, height: 100,
+        justifyContent: 'center',
+        alignSelf: 'center',
+        marginTop: 60
     },
-    inputContainer: {
-        flexDirection: 'row',
-        flex: 1,
-        width: '100%',
-        alignItems: 'center',
-        //justifyContent: 'center',
+
+    input: {
+        height: 45,
+        marginTop: 10,
+        width: 300
     },
-    errorText: {
-        paddingLeft: 40,
-        color: 'crimson',
-        fontWeight: 'bold'
-    },
-    image: {
-        justifyContent: 'flex-start',
-        alignItems: 'flex-start'
-    }
 });
 
 export default RegistrationScreen;

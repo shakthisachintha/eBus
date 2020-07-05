@@ -1,10 +1,10 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { StyleSheet } from 'react-native'
 import { Button } from 'react-native-paper'
 import { LoginManager, AccessToken, GraphRequest, GraphRequestManager } from 'react-native-fbsdk'
 import ErrorHandler from './ErrorHandler'
 
-const FaceBookLogin = ({ loginSuccessCallback }) => {
+const FaceBookLogin = ({ loginSuccessCallback, loading }) => {
 
     return (
         <Button icon="facebook"
@@ -12,30 +12,38 @@ const FaceBookLogin = ({ loginSuccessCallback }) => {
             labelStyle={styles.facebookButtonLabel}
             mode="contained"
             color="dodgerblue"
-            onPress={() => loginWithFacebook(loginSuccessCallback)}
+            loading={loading}
+            onPress={() => { loginWithFacebook(loginSuccessCallback) }}
         >
             Facebook
         </Button>
     )
 }
 
-
 function loginWithFacebook(successCallback) {
+
     LoginManager.logInWithPermissions(["public_profile", "email"]).then(
         function (result) {
             if (result.isCancelled) {
                 ErrorHandler(new Error("Login Cancelled!"))
                 console.log("Login cancelled");
             } else {
-                console.log("Login Success", result.grantedPermissions.toString())
                 AccessToken.getCurrentAccessToken().then((accessToken) => {
                     const request = new GraphRequest('/me', {
                         accessToken: accessToken.accessToken, parameters: { fields: { string: 'id, name, email,picture.type(large)' } }, httpMethod: "POST"
                     }, function (error, result) {
+
                         if (error) {
                             ErrorHandler(error);
                         } else {
-                            successCallback(result)
+                            // console.log(result);
+                            const user = {
+                                name: result.name,
+                                email: result.email,
+                                image: result.picture.data.url,
+                                authProvider: 'facebook'
+                            }
+                            successCallback(user)
                         }
                     });
                     new GraphRequestManager().addRequest(request).start();
@@ -51,6 +59,7 @@ function loginWithFacebook(successCallback) {
         ErrorHandler(reason)
     });
 }
+
 
 export default FaceBookLogin
 

@@ -1,27 +1,32 @@
 import React from 'react'
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet, View, Text } from 'react-native'
 
 import AppCard from '../../components/AppCard'
-import colors from '../../utils/colors'
+import AppText from '../../components/AppText'
 import AppIcon from '../../components/AppIcon'
+import colors from '../../utils/colors'
+import useAuth from '../../auth/useAuth'
 
 
 
-const UserAccountScreen = ({ name = "Siny Johns", email = "joohndoe@gmail.com", image = "https://cdn.pixabay.com/photo/2017/04/03/15/52/love-you-2198772__340.png", navigation }) => {
+const UserAccountScreen = ({ navigation }) => {
+    const { user, logOut } = useAuth();
+
     return (
         <View>
             <AppCard
                 titleStyle={styles.name}
-                title={name}
-                subTitle={email}
-                image={image}
+                title={user.name}
+                subTitle={user.email}
+                image={user.image}
                 onPress={() => navigation.navigate("EditUserProfile")}
             />
             <View style={styles.container}>
                 <AppCard title="Wallet" onPress={() => navigation.navigate('Wallet')} IconComponent={<AppIcon name="credit-card-multiple" backgroundColor={colors.secondary} />} />
                 <AppCard title="My Messages" IconComponent={<AppIcon name="forum-outline" backgroundColor={colors.primary} />} />
                 <AppCard title="Settings" style={{ marginVertical: 30 }} IconComponent={<AppIcon name="settings" backgroundColor={'#5515ee'} />} />
-                <AppCard title="Logout" style={{ marginVertical: 25 }} IconComponent={<AppIcon name="logout" backgroundColor={'#F5d529'} />} />
+
+                <AppCard title="Logout" onPress={() => logOut()} IconComponent={<AppIcon name="logout" backgroundColor={'#F5d529'} />} />
 
             </View>
         </View>
