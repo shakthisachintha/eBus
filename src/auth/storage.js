@@ -1,3 +1,4 @@
+import React from 'react'
 import RNSecureKeyStore, { ACCESSIBLE } from "react-native-secure-key-store";
 import ErrorHandler from '../components/ErrorHandler';
 import jwtDecode from 'jwt-decode';

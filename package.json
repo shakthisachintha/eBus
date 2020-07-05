@@ -17,6 +17,7 @@
     "apisauce": "^1.1.1",
     "formik": "^2.1.4",
     "jwt-decode": "^2.2.0",
+    "lodash": "^4.17.15",
     "native-base": "^2.13.12",
     "react": "16.11.0",
     "react-native": "0.62.2",
@@ -31,6 +32,7 @@
     "react-native-safe-area-context": "^3.0.7",
     "react-native-screens": "^2.9.0",
     "react-native-secure-key-store": "^2.0.7",
+    "react-native-secure-storage": "^0.1.2",
     "react-native-vector-icons": "^6.6.0",
     "yup": "^0.29.1"
   },

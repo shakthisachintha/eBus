@@ -18,7 +18,7 @@ const UserAccountScreen = ({ navigation }) => {
                 titleStyle={styles.name}
                 title={user.name}
                 subTitle={user.email}
-                // image={userDetails.image.url}
+                image={user.image}
                 onPress={() => navigation.navigate("EditUserProfile")}
             />
             <View style={styles.container}>

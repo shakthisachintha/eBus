@@ -10,6 +10,7 @@ import images from '../../utils/images';
 import { AppForm, AppFormInput, SubmitButton, ErrorMessage } from '../../components/forms'
 import FaceBookLogin from '../../components/FaceBookLogin';
 import useAuth from '../../auth/useAuth';
+import userAPI from '../../api/user';
 
 
 const validationSchema = Yup.object().shape({
@@ -36,6 +37,13 @@ const LoginScreen = ({ navigation }) => {
     auth.logIn(result.headers['x-auth-token']);
   }
 
+  const handleFacebookLogin = async (user) => {
+    console.log(user);
+    const result = await userAPI.facebookRegister(user);
+    if (!result.ok) return alert("Error occured with Facebook login.");
+    auth.logIn(result.headers['x-auth-token']);
+  }
+
   navigation.dispatch(state => {
     // Remove the Loading route from the stack
     const routes = state.routes.filter(r => r.name !== 'Loading');
@@ -48,8 +56,7 @@ const LoginScreen = ({ navigation }) => {
   });
 
   return (
-    <View style={StyleSheet.container}>
-
+    <View>
       <ImageBackground source={images.LOGING_BACKGROUND} style={styles.backgroundImage} >
         <Image
           style={styles.topImage}
@@ -62,46 +69,40 @@ const LoginScreen = ({ navigation }) => {
           onSubmit={hadleLogin}
           validationSchema={validationSchema}
         >
-          <View style={{ flexDirection: 'column', marginTop: 0 }}>
+          <AppFormInput
+            name="email"
+            autoCapitalize="none"
+            autoCorrect={false}
+            style={styles.input}
+            label="Email"
+            mode="outlined"
+          />
+          <AppFormInput
+            name="password"
+            autoCapitalize="none"
+            autoCorrect={false}
+            secureTextEntry
+            style={styles.input}
+            label="Password"
+            mode="outlined"
+          />
+          <ErrorMessage style={{ marginTop: 10, alignSelf: "center" }} visible={loginState.hasLoginError} error={loginState.loginError} />
 
-            <AppFormInput
-              name="email"
-              autoCapitalize="none"
-              autoCorrect={false}
-              style={styles.input}
-              placeholder="Email"
-              label="Email"
-              mode="outlined"
-            />
-            <AppFormInput
-              name="password"
-              autoCapitalize="none"
-              autoCorrect={false}
-              secureTextEntry
-              style={styles.input}
-              placeholder="Password"
-              label="Password"
-              mode="outlined"
-            />
-            <ErrorMessage style={{ marginTop: 10, alignSelf: "center" }} visible={loginState.hasLoginError} error={loginState.loginError} />
+          <SubmitButton
+            loading={loginState.loginLoader}
+            style={styles.button}
+            color={colors.primary}
+            contentStyle={styles.buttonContent}
+            title="Login"
+          />
 
-            <SubmitButton
-              loading={loginState.loginLoader}
-              style={styles.button}
-              color={colors.primary}
-              contentStyle={styles.buttonContent}
-              title="Login"
-            />
-          </View>
 
         </AppForm>
 
         <Text style={styles.textSocial}>or Via Social Media</Text>
         <View style={styles.icon}>
 
-          <FaceBookLogin loginSuccessCallback={(user) => {
-            alert(`Logged In ${user.name} (${user.email})`)
-          }} />
+          <FaceBookLogin loginSuccessCallback={(user) => handleFacebookLogin(user)} />
 
         </View>
         <View style={{ flexDirection: 'row' }}>
@@ -161,11 +162,8 @@ const styles = StyleSheet.create({
     color: colors.white
   },
   icon: {
-    flexDirection: 'row',
-    margin: 20,
+    margin: 15,
     justifyContent: 'center',
-    alignSelf: 'center',
-    marginLeft: 20
   },
   input: {
     height: 45,

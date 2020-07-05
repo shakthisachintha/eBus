@@ -1,9 +1,10 @@
 import client from "./client";
 
-const endpoint = '/user';
+const register = (userInfo) => client.post("/user/register", userInfo);
 
-const getMyDetails = () => client.get("/user/me");
+const facebookRegister = (userInfo) => client.post("/user/register/facebook", userInfo);
 
 export default {
-    getMyDetails
+    register,
+    facebookRegister
 }
