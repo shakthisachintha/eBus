@@ -1,13 +1,10 @@
 import React from 'react'
 import { StyleSheet, View, Text } from 'react-native'
 
-import AppCard from '../../components/AppCard'
-import AppText from '../../components/AppText'
-import AppIcon from '../../components/AppIcon'
-import colors from '../../utils/colors'
-import useAuth from '../../auth/useAuth'
-
-
+import AppCard from '../../../components/AppCard'
+import AppIcon from '../../../components/AppIcon'
+import colors from '../../../utils/colors'
+import useAuth from '../../../auth/useAuth'
 
 const UserAccountScreen = ({ navigation }) => {
     const { user, logOut } = useAuth();

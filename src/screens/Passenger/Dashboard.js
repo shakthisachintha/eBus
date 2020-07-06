@@ -6,6 +6,7 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 
 import SideLabelDrawer from '../../components/SideLabelDrawer';
 import colors from '../../utils/colors';
+import AppText from '../../components/AppText';
 
 export default class Dashboard extends React.Component {
     payMethods = [
@@ -16,6 +17,7 @@ export default class Dashboard extends React.Component {
     render() {
         return (
             <View style={StyleSheet.container}>
+                <AppText>Dashboard Screen</AppText>
                 <SideLabelDrawer
                     rechargeSubmit={(method, amount) => alert(`${method}, ${amount}`)}
                     payMethods={this.payMethods}

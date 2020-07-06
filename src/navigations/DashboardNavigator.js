@@ -24,7 +24,7 @@ const AppNavigator = () => (
                 tabBarIcon: ({ color, size }) => <Icon name="format-list-bulleted-type" color={color} size={size} />
             }}
             name="Dashboard"
-            component={WalletScreen}
+            component={Dashboard}
         />
         <Tab.Screen
             options={({ navigation }) => ({

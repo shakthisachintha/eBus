@@ -1,11 +1,15 @@
 import React from 'react'
 import { createStackNavigator } from "@react-navigation/stack"
 
-import EditUserProfileScreen from '../screens/Passenger/EditUserProfileScreen';
-import SetNewPasswordScreen from '../screens/Authentication/SetNewPasswordScreen';
-import ChangePasswordScreen from '../screens/Passenger/ChangePasswordScreen';
-import UserAccountScreen from '../screens/Passenger/UserAccountScreen';
-import WalletScreen from '../screens/Passenger/WalletScreen';
+import {
+    EditUserProfileScreen,
+    UserAccountScreen,
+    ChangePasswordScreen,
+    WalletScreen,
+    SetNewPasswordScreen
+} from '../screens/Passenger';
+
+
 
 const Stack = createStackNavigator();
 
@@ -62,6 +66,7 @@ const AuthNavigator = () => (
                 title: 'Manage Wallet'
             }}
         />
+
     </Stack.Navigator>
 
 )
