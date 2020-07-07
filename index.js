@@ -5,6 +5,9 @@ import { name as appName } from './app.json';
 import App from './src/App';
 import colors from './src/utils/colors';
 
+import { YellowBox } from 'react-native';
+YellowBox.ignoreWarnings(["Picker has been extracted from react-native core and will be removed in a future release."]);
+
 
 const theme = {
   ...DefaultTheme,
