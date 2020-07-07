@@ -9,7 +9,6 @@ const WalletNavigator = () => (
     <Stack.Navigator initialRouteName="Wallet">
 
         <Stack.Screen
-
             name="Wallet"
             component={WalletScreen}
             options={{

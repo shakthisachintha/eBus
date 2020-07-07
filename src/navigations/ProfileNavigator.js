@@ -6,6 +6,7 @@ import {
     UserAccountScreen,
     ChangePasswordScreen,
     SetNewPasswordScreen,
+    UserProfileScreen,
 } from '../screens/Passenger';
 
 import WalletNavigator from './WalletNavigator';
@@ -29,10 +30,20 @@ const AuthNavigator = () => (
         />
 
         <Stack.Screen
+            name="Profile"
+            component={UserProfileScreen}
+            options={{
+                headerShown: false,
+                headerLeft: null,
+                title: 'Profile'
+            }}
+        />
+
+        <Stack.Screen
             name="EditUserProfile"
             component={EditUserProfileScreen}
             options={{
-                headerShown: false,
+                headerShown: true,
                 headerLeft: null,
                 title: 'Edit Profile'
             }}
@@ -52,7 +63,7 @@ const AuthNavigator = () => (
             name="ChangePassword"
             component={ChangePasswordScreen}
             options={{
-                headerShown: false,
+                headerShown: true,
                 headerLeft: null,
                 title: 'Reset Password'
             }}
