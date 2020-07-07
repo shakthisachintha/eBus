@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, TouchableWithoutFeedback, Keyboard, ScrollView,
 import { Formik } from 'formik';
 import * as yup from 'yup';
 import { TextInput, Button } from 'react-native-paper';
-import Card from '../../components/Card';
+import Card from '../../../components/Card';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 

@@ -1,11 +1,17 @@
 import React from 'react'
 import { createStackNavigator } from "@react-navigation/stack"
 
-import EditUserProfileScreen from '../screens/Passenger/EditUserProfileScreen';
-import SetNewPasswordScreen from '../screens/Authentication/SetNewPasswordScreen';
-import ChangePasswordScreen from '../screens/Passenger/ChangePasswordScreen';
-import UserAccountScreen from '../screens/Passenger/UserAccountScreen';
-import WalletScreen from '../screens/Passenger/WalletScreen';
+import {
+    EditUserProfileScreen,
+    UserAccountScreen,
+    ChangePasswordScreen,
+    SetNewPasswordScreen,
+    UserProfileScreen,
+} from '../screens/Passenger';
+
+import WalletNavigator from './WalletNavigator';
+
+
 
 const Stack = createStackNavigator();
 
@@ -24,10 +30,20 @@ const AuthNavigator = () => (
         />
 
         <Stack.Screen
+            name="Profile"
+            component={UserProfileScreen}
+            options={{
+                headerShown: false,
+                headerLeft: null,
+                title: 'Profile'
+            }}
+        />
+
+        <Stack.Screen
             name="EditUserProfile"
             component={EditUserProfileScreen}
             options={{
-                headerShown: false,
+                headerShown: true,
                 headerLeft: null,
                 title: 'Edit Profile'
             }}
@@ -47,21 +63,22 @@ const AuthNavigator = () => (
             name="ChangePassword"
             component={ChangePasswordScreen}
             options={{
-                headerShown: false,
+                headerShown: true,
                 headerLeft: null,
                 title: 'Reset Password'
             }}
         />
 
         <Stack.Screen
-            name="Wallet"
-            component={WalletScreen}
+            name="userWallet"
+            component={WalletNavigator}
             options={{
                 headerShown: false,
                 headerLeft: null,
-                title: 'Manage Wallet'
+                title: 'My Wallet'
             }}
         />
+
     </Stack.Navigator>
 
 )
