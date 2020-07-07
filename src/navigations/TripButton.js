@@ -5,11 +5,13 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const TripButton = function ({ onPress }) {
     return (
-        <TouchableOpacity onPress={onPress}>
-            <View style={styles.container}>
-                <Icon name="train-car" color={colors.primary} size={40} />
-            </View>
-        </TouchableOpacity>
+
+        <View style={styles.container}>
+            <TouchableOpacity onPress={onPress}>
+                <Icon name="train-car" color={colors.primary} size={50} />
+            </TouchableOpacity>
+        </View>
+
     )
 }
 
@@ -17,14 +19,13 @@ const styles = StyleSheet.create({
     container: {
         alignItems: 'center',
         backgroundColor: colors.white,
-        borderRadius: 45,
+        borderRadius: 40,
         borderColor: colors.primary,
-        borderWidth: 15,
+        borderWidth: 10,
         bottom: 30,
-        height: 90,
+        height: 80,
         justifyContent: 'center',
-        width: 90,
-
+        width: 80,
     }
 })
 

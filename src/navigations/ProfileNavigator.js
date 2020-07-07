@@ -15,7 +15,7 @@ import WalletNavigator from './WalletNavigator';
 
 const Stack = createStackNavigator();
 
-const AuthNavigator = () => (
+const ProfileNavigator = () => (
 
     <Stack.Navigator>
 
@@ -83,4 +83,4 @@ const AuthNavigator = () => (
 
 )
 
-export default AuthNavigator;
+export default ProfileNavigator;

@@ -15,33 +15,21 @@ import paymentAPI from '../../api/payment';
 
 const WalletScreen = ({ due, navigation }) => {
     const [payMethods, setPayMethods] = useState(null);
-    // const payMethods = [
-    //     { id: 1, label: "Primary (xxxx...2147 VISA)" },
-    //     { id: 2, label: "(xxxx...2156 MASTER)" },
-    //     { id: 25, label: "Credit/Debit Card" },
-    // ];
 
-    const { user } = useAuth()
-
-    const paymentParams = {
-        URL: "https://sandbox.payhere.lk/pay/preapprove",
-        method: "POST",
-        first_name: "Shakthi",
-        last_name: "Sachintha",
-        email: "shakthisachintha@gmail.com",
-        phone: "0774345234",
-        address: "Shakthi Sachintha " + config.APP_ADDRESS,
-        userID: user.id
-    }
+    const { user } = useAuth();
 
     const PaymentMethods = async () => {
         const result = await paymentAPI.getPaymentMethods();
-        if (!result.ok) return alert('Couldnt fetch payment data');
+        if (!result.ok) return alert("Couldn't fetch payment data");
         setPayMethods(result.data.paymentMethods);
     }
-
+    const isCancelled = React.useRef(false);
     useEffect(() => {
-        PaymentMethods();
+        let didCancel = false;
+        if (!isCancelled.current) PaymentMethods();
+        return () => {
+            isCancelled.current = true;
+        };
     })
 
     return (
@@ -62,7 +50,7 @@ const WalletScreen = ({ due, navigation }) => {
                 </View>
             )}
 
-            <AppCard title="Add Payment Method" onPress={() => navigation.navigate('PayHereWebView', paymentParams)} style={{ marginVertical: 30 }} IconComponent={<AppIcon name="card" backgroundColor={'#5415fe'} />} />
+            <AppCard title="Add Payment Method" onPress={() => navigation.navigate('PayHereWebView', user)} style={{ marginVertical: 30 }} IconComponent={<AppIcon name="card" backgroundColor={'#5415fe'} />} />
             <FlatList
                 data={payMethods}
                 renderItem={({ item }) => <Text style={{ fontSize: 24, backgroundColor: colors.mediumGray, padding: 15, marginVertical: 5 }}>{item.method} {item.cardDetails.cardMask}</Text>}
