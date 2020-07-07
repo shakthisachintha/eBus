@@ -2,11 +2,19 @@ import React from 'react'
 import { createStackNavigator } from "@react-navigation/stack"
 
 import { PayHereWebViewScreen, WalletScreen } from '../screens/Passenger';
+import colors from '../utils/colors';
+import { NONE } from 'apisauce';
 
 const Stack = createStackNavigator();
 
 const WalletNavigator = () => (
-    <Stack.Navigator initialRouteName="Wallet">
+    <Stack.Navigator screenOptions={{
+        gestureEnabled: true,
+        gestureDirection: "horizontal",
+        gestureResponseDistance: 10,
+        gestureVelocityImpact: 1,
+    }}
+        initialRouteName="Wallet">
 
         <Stack.Screen
 
@@ -24,7 +32,7 @@ const WalletNavigator = () => (
             options={{
                 headerShown: false,
                 cardOverlayEnabled: true,
-                title: 'User Profile'
+                title: 'Add payment method'
             }}
         />
     </Stack.Navigator>

@@ -6,28 +6,30 @@ import { WebView } from 'react-native-webview';
 import config from '../../../utils/config';
 import colors from '../../../utils/colors';
 
-const PayHereWebViewScreen = ({ route, navigation }) => {
+const PayHereWebViewScreen = ({ navigation, route }) => {
 
+
+    const user = route.params;
+    const [first_name, last_name] = `${user.name} eBus`.split(" ", 2);
     const postParams = {
         merchant_id: config.PAYHERE_MERCHANT_ID,
         return_url: config.PAYHERE_RETURN_URL,
         cancel_url: config.PAYHERE_CANCEL_URL,
         notify_url: config.PAYHERE_NOTIFY_URL,
-        first_name: route.params.first_name,
-        last_name: route.params.last_name,
-        email: route.params.email,
-        phone: route.params.phone,
-        address: route.params.address,
+        first_name,
+        last_name,
+        email: user.email,
+        phone: "0774345234",
+        address: `${user.name},${config.APP_ADDRESS}`,
         city: config.APP_CITY,
         country: config.APP_COUNTRY,
-        order_id: "ORDERID1",
-        items: "ITEM1",
-        custom_1: route.params.userID,
+        order_id: `ORDER_${user.id}`,
+        items: " ",
+        custom_1: user.id,
         currency: config.APP_CURRENCY
     }
-
+    console.log(postParams);
     const params = new URLSearchParams(postParams).toString();
-    console.log(params);
 
     const handleRedirect = (event) => {
         const { data } = event.nativeEvent;
@@ -42,7 +44,7 @@ const PayHereWebViewScreen = ({ route, navigation }) => {
             containerStyle={{ paddingVertical: 35 }}
             startInLoadingState={true}
             renderLoading={() => <ActivityIndicator size="large" />}
-            source={{ uri: route.params.URL, method: "post", body: params }}
+            source={{ uri: config.PAYHERE_PREAPPROVE_URL, method: "post", body: params }}
         />
     )
 }

@@ -17,6 +17,14 @@ const AppNavigator = () => (
         tabBarOptions={{
             activeTintColor: colors.white,
             inactiveTintColor: colors.black,
+            keyboardHidesTabBar: true,
+            adaptive: true,
+            allowFontScaling: true,
+            style: {
+                backgroundColor: colors.primary,
+                elevation: 0,
+                borderTopWidth: 0
+            }
         }}
     >
         <Tab.Screen
@@ -29,7 +37,6 @@ const AppNavigator = () => (
         <Tab.Screen
             options={({ navigation }) => ({
                 tabBarButton: () => <TripButton onPress={() => navigation.navigate("Trip")} />,
-
             })}
             name="Trip"
             component={TripScreen}
