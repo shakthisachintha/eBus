@@ -5,9 +5,10 @@ import {
     EditUserProfileScreen,
     UserAccountScreen,
     ChangePasswordScreen,
-    WalletScreen,
-    SetNewPasswordScreen
+    SetNewPasswordScreen,
 } from '../screens/Passenger';
+
+import WalletNavigator from './WalletNavigator';
 
 
 
@@ -58,12 +59,12 @@ const AuthNavigator = () => (
         />
 
         <Stack.Screen
-            name="Wallet"
-            component={WalletScreen}
+            name="userWallet"
+            component={WalletNavigator}
             options={{
                 headerShown: false,
                 headerLeft: null,
-                title: 'Manage Wallet'
+                title: 'My Wallet'
             }}
         />
 

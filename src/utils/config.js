@@ -1,8 +1,8 @@
 export default {
-    PAYHERE_MERCHANT_ID: "1214013",
-    PAYHERE_CANCEL_URL: "www.google.lk",
-    PAYHERE_NOTIFY_URL: "www.google.lk",
-    PAYHERE_RETURN_URL: "www.google.lk",
+    PAYHERE_MERCHANT_ID: "1214880",
+    PAYHERE_CANCEL_URL: "http://91b184155df4.ngrok.io/payments/payhere/cancel",
+    PAYHERE_NOTIFY_URL: "http://91b184155df4.ngrok.io/payments/payhere/notify",
+    PAYHERE_RETURN_URL: "http://91b184155df4.ngrok.io/payments/payhere/return",
     APP_COUNTRY: "SRI LANKA",
     APP_CITY: "Colombo",
     APP_CURRENCY: "LKR",

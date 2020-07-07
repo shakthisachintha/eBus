@@ -19,7 +19,7 @@ const UserAccountScreen = ({ navigation }) => {
                 onPress={() => navigation.navigate("EditUserProfile")}
             />
             <View style={styles.container}>
-                <AppCard title="Wallet" onPress={() => navigation.navigate('Wallet')} IconComponent={<AppIcon name="credit-card-multiple" backgroundColor={colors.secondary} />} />
+                <AppCard title="Wallet" onPress={() => navigation.navigate('userWallet')} IconComponent={<AppIcon name="credit-card-multiple" backgroundColor={colors.secondary} />} />
                 <AppCard title="My Messages" IconComponent={<AppIcon name="forum-outline" backgroundColor={colors.primary} />} />
                 <AppCard title="Settings" style={{ marginVertical: 30 }} IconComponent={<AppIcon name="settings" backgroundColor={'#5515ee'} />} />
 
