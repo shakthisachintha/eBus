@@ -10,7 +10,7 @@ import {
 } from '../screens/Passenger';
 
 import WalletNavigator from './WalletNavigator';
-
+import Edit from '../screens/Passenger/Account/Edit'
 
 
 const Stack = createStackNavigator();
@@ -41,7 +41,7 @@ const ProfileNavigator = () => (
 
         <Stack.Screen
             name="EditUserProfile"
-            component={EditUserProfileScreen}
+            component={Edit}
             options={{
                 headerShown: true,
                 headerLeft: null,
