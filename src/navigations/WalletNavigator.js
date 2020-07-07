@@ -17,7 +17,6 @@ const WalletNavigator = () => (
         initialRouteName="Wallet">
 
         <Stack.Screen
-
             name="Wallet"
             component={WalletScreen}
             options={{

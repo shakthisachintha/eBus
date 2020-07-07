@@ -6,5 +6,6 @@ export { default as ChangePasswordScreen } from './Account/ChangePasswordScreen'
 export { default as EditUserProfileScreen } from './Account/EditUserProfileScreen';
 export { default as SetNewPasswordScreen } from './Account/SetNewPasswordScreen';
 export { default as UserAccountScreen } from './Account/UserAccountScreen';
+export { default as UserProfileScreen } from './Account/UserProfileScreen';
 
 export { default as PayHereWebViewScreen } from './Payments/PayHereWebViewScreen';

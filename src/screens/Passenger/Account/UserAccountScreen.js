@@ -16,7 +16,7 @@ const UserAccountScreen = ({ navigation }) => {
                 title={user.name}
                 subTitle={user.email}
                 image={user.image}
-                onPress={() => navigation.navigate("EditUserProfile")}
+                onPress={() => navigation.navigate('Profile')}
             />
             <View style={styles.container}>
                 <AppCard title="Wallet" onPress={() => navigation.navigate('userWallet')} IconComponent={<AppIcon name="credit-card-multiple" backgroundColor={colors.secondary} />} />

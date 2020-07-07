@@ -16,12 +16,13 @@ import { TextInput, IconButton, Colors, Button } from 'react-native-paper';
 
 import ImagePicker from 'react-native-image-picker';
 
-import Card from '../../components/Card';
-import images from '../../utils/images';
+import Card from '../../../components/Card';
+import images from '../../../utils/images';
 
 
 const UserProfileScreen = ({ navigation }) => {
 
+    const { user } = useAuth();
     const [popvisibility, setPopvisibility] = useState(false);
     const [photo, setphoto] = useState(null);
 
@@ -55,7 +56,7 @@ const UserProfileScreen = ({ navigation }) => {
         <ScrollView>
             <View style={styles.container}>
                 <View style={styles.header}><Image style={{ width: '100%', height: '100%' }} source={images.USER_PROFILE_BACKGROUND} /></View>
-                <Image style={styles.avatar} source={{ uri: 'https://bootdey.com/img/Content/avatar/avatar6.png' }} />
+                <Image style={styles.avatar} source={{ uri : user.image }} />
                 <IconButton
                     icon="camera-account"
                     color={Colors.red500}
@@ -66,14 +67,13 @@ const UserProfileScreen = ({ navigation }) => {
                 />
                 <View style={styles.body}>
                     <View style={styles.bodyContent}>
-                        <Text style={styles.name}>John Doe</Text>
-                        <Text style={styles.info}>965550550V</Text>
+                        <Text style={styles.name}>{user.name}</Text>
                     </View>
                 </View>
                 <Card style={styles.firstcard}>
                     <View style={styles.item}>
                         <Text style={styles.label}>Email : </Text>
-                        <Text style={styles.detail}>johndoe@gmail.com</Text>
+                        <Text style={styles.detail}>{user.email}</Text>
                     </View>
                 </Card>
                 <Card style={styles.card}>
