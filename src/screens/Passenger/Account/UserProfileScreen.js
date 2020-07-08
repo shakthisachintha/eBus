@@ -1,128 +1,93 @@
 import React, { useState } from 'react';
-import {
-    StyleSheet,
-    Text,
-    View,
-    Image,
-    ScrollView,
-} from 'react-native';
-import Dialog, {
-    DialogTitle,
-    DialogContent,
-    DialogButton,
-    ScaleAnimation,
-} from 'react-native-popup-dialog';
-import { TextInput, IconButton, Colors, Button } from 'react-native-paper';
-
+import { StyleSheet, ScrollView, Image, View, Modal, ImageBackground,Text } from 'react-native';
+import * as yup from 'yup';
+import { IconButton, Colors, Button } from 'react-native-paper';
 import ImagePicker from 'react-native-image-picker';
 
-import Card from '../../../components/Card';
+import { AppForm, AppFormInput, SubmitButton, ErrorMessage } from '../../../components/forms';
+import colors from '../../../utils/colors';
+import useAuth from '../../../auth/useAuth';
 import images from '../../../utils/images';
+
 
 
 const UserProfileScreen = ({ navigation }) => {
 
     const { user } = useAuth();
-    const [popvisibility, setPopvisibility] = useState(false);
-    const [photo, setphoto] = useState(null);
 
-    //choose a photo from storage
-    const handleChoosePhoto = () => {
-        const options = {
-            noData: true,
-        };
-        ImagePicker.launchImageLibrary(options, response => {
-            if (response.uri) {
-                setPopvisibility(false);
-                console.log("response", response);
-                setphoto(response);
-            }
-        });
-    };
-    //take a photo
-    const handleTakePhoto = () => {
-        const options = {
-            noData: true,
-        };
-        ImagePicker.launchCamera(options, response => {
-            if (response.uri) {
-                setPopvisibility(false);
-                console.log("response", response);
-                setphoto(response);
-            }
-        });
-    };
     return (
-        <ScrollView>
-            <View style={styles.container}>
-                <View style={styles.header}><Image style={{ width: '100%', height: '100%' }} source={images.USER_PROFILE_BACKGROUND} /></View>
+        
+        <ScrollView style={styles.scrollView}>
+            <ImageBackground source={images.LOGING_BACKGROUND} style={styles.backgroundImage} >
+            {/* <Image
+                style={styles.topImage}
+                source={images.LOGO}
+                resizeMode="contain"
+            /> */}
+            <Text style={styles.userNameText}> {user.name} </Text>
+            <Text style={styles.emailText}> {user.email} </Text>
                 <Image style={styles.avatar} source={{ uri : user.image }} />
-                <IconButton
-                    icon="camera-account"
-                    color={Colors.red500}
-                    size={30}
-                    onPress={() => setPopvisibility(true)}
-                    name="Edit Profile"
-                    style={{ position: 'absolute', marginTop: 190, marginLeft: 230 }}
-                />
-                <View style={styles.body}>
-                    <View style={styles.bodyContent}>
-                        <Text style={styles.name}>{user.name}</Text>
-                    </View>
+                <View style={{paddingTop:200 ,justifyContent: "center",alignItems: 'center',}}>
+                    <AppForm
+                        initialValues={{ name: user.name , email: user.email, address: "", number: "", image:user.image }}
+                        style={styles.data}
+                        // validationSchema={reviewSchema}
+                        // onSubmit={handleUpdate}
+                    >
+                        <AppFormInput
+                            // autoFocus={true}
+                            name="name"
+                            autoCapitalize="words"
+                            autoCorrect={false}
+                            style={styles.input}
+                            label="Name"
+                            mode="outlined"
+                            disabled
+                            value={user.name}
+                        />
+
+                        <AppFormInput
+                            name="email"
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            style={styles.input}
+                            label="Email"
+                            mode="outlined"
+                            value={user.email}
+                            disabled
+                        />
+
+                        <AppFormInput
+                            name="address"
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            style={styles.input}
+                            label="Address"
+                            mode="outlined"
+                            disabled
+                            multiline
+                            value={user.address}
+                        />
+                        <AppFormInput
+                            name="number"
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            style={styles.input}
+                            label="Phone Number"
+                            mode="outlined"
+                            disabled
+                            value={user.address}
+                        />
+                    </AppForm>
                 </View>
-                <Card style={styles.firstcard}>
-                    <View style={styles.item}>
-                        <Text style={styles.label}>Email : </Text>
-                        <Text style={styles.detail}>{user.email}</Text>
-                    </View>
-                </Card>
-                <Card style={styles.card}>
-                    <View style={styles.item}>
-                        <Text style={styles.label}>Address : </Text>
-                        <Text style={styles.detail}>No 35, Reid avenue, Colombo 7</Text>
-                    </View>
-                </Card>
-                <Card style={styles.card}>
-                    <View style={styles.item}>
-                        <Text style={styles.label}>Phone number : </Text>
-                        <Text style={styles.detail}>0711234567</Text>
-                    </View>
-                </Card>
                 <View style={styles.buttonContainer}>
                     <Button mode="outlined" icon="shield-key" labelStyle={{ fontSize: 13 }} onPress={() => navigation.navigate('ChangePassword')}>Change Password</Button>
                     <Button mode="outlined" icon="account-edit" labelStyle={{ fontSize: 13 }} onPress={() => navigation.navigate('EditUserProfile')} >Edit Details</Button>
                 </View>
-            </View>
-
-            {/* popup window */}
-            <Dialog
-                onTouchOutside={() => {
-                    setPopvisibility(false);
-                }}
-                width={0.9}
-                visible={popvisibility}
-                dialogAnimation={new ScaleAnimation()}
-                onHardwareBackPress={() => {
-                    setPopvisibility(false);
-                    return true;
-                }}
-                dialogTitle={
-                    <DialogTitle
-                        title="Change Profile Picture"
-                        hasTitleBar={false}
-                    />
-                }>
-                <DialogContent>
-                    <View style={styles.photobuttons}>
-                        <Button icon="camera-image" onPress={handleChoosePhoto}>Upload a photo</Button>
-                    </View>
-                    <View style={styles.photobuttons}>
-                        <Button icon="camera" onPress={handleTakePhoto}>Take a photo</Button>
-                    </View>
-                </DialogContent>
-            </Dialog>
-
+            </ImageBackground>
         </ScrollView>
+        
+
     );
 };
 
@@ -130,9 +95,53 @@ const styles = StyleSheet.create({
     container: {
         flex: 1
     },
-    header: {
-        backgroundColor: "#00BFFF",
-        height: 150,
+    backgroundImage: {
+        resizeMode: "stretch",
+        justifyContent: "center",
+        alignItems: 'center',
+        // paddingTop: 300
+    },
+    button: {
+        marginTop: 40,
+        alignSelf: 'center',
+    },
+    headText: {
+        fontSize: 30,
+        justifyContent: 'center',
+        alignSelf: 'center',
+        color: 'purple'
+    },
+    buttonContent: {
+        height: 40,
+        width: 150,
+    },
+    title: {
+        fontSize: 20,
+        marginVertical: 10,
+    },
+    userNameText: {
+        // width: 75, height: 75,
+        // justifyContent: 'center',
+        alignSelf: 'flex-start',
+        position:'absolute',
+        top:65,
+        left:30,
+        fontSize:20,
+        fontWeight:'bold',
+        color: 'white'
+        // marginTop: 60
+    },
+    emailText: {
+        alignSelf: 'flex-start',
+        position:'absolute',
+        top:92,
+        left:30,
+        color: 'white'
+    },
+    input: {
+        height: 45,
+        marginTop: 10,
+        width: 300
     },
     avatar: {
         width: 130,
@@ -140,28 +149,10 @@ const styles = StyleSheet.create({
         borderRadius: 63,
         borderWidth: 4,
         borderColor: "white",
-        marginBottom: 10,
         alignSelf: 'center',
         position: 'absolute',
-        marginTop: 95
-    },
-    body: {
-        marginTop: 40,
-    },
-    bodyContent: {
-        flex: 1,
-        alignItems: 'center',
-        padding: 30,
-    },
-    name: {
-        fontSize: 28,
-        color: "black",
-        fontWeight: "600"
-    },
-    info: {
-        fontSize: 16,
-        color: "#696969",
-        marginTop: 10
+        top:50,
+        right:40
     },
     buttonContainer: {
         flexDirection: 'row',
@@ -169,31 +160,6 @@ const styles = StyleSheet.create({
         padding: 30,
         paddingBottom: 60
     },
-    firstcard: {
-        // marginTop: 10,
-        alignSelf: 'center',
-        width: '95%'
-    },
-    card: {
-        marginTop: 15,
-        alignSelf: 'center',
-        width: '95%'
-    },
-    item: {
-        flexDirection: 'row',
-    },
-    label: {
-        fontSize: 15,
-        fontStyle: 'italic'
-    },
-    detail: {
-        fontSize: 15,
-        fontWeight: 'bold',
-        width: '80%'
-    },
-    photobuttons: {
-        paddingVertical: 7
-    }
 });
 
 export default UserProfileScreen;
