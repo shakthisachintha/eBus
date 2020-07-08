@@ -1,105 +1,141 @@
-import React from 'react';
-import { StyleSheet, Text, View, TouchableWithoutFeedback, Keyboard, ScrollView, } from 'react-native';
-import { Formik } from 'formik';
+import React, { useState } from 'react';
+import { StyleSheet, ScrollView, Image, View, ImageBackground } from 'react-native';
 import * as yup from 'yup';
-import { TextInput, Button } from 'react-native-paper';
-import Card from '../../../components/Card';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-
+import { AppForm, AppFormInput, SubmitButton, ErrorMessage } from '../../../components/forms';
+import colors from '../../../utils/colors';
+import useAuth from '../../../auth/useAuth';
+import images from '../../../utils/images';
 
 const reviewSchema = yup.object({
-    oldPassword: yup.string()
-        .required('Old password is required')
-        .min(8),
-    newPassword: yup.string()
-        .required('New password is required')
-        .min(8),
-    confirmNewPassword: yup.string()
-        .required('Confirm password is required')
-        .oneOf([yup.ref('newPassword'), null], 'Passwords must match')
-})
+    oldpassword: yup.string().required('Old password is required').min(6),
+    newpassword: yup.string().required('New password is required').min(6),
+    confirmpassword: yup.string().required('Confirm password is required')
+    .oneOf([yup.ref('password'), null], 'Passwords must match')
+});
+
 
 const ChangePasswordScreen = ({ navigation }) => {
-    return (
-        <TouchableWithoutFeedback onPress={() => { Keyboard.dismiss(); }}>
-            <View style={styles.screen}>
-                <Text style={styles.title}>Change Password</Text>
-                <ScrollView>
-                    <Formik
-                        initialValues={{ oldPassword: '', newPassword: '', confirmNewPassword: '' }}
-                        validationSchema={reviewSchema}
-                        onSubmit={(values) => {
-                            console.log(values);
-                        }}
-                    >
-                        {(props) => (
-                            <Card>
-                                <View style={styles.inputContainer}>
-                                    <Icon style={{ flex: 1, marginRight: 10 }} name="shield-remove" size={30} color="#a7287b" />
-                                    <TextInput secureTextEntry={true} style={{ flex: 12 }} label="Old Password" mode="outlined" onChangeText={props.handleChange('oldPassword')} value={props.values.oldPassword} onBlur={props.handleBlur('oldPassword')} />
-                                </View>
-                                <Text style={styles.errorText}>{props.touched.oldPassword && props.errors.oldPassword}</Text>
-                                <View style={styles.inputContainer}>
-                                    <Icon style={{ flex: 1, marginRight: 10 }} name="shield-plus" size={30} color="#a7287b" />
-                                    <TextInput secureTextEntry={true} style={{ flex: 12 }} label="New Password" mode="outlined" onChangeText={props.handleChange('newPassword')} value={props.values.newPassword} onBlur={props.handleBlur('newPassword')} />
-                                </View>
-                                <Text style={styles.errorText}>{props.touched.newPassword && props.errors.newPassword}</Text>
-                                <View style={styles.inputContainer}>
-                                    <Icon style={{ flex: 1, marginRight: 10 }} name="shield-check" size={30} color="#a7287b" />
-                                    <TextInput secureTextEntry={true} style={{ flex: 12 }} label="Re-enter the new password" mode="outlined" onChangeText={props.handleChange('confirmNewPassword')} value={props.values.confirmNewPassword} onBlur={props.handleBlur('confirmNewPassword')} />
-                                </View>
-                                <Text style={styles.errorText}>{props.touched.confirmNewPassword && props.errors.confirmNewPassword}</Text>
 
-                                <View style={styles.buttonContainer}>
-                                    <View style={styles.button}><Button color="#ff0000" mode="contained" onPress={() => navigation.goBack()}>Cancel</Button></View>
-                                    <View style={styles.button}><Button color="#a7287b" mode="contained" onPress={props.handleSubmit}>Change</Button></View>
-                                </View>
-                            </Card>
-                        )}
-                    </Formik>
-                </ScrollView>
-            </View>
-        </TouchableWithoutFeedback>
+    const { user } = useAuth();
+    const [updateState, setUpdateState] = useState({
+        updateError: null,
+        updateLoader: false,
+    });
+
+    const handleUpdate = (values) => {
+        setUpdateState({ updateLoader: true });
+        // const result = await userAPI.register(_.pick(user, ["name", "email", "password"]));
+        // setRegisterState({ regLoader: false });
+        // if (!result.ok) {
+        //     if (result.data) setRegisterState({ regError: result.data.error });
+        //     else {
+        //         setRegisterState({ regError: "An unknown error occurred." });
+        //         console.log(result);
+        //     }
+        //     return;
+        // }
+        // auth.logIn(result.headers['x-auth-token']);
+        console.log(values);
+    }
+
+    return (
+        
+        <ScrollView style={styles.scrollView}>
+            <ImageBackground source={images.LOGING_BACKGROUND} style={styles.backgroundImage} >
+                <Image style={styles.avatar} source={{ uri : user.image }} />
+                <View style={{paddingTop:130 ,justifyContent: "center",alignItems: 'center',}}>
+                    <AppForm
+                        initialValues={{ oldpassword: "" , newpassword: "" , confirmpassword: "" }}
+                        validationSchema={reviewSchema}
+                        onSubmit={handleUpdate}
+                    >
+                        <AppFormInput
+                            // autoFocus={true}
+                            name="oldpassword"
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            style={styles.input}
+                            label="Old Password"
+                            mode="outlined"
+                        />
+
+                        <AppFormInput
+                            name="newpassword"
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            style={styles.input}
+                            label="New Password"
+                            mode="outlined"
+                            secureTextEntry
+                        />
+
+                        <AppFormInput
+                            name="confirmpassword"
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            style={styles.input}
+                            label="Confirm Password"
+                            mode="outlined"
+                            secureTextEntry
+                        />
+
+                        {updateState.updateError && <ErrorMessage error={updateState.updateError} />}
+
+                        <SubmitButton
+                            loading={updateState.updateLoader}
+                            style={styles.button}
+                            color={colors.primary}
+                            contentStyle={styles.buttonContent}
+                            title="Update"
+                        />
+                    </AppForm>
+                </View>
+            </ImageBackground>
+        </ScrollView>
+        
+
     );
 };
 
 const styles = StyleSheet.create({
-    screen: {
-        padding: 10,
-        // alignItems: "center", //align center in horizontally
-        justifyContent: 'center' //align in vertically
+    container: {
+        flex: 1
     },
-    buttonContainer: {
-        flexDirection: 'row',
-        width: '100%',
-        justifyContent: 'space-between',
-        paddingHorizontal: 10,
-        paddingTop: 10,
-        paddingBottom: 15
+    backgroundImage: {
+        resizeMode: "stretch",
+        justifyContent: "center",
+        alignItems: 'center',
+    },
+    button: {
+        marginTop: 40,
+        alignSelf: 'center',
+    },
+    headText: {
+        fontSize: 30,
+        justifyContent: 'center',
+        alignSelf: 'center',
+        color: 'purple'
+    },
+    buttonContent: {
+        height: 40,
+        width: 150,
     },
     title: {
         fontSize: 20,
         marginVertical: 10,
     },
-    button: {
-        width: 150
+    topImage: {
+        width: 200, height: 100,
+        justifyContent: 'center',
+        alignSelf: 'center',
+        marginTop: 60
     },
-    inputContainer: {
-        flexDirection: 'row',
-        flex: 1,
-        width: '100%',
-        alignItems: 'center',
-        //justifyContent: 'center',
-    },
-    errorText: {
-        paddingLeft: 40,
-        color: 'crimson',
-        fontWeight: 'bold'
-    },
-    image: {
-        justifyContent: 'flex-start',
-        alignItems: 'flex-start'
+
+    input: {
+        height: 45,
+        marginTop: 10,
+        width: 300
     }
 });
 
