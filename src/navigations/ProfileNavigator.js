@@ -10,8 +10,9 @@ import {
 } from '../screens/Passenger';
 
 import WalletNavigator from './WalletNavigator';
-import Edit from '../screens/Passenger/Account/Edit'
-import Profile from '../screens/Passenger/Account/Profile'
+import Edit from '../screens/Passenger/Account/Edit';
+import Profile from '../screens/Passenger/Account/Profile';
+import Password from '../screens/Passenger/Account/Password'
 
 
 const Stack = createStackNavigator();
@@ -62,11 +63,11 @@ const ProfileNavigator = () => (
 
         <Stack.Screen
             name="ChangePassword"
-            component={ChangePasswordScreen}
+            component={Password}
             options={{
                 headerShown: true,
                 headerLeft: null,
-                title: 'Reset Password'
+                title: 'Change Password'
             }}
         />
 
