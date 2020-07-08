@@ -1,15 +1,27 @@
-import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import React, { useState } from 'react'
+import { StyleSheet, Text, View, TouchableNativeFeedback } from 'react-native'
+
+
 import AppIcon from '../../components/AppIcon'
 import colors from '../../utils/colors'
+import useLocation from '../../hooks/useLocation'
+import { TouchableOpacity } from 'react-native-gesture-handler'
+
 
 
 const TripScreen = () => {
 
+    const location = useLocation();
+    console.log(location);
+
     return (
         <View style={styles.container}>
-            <AppIcon name="crosshairs-gps" size={80} backgroundColor={colors.secondary} iconColor={colors.white}> </AppIcon>
+            <TouchableOpacity>
+                <AppIcon name="crosshairs-gps" size={80} backgroundColor={colors.secondary} iconColor={colors.white}> </AppIcon>
+            </TouchableOpacity>
+
             <Text style={styles.helpText}>You don't have any active trips</Text>
+            {/* <Text>Longitude:{cords} Latitude:{cords}</Text> */}
         </View>
     )
 }
