@@ -12,7 +12,7 @@ const reviewSchema = yup.object({
     name: yup.string().required().label("Name"),
     email: yup.string().required().email().label("Email"),
     address: yup.string(),
-    number: yup.string().test('len', 'Must be exactly 10 digits', val => val.length === 10)
+    number: yup.string().test('len', 'Must be exactly 10 characters', (val) => { if(val) return val.toString().length === 10; })
 });
 
 
@@ -83,7 +83,7 @@ const UserDetailsEditScreen = ({ navigation }) => {
                 />
                 <View style={{paddingTop:130 ,justifyContent: "center",alignItems: 'center',}}>
                     <AppForm
-                        initialValues={{ name: user.name , email: user.email, address: "", number: "" }}
+                        initialValues={{ name: user.name , email: user.email, address: "", number: "", image:user.image }}
                         validationSchema={reviewSchema}
                         onSubmit={handleUpdate}
                     >
@@ -95,7 +95,7 @@ const UserDetailsEditScreen = ({ navigation }) => {
                             style={styles.input}
                             label="Name"
                             mode="outlined"
-                            // value={props.values.name}
+                            value={user.name}
                         />
 
                         <AppFormInput
@@ -105,7 +105,8 @@ const UserDetailsEditScreen = ({ navigation }) => {
                             style={styles.input}
                             label="Email"
                             mode="outlined"
-                            // value={user.email}
+                            keyboardType='email-address'
+                            value={user.email}
                         />
 
                         <AppFormInput
@@ -115,6 +116,8 @@ const UserDetailsEditScreen = ({ navigation }) => {
                             style={styles.input}
                             label="Address"
                             mode="outlined"
+                            value={user.address}
+                            multiline
                         />
                         <AppFormInput
                             name="number"
@@ -123,6 +126,8 @@ const UserDetailsEditScreen = ({ navigation }) => {
                             style={styles.input}
                             label="Phone Number"
                             mode="outlined"
+                            keyboardType='numeric'
+                            value={user.number}
                         />
 
                         {updateState.updateError && <ErrorMessage error={updateState.updateError} />}
