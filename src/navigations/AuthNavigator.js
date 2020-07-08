@@ -35,7 +35,7 @@ const AuthNavigator = () => (
         <Stack.Screen
             name="Register"
             component={RegistrationScreen}
-            options={{ title: "Register" }}
+            options={{ title: "Register With Us" }}
         />
 
         <Stack.Screen

@@ -1,117 +1,230 @@
-import React from 'react';
-import { StyleSheet, Text, View, TouchableWithoutFeedback, Keyboard, ScrollView, } from 'react-native';
-import { Formik } from 'formik';
+import React, { useState } from 'react';
+import { StyleSheet, ScrollView, Image, View, Modal } from 'react-native';
 import * as yup from 'yup';
-import { TextInput, Button } from 'react-native-paper';
-import Card from '../../../components/Card';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { IconButton, Colors, Button } from 'react-native-paper';
+import ImagePicker from 'react-native-image-picker';
 
-
+import { AppForm, AppFormInput, SubmitButton, ErrorMessage } from '../../../components/forms';
+import colors from '../../../utils/colors';
+import useAuth from '../../../auth/useAuth';
 
 const reviewSchema = yup.object({
-    name: yup.string()
-        .required('First name is required'),
-    email: yup.string()
-        .required()
-        .email(),
-    nic: yup.string()
-        .min(10, 'National Identity Card Number must be at least 10 characters')
-        .max(12, 'National Identity Card Number must be at most 12 characters'),
+    name: yup.string().required().label("Name"),
+    email: yup.string().required().email().label("Email"),
     address: yup.string(),
-    number: yup.number()
-        .min(10, 'Phone number must be at least 10 characters')
-})
+    number: yup.string().max(10)
+});
+
 
 const EditUserProfileScreen = ({ navigation }) => {
-    return (
-        <TouchableWithoutFeedback onPress={() => { Keyboard.dismiss(); }}>
-            <View style={styles.screen}>
-                <Text style={styles.title}>Edit details</Text>
-                <ScrollView>
-                    <Formik
-                        initialValues={{ name: 'John Doe', email: 'johndoe@gmail.com', nic: '', address: '', number: '' }}
-                        validationSchema={reviewSchema}
-                        onSubmit={(values) => {
-                            console.log(values);
-                        }}
-                    >
-                        {(props) => (
-                            <Card>
-                                <View style={styles.inputContainer}>
-                                    <Icon style={{ flex: 1, marginRight: 10 }} name="account" size={30} color="#a7287b" />
-                                    <TextInput style={{ flex: 12 }} label="First Name" mode="outlined" onChangeText={props.handleChange('name')} value={props.values.name} onBlur={props.handleBlur('name')} />
-                                </View>
-                                <Text style={styles.errorText}>{props.touched.name && props.errors.name}</Text>
-                                <View style={styles.inputContainer}>
-                                    <Icon style={{ flex: 1, marginRight: 10 }} name="email" size={30} color="#a7287b" />
-                                    <TextInput style={{ flex: 12 }} label="Email" mode="outlined" keyboardType='email-address' onChangeText={props.handleChange('email')} value={props.values.email} onBlur={props.handleBlur('email')} />
-                                </View>
-                                <Text style={styles.errorText}>{props.touched.email && props.errors.email}</Text>
-                                <View style={styles.inputContainer}>
-                                    <Icon style={{ flex: 1, marginRight: 10 }} name="account-card-details" size={30} color="#a7287b" />
-                                    <TextInput style={{ flex: 12 }} label="National Identity Card No." mode="outlined" onChangeText={props.handleChange('nic')} value={props.values.nic} onBlur={props.handleBlur('nic')} />
-                                </View>
-                                <Text style={styles.errorText}>{props.touched.nic && props.errors.nic}</Text>
-                                <View style={styles.inputContainer}>
-                                    <Icon style={{ flex: 1, marginRight: 10 }} name="home-map-marker" size={30} color="#a7287b" />
-                                    <TextInput multiline style={{ flex: 12 }} label="Address" mode="outlined" onChangeText={props.handleChange('address')} value={props.values.address} onBlur={props.handleBlur('address')} />
-                                </View>
-                                <Text style={styles.errorText}>{props.touched.address && props.errors.address}</Text>
-                                <View style={styles.inputContainer}>
-                                    <Icon style={{ flex: 1, marginRight: 10 }} name="cellphone-basic" size={30} color="#a7287b" />
-                                    <TextInput style={{ flex: 12 }} label="Phone number" mode="outlined" onChangeText={props.handleChange('number')} value={props.values.number} onBlur={props.handleBlur('number')} keyboardType='numeric' />
-                                </View>
-                                <Text style={styles.errorText}>{props.touched.number && props.errors.number}</Text>
 
-                                <View style={styles.buttonContainer}>
-                                    <View style={styles.button}><Button color="#ff0000" mode="contained" onPress={() => navigation.goBack()}>Cancel</Button></View>
-                                    <View style={styles.button}><Button color="#a7287b" mode="contained" onPress={props.handleSubmit}>Save</Button></View>
-                                </View>
-                            </Card>
-                        )}
-                    </Formik>
-                </ScrollView>
-            </View>
-        </TouchableWithoutFeedback>
+    const { user } = useAuth();
+    const [updateState, setUpdateState] = useState({
+        updateError: null,
+        updateLoader: false,
+    });
+    const [modal, setModal] = useState(false);
+    const [photo, setphoto] = useState(null);
+
+    //choose a photo from storage
+    const handleChoosePhoto = () => {
+        const options = {
+            noData: true,
+        };
+        ImagePicker.launchImageLibrary(options, response => {
+            if (response.uri) {
+                setModal(false);
+                console.log("response", response);
+                setphoto(response);
+            }
+        });
+    };
+    //take a photo
+    const handleTakePhoto = () => {
+        const options = {
+            noData: true,
+        };
+        ImagePicker.launchCamera(options, response => {
+            if (response.uri) {
+                setModal(false);
+                console.log("response", response);
+                setphoto(response);
+            }
+        });
+    };
+
+    const handleUpdate = (values) => {
+        setUpdateState({ updateLoader: true });
+        // const result = await userAPI.register(_.pick(user, ["name", "email", "password"]));
+        // setRegisterState({ regLoader: false });
+        // if (!result.ok) {
+        //     if (result.data) setRegisterState({ regError: result.data.error });
+        //     else {
+        //         setRegisterState({ regError: "An unknown error occurred." });
+        //         console.log(result);
+        //     }
+        //     return;
+        // }
+        // auth.logIn(result.headers['x-auth-token']);
+        console.log(values);
+    }
+
+    return (
+        
+        <ScrollView style={styles.container}>
+            {/* <ImageBackground source={images.LOGING_BACKGROUND} style={styles.backgroundImage} > */}
+                <Image style={styles.avatar} source={{ uri : user.image }} />
+                <IconButton
+                    icon="camera-account"
+                    color={Colors.red500}
+                    size={30}
+                    onPress={() => setModal(true)}
+                    style={{ position: 'absolute', marginTop: 60, marginLeft: 250 }}
+                />
+                <View style={{paddingTop:130 ,justifyContent: "center",alignItems: 'center',}}>
+                    <AppForm
+                        initialValues={{ name: user.name , email: user.email, address: "", number: "", image:user.image }}
+                        validationSchema={reviewSchema}
+                        onSubmit={handleUpdate}
+                    >
+                        <AppFormInput
+                            // autoFocus={true}
+                            name="name"
+                            autoCapitalize="words"
+                            autoCorrect={false}
+                            style={styles.input}
+                            label="Name"
+                            mode="outlined"
+                            // value={user.name}
+                        />
+
+                        <AppFormInput
+                            name="email"
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            style={styles.input}
+                            label="Email"
+                            mode="outlined"
+                            keyboardType='email-address'
+                            value={user.email}
+                        />
+
+                        <AppFormInput
+                            name="address"
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            style={styles.input}
+                            label="Address"
+                            mode="outlined"
+                            value={user.address}
+                            multiline
+                        />
+                        <AppFormInput
+                            name="number"
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            style={styles.input}
+                            label="Phone Number"
+                            mode="outlined"
+                            keyboardType='numeric'
+                            value={user.number}
+                        />
+
+                        {updateState.updateError && <ErrorMessage error={updateState.updateError} />}
+
+                        <SubmitButton
+                            loading={updateState.updateLoader}
+                            style={styles.button}
+                            color={colors.primary}
+                            contentStyle={styles.buttonContent}
+                            title="Update"
+                        />
+                    </AppForm>
+                </View>
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={modal}
+                    onRequestClose={() => {
+                        setModal(false);
+                    }}
+                >
+                    <View style={styles.modalView}>
+                    <View style={styles.photobuttons}>
+                        <Button mode="contained" icon="upload" onPress={handleChoosePhoto}>Upload a photo</Button>
+                    </View>
+                    <View style={styles.photobuttons}>
+                        <Button mode="contained" icon="camera" onPress={handleTakePhoto}>Take a photo</Button>
+                    </View>
+                    </View>
+                </Modal>
+            {/* </ImageBackground> */}
+        </ScrollView>
+        
+
     );
 };
 
 const styles = StyleSheet.create({
-    screen: {
-        padding: 10,
-        // alignItems: "center", //align center in horizontally
-        justifyContent: 'center' //align in vertically
+    container: {
+        flex: 1
     },
-    buttonContainer: {
-        flexDirection: 'row',
-        width: '100%',
-        justifyContent: 'space-between',
-        paddingHorizontal: 10,
-        paddingTop: 10,
-        paddingBottom: 15
+    backgroundImage: {
+        resizeMode: "stretch",
+        justifyContent: "center",
+        alignItems: 'center',
+    },
+    button: {
+        // marginTop: 30,
+        margin:35,
+        alignSelf: 'center',
+    },
+    headText: {
+        fontSize: 30,
+        justifyContent: 'center',
+        alignSelf: 'center',
+        color: 'purple'
+    },
+    buttonContent: {
+        height: 40,
+        width: 150,
     },
     title: {
         fontSize: 20,
         marginVertical: 10,
     },
-    button: {
-        width: 150
+    topImage: {
+        width: 200, height: 100,
+        justifyContent: 'center',
+        alignSelf: 'center',
+        marginTop: 60
     },
-    inputContainer: {
-        flexDirection: 'row',
-        flex: 1,
+
+    input: {
+        height: 45,
+        marginTop: 10,
+        width: 300
+    },
+    avatar: {
+        width: 130,
+        height: 130,
+        borderRadius: 63,
+        borderWidth: 4,
+        borderColor: "white",
+        alignSelf: 'center',
+        position: 'absolute',
+        top:10,
+        // right:80
+    },
+    modalView: {
+        position:'absolute',
+        bottom:1,
+        alignSelf:'center',
         width: '100%',
-        alignItems: 'center',
-        //justifyContent: 'center',
+        backgroundColor:"#ffffff"
     },
-    errorText: {
-        paddingLeft: 40,
-        color: 'crimson',
-        fontWeight: 'bold'
-    },
-    image: {
-        justifyContent: 'flex-start',
-        alignItems: 'flex-start'
+    photobuttons: {
+        padding:15
     }
 });
 

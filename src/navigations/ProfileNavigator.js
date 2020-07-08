@@ -12,7 +12,6 @@ import {
 import WalletNavigator from './WalletNavigator';
 
 
-
 const Stack = createStackNavigator();
 
 const ProfileNavigator = () => (
@@ -65,7 +64,7 @@ const ProfileNavigator = () => (
             options={{
                 headerShown: true,
                 headerLeft: null,
-                title: 'Reset Password'
+                title: 'Change Password'
             }}
         />
 
