@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
-import { Text, StyleSheet, ScrollView, ImageBackground, Image, View } from 'react-native';
+import { StyleSheet, ScrollView, Image, View, Modal } from 'react-native';
 import * as yup from 'yup';
-import { IconButton, Colors } from 'react-native-paper';
+import { IconButton, Colors, Button } from 'react-native-paper';
+import ImagePicker from 'react-native-image-picker';
 
 import { AppForm, AppFormInput, SubmitButton, ErrorMessage } from '../../../components/forms';
 import colors from '../../../utils/colors';
-import images from '../../../utils/images';
 import useAuth from '../../../auth/useAuth';
 
 const reviewSchema = yup.object({
     name: yup.string().required().label("Name"),
     email: yup.string().required().email().label("Email"),
     address: yup.string(),
-    // number: yup.string().test('len', 'Must be exactly 10 digits', val => val.length === 10)
+    number: yup.string().test('len', 'Must be exactly 10 digits', val => val.length === 10)
 });
 
 
@@ -23,6 +23,35 @@ const UserDetailsEditScreen = ({ navigation }) => {
         updateError: null,
         updateLoader: false,
     });
+    const [modal, setModal] = useState(false);
+    const [photo, setphoto] = useState(null);
+
+    //choose a photo from storage
+    const handleChoosePhoto = () => {
+        const options = {
+            noData: true,
+        };
+        ImagePicker.launchImageLibrary(options, response => {
+            if (response.uri) {
+                setModal(false);
+                console.log("response", response);
+                setphoto(response);
+            }
+        });
+    };
+    //take a photo
+    const handleTakePhoto = () => {
+        const options = {
+            noData: true,
+        };
+        ImagePicker.launchCamera(options, response => {
+            if (response.uri) {
+                setModal(false);
+                console.log("response", response);
+                setphoto(response);
+            }
+        });
+    };
 
     const handleUpdate = (values) => {
         setUpdateState({ updateLoader: true });
@@ -41,6 +70,7 @@ const UserDetailsEditScreen = ({ navigation }) => {
     }
 
     return (
+        
         <ScrollView style={styles.scrollView}>
             {/* <ImageBackground source={images.LOGING_BACKGROUND} style={styles.backgroundImage} > */}
                 <Image style={styles.avatar} source={{ uri : user.image }} />
@@ -48,7 +78,7 @@ const UserDetailsEditScreen = ({ navigation }) => {
                     icon="camera-account"
                     color={Colors.red500}
                     size={30}
-                    onPress={() => {}}
+                    onPress={() => setModal(true)}
                     style={{ position: 'absolute', marginTop: 60, marginLeft: 250 }}
                 />
                 <View style={{paddingTop:130 ,justifyContent: "center",alignItems: 'center',}}>
@@ -106,8 +136,26 @@ const UserDetailsEditScreen = ({ navigation }) => {
                         />
                     </AppForm>
                 </View>
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={modal}
+                    onRequestClose={() => {
+                        setModal(false);
+                    }}
+                >
+                    <View style={styles.modalView}>
+                    <View style={styles.photobuttons}>
+                        <Button mode="contained" icon="upload" onPress={handleChoosePhoto}>Upload a photo</Button>
+                    </View>
+                    <View style={styles.photobuttons}>
+                        <Button mode="contained" icon="camera" onPress={handleTakePhoto}>Take a photo</Button>
+                    </View>
+                    </View>
+                </Modal>
             {/* </ImageBackground> */}
         </ScrollView>
+        
 
     );
 };
@@ -162,6 +210,16 @@ const styles = StyleSheet.create({
         top:10,
         // right:80
     },
+    modalView: {
+        position:'absolute',
+        bottom:1,
+        alignSelf:'center',
+        width: '100%',
+        backgroundColor:"#ffffff"
+    },
+    photobuttons: {
+        padding:15
+    }
 });
 
 export default UserDetailsEditScreen;
