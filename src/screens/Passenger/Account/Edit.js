@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Text, StyleSheet, ScrollView, ImageBackground, Image, View } from 'react-native';
 import * as yup from 'yup';
+import { IconButton, Colors } from 'react-native-paper';
 
 import { AppForm, AppFormInput, SubmitButton, ErrorMessage } from '../../../components/forms';
 import colors from '../../../utils/colors';
@@ -41,63 +42,71 @@ const UserDetailsEditScreen = ({ navigation }) => {
 
     return (
         <ScrollView style={styles.scrollView}>
-            <ImageBackground source={images.LOGING_BACKGROUND} style={styles.backgroundImage} >
-                <View style={{paddingTop:130}}>
-                <AppForm
-                    initialValues={{ name: user.name , email: user.email, address: "", number: "" }}
-                    validationSchema={reviewSchema}
-                    onSubmit={handleUpdate}
-                >
-                    <AppFormInput
-                        // autoFocus={true}
-                        name="name"
-                        autoCapitalize="words"
-                        autoCorrect={false}
-                        style={styles.input}
-                        label="Name"
-                        mode="outlined"
-                        // value={values.name}
-                    />
+            {/* <ImageBackground source={images.LOGING_BACKGROUND} style={styles.backgroundImage} > */}
+                <Image style={styles.avatar} source={{ uri : user.image }} />
+                <IconButton
+                    icon="camera-account"
+                    color={Colors.red500}
+                    size={30}
+                    onPress={() => {}}
+                    style={{ position: 'absolute', marginTop: 60, marginLeft: 250 }}
+                />
+                <View style={{paddingTop:130 ,justifyContent: "center",alignItems: 'center',}}>
+                    <AppForm
+                        initialValues={{ name: user.name , email: user.email, address: "", number: "" }}
+                        validationSchema={reviewSchema}
+                        onSubmit={handleUpdate}
+                    >
+                        <AppFormInput
+                            // autoFocus={true}
+                            name="name"
+                            autoCapitalize="words"
+                            autoCorrect={false}
+                            style={styles.input}
+                            label="Name"
+                            mode="outlined"
+                            // value={props.values.name}
+                        />
 
-                    <AppFormInput
-                        name="email"
-                        autoCapitalize="none"
-                        autoCorrect={false}
-                        style={styles.input}
-                        label="Email"
-                        mode="outlined"
-                        // value={user.email}
-                    />
+                        <AppFormInput
+                            name="email"
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            style={styles.input}
+                            label="Email"
+                            mode="outlined"
+                            // value={user.email}
+                        />
 
-                    <AppFormInput
-                        name="address"
-                        autoCapitalize="none"
-                        autoCorrect={false}
-                        style={styles.input}
-                        label="Address"
-                        mode="outlined"
-                    />
-                    <AppFormInput
-                        name="number"
-                        autoCapitalize="none"
-                        autoCorrect={false}
-                        style={styles.input}
-                        label="Phone Number"
-                        mode="outlined"
-                    />
+                        <AppFormInput
+                            name="address"
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            style={styles.input}
+                            label="Address"
+                            mode="outlined"
+                        />
+                        <AppFormInput
+                            name="number"
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            style={styles.input}
+                            label="Phone Number"
+                            mode="outlined"
+                        />
 
-                    {updateState.updateError && <ErrorMessage error={updateState.updateError} />}
+                        {updateState.updateError && <ErrorMessage error={updateState.updateError} />}
 
-                    <SubmitButton
-                        loading={updateState.updateLoader}
-                        style={styles.button}
-                        color={colors.primary}
-                        contentStyle={styles.buttonContent}
-                        title="Update"
-                    />
-                </AppForm>
+                        <SubmitButton
+                            loading={updateState.updateLoader}
+                            style={styles.button}
+                            color={colors.primary}
+                            contentStyle={styles.buttonContent}
+                            title="Update"
+                        />
+                    </AppForm>
                 </View>
-            </ImageBackground>
+            {/* </ImageBackground> */}
         </ScrollView>
 
     );
@@ -141,6 +150,17 @@ const styles = StyleSheet.create({
         height: 45,
         marginTop: 10,
         width: 300
+    },
+    avatar: {
+        width: 130,
+        height: 130,
+        borderRadius: 63,
+        borderWidth: 4,
+        borderColor: "white",
+        alignSelf: 'center',
+        position: 'absolute',
+        top:10,
+        // right:80
     },
 });
 
