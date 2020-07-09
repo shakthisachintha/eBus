@@ -29,7 +29,7 @@ const UserProfileScreen = ({ navigation }) => {
                 <Image style={styles.avatar} source={{ uri : user.image }} />
                 <View style={{paddingTop:200 ,justifyContent: "center",alignItems: 'center',}}>
                     <AppForm
-                        initialValues={{ name: user.name , email: user.email, address: "", number: "", image:user.image }}
+                        initialValues={{ name: user.name , email: user.email, address: user.address, number: user.number, image:user.image }}
                         style={styles.data}
                         // validationSchema={reviewSchema}
                         // onSubmit={handleUpdate}
@@ -65,8 +65,11 @@ const UserProfileScreen = ({ navigation }) => {
                             label="Address"
                             mode="outlined"
                             disabled
-                            multiline
+                            // multiline
                             value={user.address}
+                            multiline={true}
+                            numberOfLines={2}
+                            style={{width:300}}
                         />
                         <AppFormInput
                             name="number"
@@ -76,7 +79,7 @@ const UserProfileScreen = ({ navigation }) => {
                             label="Phone Number"
                             mode="outlined"
                             disabled
-                            value={user.address}
+                            value={user.number}
                         />
                     </AppForm>
                 </View>
