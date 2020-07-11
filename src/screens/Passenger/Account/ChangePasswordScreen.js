@@ -27,7 +27,7 @@ const ChangePasswordScreen = ({ navigation }) => {
 
     const handleUpdate = async (values) => {
         setUpdateState({ updateLoader: true });
-        const result = await userAPI.updatePassword(_.pick(values, ["id", "oldpassword", "newpassword", "confirmpassword"]));
+        const result = await userAPI.updatePassword(_.pick(values, ["oldpassword", "newpassword", "confirmpassword"]));
         setUpdateState({ updateLoader: false });
         if (!result.ok) {
             if (result.data) {
@@ -58,7 +58,7 @@ const ChangePasswordScreen = ({ navigation }) => {
                 <Image style={styles.avatar} source={{ uri : user.image }} />
                 <View style={{paddingTop:130 ,justifyContent: "center",alignItems: 'center',}}>
                     <AppForm
-                        initialValues={{ oldpassword: "" , newpassword: "" , confirmpassword: "", id:user.id }}
+                        initialValues={{ oldpassword: "" , newpassword: "" , confirmpassword: ""}}
                         validationSchema={reviewSchema}
                         onSubmit={handleUpdate}
                     >
