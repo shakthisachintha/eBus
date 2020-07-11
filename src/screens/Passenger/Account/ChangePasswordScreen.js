@@ -1,17 +1,19 @@
 import React, { useState } from 'react';
-import { StyleSheet, ScrollView, Image, View, ImageBackground } from 'react-native';
+import { StyleSheet, ScrollView, Image, View, ImageBackground, Alert } from 'react-native';
 import * as yup from 'yup';
+import _ from "lodash";
 
 import { AppForm, AppFormInput, SubmitButton, ErrorMessage } from '../../../components/forms';
 import colors from '../../../utils/colors';
 import useAuth from '../../../auth/useAuth';
 import images from '../../../utils/images';
+import userAPI from '../../../api/user';
 
 const reviewSchema = yup.object({
     oldpassword: yup.string().required('Old password is required').min(6),
     newpassword: yup.string().required('New password is required').min(6),
     confirmpassword: yup.string().required('Confirm password is required')
-    .oneOf([yup.ref('password'), null], 'Passwords must match')
+    .oneOf([yup.ref('newpassword'), null], 'Passwords must match')
 });
 
 
@@ -23,20 +25,30 @@ const ChangePasswordScreen = ({ navigation }) => {
         updateLoader: false,
     });
 
-    const handleUpdate = (values) => {
+    const handleUpdate = async (values) => {
         setUpdateState({ updateLoader: true });
-        // const result = await userAPI.register(_.pick(user, ["name", "email", "password"]));
-        // setRegisterState({ regLoader: false });
-        // if (!result.ok) {
-        //     if (result.data) setRegisterState({ regError: result.data.error });
-        //     else {
-        //         setRegisterState({ regError: "An unknown error occurred." });
-        //         console.log(result);
-        //     }
-        //     return;
-        // }
-        // auth.logIn(result.headers['x-auth-token']);
-        console.log(values);
+        const result = await userAPI.updatePassword(_.pick(values, ["id", "oldpassword", "newpassword", "confirmpassword"]));
+        setUpdateState({ updateLoader: false });
+        if (!result.ok) {
+            if (result.data) {
+                setUpdateState({ updateError: result.data.error });
+            }
+            else {
+                setUpdateState({ updateError: "An unknown error occurred." });
+                console.log(result);
+            }
+            return;
+        }
+        if (result.ok){
+            Alert.alert(
+                'Password Change',
+                'You have successefully changed you password!',
+                [
+                  { text: 'OK', onPress: () => navigation.navigate('Profile') }
+                ],
+                { cancelable: false }
+              );
+        }
     }
 
     return (
@@ -46,7 +58,7 @@ const ChangePasswordScreen = ({ navigation }) => {
                 <Image style={styles.avatar} source={{ uri : user.image }} />
                 <View style={{paddingTop:130 ,justifyContent: "center",alignItems: 'center',}}>
                     <AppForm
-                        initialValues={{ oldpassword: "" , newpassword: "" , confirmpassword: "" }}
+                        initialValues={{ oldpassword: "" , newpassword: "" , confirmpassword: "", id:user.id }}
                         validationSchema={reviewSchema}
                         onSubmit={handleUpdate}
                     >
@@ -58,6 +70,7 @@ const ChangePasswordScreen = ({ navigation }) => {
                             style={styles.input}
                             label="Old Password"
                             mode="outlined"
+                            secureTextEntry
                         />
 
                         <AppFormInput

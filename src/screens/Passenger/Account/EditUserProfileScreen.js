@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
-import { StyleSheet, ScrollView, Image, View, Modal } from 'react-native';
+import { StyleSheet, ScrollView, Image, View, Modal, Alert } from 'react-native';
 import * as yup from 'yup';
 import { IconButton, Colors, Button } from 'react-native-paper';
 import ImagePicker from 'react-native-image-picker';
+import _ from "lodash";
 
 import { AppForm, AppFormInput, SubmitButton, ErrorMessage } from '../../../components/forms';
 import colors from '../../../utils/colors';
 import useAuth from '../../../auth/useAuth';
+import userAPI from '../../../api/user';
 
 const reviewSchema = yup.object({
     name: yup.string().required().label("Name"),
@@ -53,20 +55,30 @@ const EditUserProfileScreen = ({ navigation }) => {
         });
     };
 
-    const handleUpdate = (values) => {
+    const handleUpdate = async (values) => {
         setUpdateState({ updateLoader: true });
-        // const result = await userAPI.register(_.pick(user, ["name", "email", "password"]));
-        // setRegisterState({ regLoader: false });
-        // if (!result.ok) {
-        //     if (result.data) setRegisterState({ regError: result.data.error });
-        //     else {
-        //         setRegisterState({ regError: "An unknown error occurred." });
-        //         console.log(result);
-        //     }
-        //     return;
-        // }
-        // auth.logIn(result.headers['x-auth-token']);
-        console.log(values);
+        const result = await userAPI.updateDetails(_.pick(values, ["name", "email", "address", "number","id"]));
+        setUpdateState({ updateLoader: false });
+        if (!result.ok) {
+            if (result.data) {
+                setUpdateState({ updateError: result.data.error });
+            }
+            else {
+                setUpdateState({ updateError: "An unknown error occurred." });
+                console.log(result);
+            }
+            return;
+        }
+        if (result.ok){
+            Alert.alert(
+                'Profile Detail Update',
+                'You have successefully updated the user details!',
+                [
+                  { text: 'OK', onPress: () => navigation.navigate('Profile') }
+                ],
+                { cancelable: false }
+              );
+        }
     }
 
     return (
@@ -83,7 +95,7 @@ const EditUserProfileScreen = ({ navigation }) => {
                 />
                 <View style={{paddingTop:130 ,justifyContent: "center",alignItems: 'center',}}>
                     <AppForm
-                        initialValues={{ name: user.name , email: user.email, address: "", number: "", image:user.image }}
+                        initialValues={{ name: user.name , email: user.email, address: user.address, number: user.number, image:user.image, id:user.id }}
                         validationSchema={reviewSchema}
                         onSubmit={handleUpdate}
                     >
@@ -95,7 +107,7 @@ const EditUserProfileScreen = ({ navigation }) => {
                             style={styles.input}
                             label="Name"
                             mode="outlined"
-                            // value={user.name}
+                            // value={user.id}
                         />
 
                         <AppFormInput
@@ -106,7 +118,7 @@ const EditUserProfileScreen = ({ navigation }) => {
                             label="Email"
                             mode="outlined"
                             keyboardType='email-address'
-                            value={user.email}
+                            // value
                         />
 
                         <AppFormInput
@@ -116,8 +128,7 @@ const EditUserProfileScreen = ({ navigation }) => {
                             style={styles.input}
                             label="Address"
                             mode="outlined"
-                            value={user.address}
-                            multiline
+                            // value
                         />
                         <AppFormInput
                             name="number"
@@ -127,7 +138,7 @@ const EditUserProfileScreen = ({ navigation }) => {
                             label="Phone Number"
                             mode="outlined"
                             keyboardType='numeric'
-                            value={user.number}
+                            // value
                         />
 
                         {updateState.updateError && <ErrorMessage error={updateState.updateError} />}
