@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { StyleSheet, ScrollView, Image, View, Modal, Alert } from 'react-native';
+import React, { useState,useEffect } from 'react';
+import { StyleSheet, ScrollView, Image, View, Modal, Alert, ActivityIndicator } from 'react-native';
 import * as yup from 'yup';
 import { IconButton, Colors, Button } from 'react-native-paper';
 import ImagePicker from 'react-native-image-picker';
@@ -14,7 +14,7 @@ const reviewSchema = yup.object({
     name: yup.string().required().label("Name"),
     email: yup.string().required().email().label("Email"),
     address: yup.string(),
-    number: yup.string().max(10)
+    phoneNumber: yup.string().max(10)
 });
 
 
@@ -27,6 +27,22 @@ const EditUserProfileScreen = ({ navigation }) => {
     });
     const [modal, setModal] = useState(false);
     const [photo, setphoto] = useState(null);
+
+    const [data,setData] = useState([]);
+    const [loading, setLoading] = useState(true);
+    useEffect( () =>{
+        async function fetchData(){
+            const result = await userAPI.userDetails();
+            if (!result.ok) {
+                return alert("Error while connecting.");
+            }
+            // console.log(result);
+            setData(result.data);
+            setLoading(false);
+            return;
+        }
+        fetchData();
+    },[])
 
     //choose a photo from storage
     const handleChoosePhoto = () => {
@@ -57,7 +73,7 @@ const EditUserProfileScreen = ({ navigation }) => {
 
     const handleUpdate = async (values) => {
         setUpdateState({ updateLoader: true });
-        const result = await userAPI.updateDetails(_.pick(values, ["name", "email", "address", "number","id"]));
+        const result = await userAPI.updateDetails(_.pick(values, ["name", "email", "address", "phoneNumber"]));
         setUpdateState({ updateLoader: false });
         if (!result.ok) {
             if (result.data) {
@@ -74,7 +90,7 @@ const EditUserProfileScreen = ({ navigation }) => {
                 'Profile Detail Update',
                 'You have successefully updated the user details!',
                 [
-                  { text: 'OK', onPress: () => navigation.navigate('Profile') }
+                  { text: 'OK', onPress: () => navigation.navigate('UserProfile') }
                 ],
                 { cancelable: false }
               );
@@ -84,8 +100,11 @@ const EditUserProfileScreen = ({ navigation }) => {
     return (
         
         <ScrollView style={styles.container}>
-            {/* <ImageBackground source={images.LOGING_BACKGROUND} style={styles.backgroundImage} > */}
-                <Image style={styles.avatar} source={{ uri : user.image }} />
+            {loading ? 
+                <ActivityIndicator size="large" color="#0000ff" />
+                :
+            <View>    
+                <Image style={styles.avatar} source={{ uri : data.image }} />
                 <IconButton
                     icon="camera-account"
                     color={Colors.red500}
@@ -95,7 +114,7 @@ const EditUserProfileScreen = ({ navigation }) => {
                 />
                 <View style={{paddingTop:130 ,justifyContent: "center",alignItems: 'center',}}>
                     <AppForm
-                        initialValues={{ name: user.name , email: user.email, address: user.address, number: user.number, image:user.image, id:user.id }}
+                        initialValues={{ name: data.name , email: data.email, address: data.address, phoneNumber: data.phoneNumber, image:user.image }}
                         validationSchema={reviewSchema}
                         onSubmit={handleUpdate}
                     >
@@ -107,7 +126,7 @@ const EditUserProfileScreen = ({ navigation }) => {
                             style={styles.input}
                             label="Name"
                             mode="outlined"
-                            // value={user.id}
+                            // value={data.name}
                         />
 
                         <AppFormInput
@@ -118,7 +137,7 @@ const EditUserProfileScreen = ({ navigation }) => {
                             label="Email"
                             mode="outlined"
                             keyboardType='email-address'
-                            // value
+                            // value={data.email}
                         />
 
                         <AppFormInput
@@ -128,17 +147,17 @@ const EditUserProfileScreen = ({ navigation }) => {
                             style={styles.input}
                             label="Address"
                             mode="outlined"
-                            // value
+                            // value={data.address}
                         />
                         <AppFormInput
-                            name="number"
+                            name="phoneNumber"
                             autoCapitalize="none"
                             autoCorrect={false}
                             style={styles.input}
                             label="Phone Number"
                             mode="outlined"
                             keyboardType='numeric'
-                            // value
+                            // value={data.phoneNumber}
                         />
 
                         {updateState.updateError && <ErrorMessage error={updateState.updateError} />}
@@ -169,7 +188,8 @@ const EditUserProfileScreen = ({ navigation }) => {
                     </View>
                     </View>
                 </Modal>
-            {/* </ImageBackground> */}
+                </View>
+            }
         </ScrollView>
         
 
