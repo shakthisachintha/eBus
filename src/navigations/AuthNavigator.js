@@ -8,7 +8,8 @@ import {
     LoginScreen,
     RegistrationScreen,
     ResetPasswordScreen,
-    SetNewPasswordScreen
+    SetNewPasswordScreen,
+    ForgotPasswordScreen
 } from "../screens/Authentication";
 
 const Stack = createStackNavigator();
@@ -40,7 +41,7 @@ const AuthNavigator = () => (
 
         <Stack.Screen
             name="ResetPassword"
-            component={ResetPasswordScreen}
+            component={ForgotPasswordScreen}
             options={{ title: "Forgot Password" }}
         />
 
