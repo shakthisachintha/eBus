@@ -28,7 +28,6 @@ const VerifyCodeScreen = ({ navigation }) => {
             }
             else {
                 setUpdateState({ updateError: "An unknown error occurred." });
-                console.log(result);
             }
             return;
         }
@@ -37,7 +36,7 @@ const VerifyCodeScreen = ({ navigation }) => {
                 'Verification Code',
                 'The verification code matches!',
                 [
-                  { text: 'OK', onPress: () => navigation.navigate('PasswordReset') }
+                  { text: 'OK', onPress: () => navigation.navigate('PasswordReset', { id: result.data._id })}
                 ],
                 { cancelable: false }
               );

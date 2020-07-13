@@ -62,7 +62,7 @@ const AuthNavigator = () => (
         <Stack.Screen
             name="PasswordReset"
             options={{ title: "Reset Password" }}
-            component={VerifyCodeScreen}
+            component={PasswordResetScreen}
         />
 
     </Stack.Navigator>
