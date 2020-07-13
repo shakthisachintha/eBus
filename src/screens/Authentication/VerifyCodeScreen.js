@@ -11,16 +11,18 @@ const reviewSchema = yup.object({
     code: yup.number().required('Verification code is required').min(6)
 });
 
-const VerifyCodeScreen = ({ navigation }) => {
+const VerifyCodeScreen = ({ navigation, route }) => {
 
     const [updateState, setUpdateState] = useState({
         updateError: null,
         updateLoader: false,
     });
 
-    const handleSubmit = async ({code}) => {
+    const { email } = route.params;
+
+    const handleSubmit = async ({code, email}) => {
         setUpdateState({ updateLoader: true });
-        const result = await authAPI.verify(code);
+        const result = await authAPI.verify(code,email);
         setUpdateState({ updateLoader: false });
         if (!result.ok) {
             if (result.data) {
@@ -48,12 +50,10 @@ const VerifyCodeScreen = ({ navigation }) => {
             <Card>
                 <Card.Cover source={images.VERIFY_BACKGROUND} />
             </Card>
-            <Text style={{ color: 'grey', justifyContent: 'center', fontSize: 16, alignSelf: 'center', marginTop: 10 }}>To recover your Password ,You need to Enter</Text>
-            <Text style={{ color: 'grey', justifyContent: 'center', fontSize: 16, alignSelf: 'center' }}>your registration Email address.We will sent the </Text>
-            <Text style={{ color: 'grey', justifyContent: 'center', fontSize: 16, alignSelf: 'center' }}>Recovery code to your Email</Text>
+            <Text style={{ color: 'black', justifyContent: 'center', fontSize: 18, marginTop: 10, textAlign:'center' }}>To reset your password ,You need to enter your <Text style={{ fontWeight: 'bold' }}>verification code</Text> that has been sent to {email}</Text>
             <View style={{ paddingTop:20 ,justifyContent: "center",alignItems: 'center',}}>
             <AppForm
-                    initialValues={{ code: ""}}
+                    initialValues={{ code: "", email:email}}
                     validationSchema={reviewSchema}
                     onSubmit={handleSubmit}
                 >

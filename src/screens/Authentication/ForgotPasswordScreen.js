@@ -28,16 +28,15 @@ const ForgotPasswordScreen = ({ navigation }) => {
             }
             else {
                 setUpdateState({ updateError: "An unknown error occurred." });
-                console.log(result);
             }
             return;
         }
         if (result.ok){
             Alert.alert(
                 'Verification Code',
-                'A verification code successfully sent to your email!',
+                `A verification code successfully sent to ${result.data.email}`,
                 [
-                  { text: 'OK', onPress: () => navigation.navigate('LinkVerify') }
+                  { text: 'OK', onPress: () => navigation.navigate('LinkVerify', { email: result.data.email }) }
                 ],
                 { cancelable: false }
               );
@@ -49,9 +48,7 @@ const ForgotPasswordScreen = ({ navigation }) => {
             <Card>
                 <Card.Cover source={images.FORGOT_PASSWORD_BACKROUND} />
             </Card>
-            <Text style={{ color: 'grey', justifyContent: 'center', fontSize: 16, alignSelf: 'center', marginTop: 10 }}>To recover your Password ,You need to Enter</Text>
-            <Text style={{ color: 'grey', justifyContent: 'center', fontSize: 16, alignSelf: 'center' }}>your registration Email address.We will sent the </Text>
-            <Text style={{ color: 'grey', justifyContent: 'center', fontSize: 16, alignSelf: 'center' }}>Recovery code to your Email</Text>
+            <Text style={{ color: 'black', justifyContent: 'center', fontSize: 18, alignSelf: 'center', marginTop: 10, textAlign:'center' }}>To reset your password ,You need to enter your registered Email address. We will sent the verification code to your email address</Text>
             <View style={{ paddingTop:20 ,justifyContent: "center",alignItems: 'center',}}>
             <AppForm
                     initialValues={{ email: ""}}

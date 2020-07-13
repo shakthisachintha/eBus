@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet, ScrollView, Image, View, ImageBackground, Alert,Text } from 'react-native';
+import { Button, TextInput, Card } from 'react-native-paper';
 import * as yup from 'yup';
 import _ from "lodash";
 
@@ -51,8 +52,10 @@ const PasswordResetScreen = ({ navigation, route }) => {
     return (
         
         <ScrollView style={styles.scrollView}>
-            <ImageBackground source={images.LOGING_BACKGROUND} style={styles.backgroundImage} >
-                <View style={{paddingTop:200 ,justifyContent: "center",alignItems: 'center',}}>
+            <Card>
+                <Card.Cover source={images.PASSWORD_BACKGROUND} />
+            </Card>
+                <View style={{justifyContent: "center",alignItems: 'center',}}>
                     <AppForm
                         initialValues={{ newpassword: "" , confirmpassword: "", id:id }}
                         validationSchema={reviewSchema}
@@ -78,7 +81,6 @@ const PasswordResetScreen = ({ navigation, route }) => {
                             mode="outlined"
                             secureTextEntry
                         />
-                        <Text>itemId: {id} </Text>
                         {updateState.updateError && <ErrorMessage error={updateState.updateError} />}
 
                         <SubmitButton
@@ -90,7 +92,6 @@ const PasswordResetScreen = ({ navigation, route }) => {
                         />
                     </AppForm>
                 </View>
-            </ImageBackground>
         </ScrollView>
         
 
@@ -102,9 +103,9 @@ const styles = StyleSheet.create({
         flex: 1
     },
     backgroundImage: {
-        resizeMode: "stretch",
         justifyContent: "center",
         alignItems: 'center',
+        resizeMode:"stretch"
     },
     button: {
         marginTop: 40,
