@@ -8,19 +8,19 @@ import colors from '../../utils/colors';
 import authAPI from '../../api/auth';
 
 const reviewSchema = yup.object({
-    email: yup.string().required('Email Address is required').email().min(6)
+    code: yup.number().required('Verification code is required').min(6)
 });
 
-const ForgotPasswordScreen = ({ navigation }) => {
+const VerifyCodeScreen = ({ navigation }) => {
 
     const [updateState, setUpdateState] = useState({
         updateError: null,
         updateLoader: false,
     });
 
-    const handleUpdate = async ({email}) => {
+    const handleSubmit = async ({code}) => {
         setUpdateState({ updateLoader: true });
-        const result = await authAPI.forgetpassword(email);
+        const result = await authAPI.verify(code);
         setUpdateState({ updateLoader: false });
         if (!result.ok) {
             if (result.data) {
@@ -35,9 +35,9 @@ const ForgotPasswordScreen = ({ navigation }) => {
         if (result.ok){
             Alert.alert(
                 'Verification Code',
-                'A verification code successfully sent to your email!',
+                'The verification code matches!',
                 [
-                  { text: 'OK', onPress: () => navigation.navigate('LinkVerify') }
+                  { text: 'OK', onPress: () => navigation.navigate('PasswordReset') }
                 ],
                 { cancelable: false }
               );
@@ -47,26 +47,26 @@ const ForgotPasswordScreen = ({ navigation }) => {
         <ScrollView style={styles.container}>
 
             <Card>
-                <Card.Cover source={images.FORGOT_PASSWORD_BACKROUND} />
+                <Card.Cover source={images.VERIFY_BACKGROUND} />
             </Card>
             <Text style={{ color: 'grey', justifyContent: 'center', fontSize: 16, alignSelf: 'center', marginTop: 10 }}>To recover your Password ,You need to Enter</Text>
             <Text style={{ color: 'grey', justifyContent: 'center', fontSize: 16, alignSelf: 'center' }}>your registration Email address.We will sent the </Text>
             <Text style={{ color: 'grey', justifyContent: 'center', fontSize: 16, alignSelf: 'center' }}>Recovery code to your Email</Text>
             <View style={{ paddingTop:20 ,justifyContent: "center",alignItems: 'center',}}>
             <AppForm
-                    initialValues={{ email: ""}}
+                    initialValues={{ code: ""}}
                     validationSchema={reviewSchema}
-                    onSubmit={handleUpdate}
+                    onSubmit={handleSubmit}
                 >
                     <AppFormInput
                         // autoFocus={true}
-                        name="email"
+                        name="code"
                         autoCapitalize="none"
                         autoCorrect={false}
                         style={styles.input}
-                        label="Email address"
+                        label="Veification Code"
                         mode="outlined"
-                        keyboardType='email-address'
+                        keyboardType='numeric'
                     />
 
                     {updateState.updateError && <ErrorMessage error={updateState.updateError} />}
@@ -76,8 +76,8 @@ const ForgotPasswordScreen = ({ navigation }) => {
                         style={styles.button}
                         color={colors.primary}
                         contentStyle={styles.buttonContent}
-                        title="Send Link"
-                        icon="email-outline"
+                        title="Verify"
+                        icon="check-circle-outline"
                     />
                 </AppForm>
                 </View>
@@ -115,4 +115,4 @@ input: {
 }
 });
 
-export default ForgotPasswordScreen;
+export default VerifyCodeScreen;

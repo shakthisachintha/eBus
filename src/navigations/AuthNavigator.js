@@ -9,7 +9,9 @@ import {
     RegistrationScreen,
     ResetPasswordScreen,
     SetNewPasswordScreen,
-    ForgotPasswordScreen
+    ForgotPasswordScreen,
+    VerifyCodeScreen,
+    PasswordResetScreen
 } from "../screens/Authentication";
 
 const Stack = createStackNavigator();
@@ -53,8 +55,14 @@ const AuthNavigator = () => (
 
         <Stack.Screen
             name="LinkVerify"
+            options={{ title: "Verify Code" }}
+            component={VerifyCodeScreen}
+        />
+
+        <Stack.Screen
+            name="PasswordReset"
             options={{ title: "Reset Password" }}
-            component={SetNewPasswordScreen}
+            component={VerifyCodeScreen}
         />
 
     </Stack.Navigator>
