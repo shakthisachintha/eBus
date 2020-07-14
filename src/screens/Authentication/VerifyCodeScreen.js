@@ -36,7 +36,7 @@ const VerifyCodeScreen = ({ navigation, route }) => {
         if (result.ok){
             Alert.alert(
                 'Verification Code',
-                'The verification code matches!',
+                'The verification is successful! Please enter a new password to proceed!',
                 [
                   { text: 'OK', onPress: () => navigation.navigate('PasswordReset', { id: result.data._id })}
                 ],
@@ -50,7 +50,7 @@ const VerifyCodeScreen = ({ navigation, route }) => {
             <Card>
                 <Card.Cover source={images.VERIFY_BACKGROUND} />
             </Card>
-            <Text style={{ color: 'black', justifyContent: 'center', fontSize: 18, marginTop: 10, textAlign:'center' }}>To reset your password ,You need to enter your <Text style={{ fontWeight: 'bold' }}>verification code</Text> that has been sent to {email}</Text>
+            <Text style={{ color: 'black', justifyContent: 'center', fontSize: 18, marginTop: 10, textAlign:'center' }}>To reset your password ,You need to enter your <Text style={{ fontWeight: 'bold' }}>verification code</Text> that has been sent to <Text style={{ fontWeight: 'bold' }}>{email}</Text></Text>
             <View style={{ paddingTop:20 ,justifyContent: "center",alignItems: 'center',}}>
             <AppForm
                     initialValues={{ code: "", email:email}}
