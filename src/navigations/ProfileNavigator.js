@@ -10,7 +10,7 @@ import {
 } from '../screens/Passenger';
 
 import WalletNavigator from './WalletNavigator';
-
+import SelectRouteScreen from '../screens/Passenger/Reservation/SelectRouteScreen';
 
 const Stack = createStackNavigator();
 
@@ -75,6 +75,15 @@ const ProfileNavigator = () => (
                 headerShown: false,
                 headerLeft: null,
                 title: 'My Wallet'
+            }}
+        />
+
+        <Stack.Screen
+            name="SelectRouteScreen"
+            component={SelectRouteScreen}
+            options={{
+                headerShown: true,
+                title: 'Route Selection'
             }}
         />
 
