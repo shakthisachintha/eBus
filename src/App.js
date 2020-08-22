@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import NFC, { NfcDataType, NdefRecordType } from "react-native-nfc";
 import { ToastAndroid } from "react-native";
-
+import { EventRegister } from 'react-native-event-listeners'
+import Location from 'react-native-location';
 
 import AuthNavigator from './navigations/AuthNavigator';
 import DashboardNavigator from './navigations/DashboardNavigator';
@@ -11,12 +12,14 @@ import navigationTheme from './navigations/navigationTheme';
 
 import AuthContext from './auth/context';
 import authStorage from './auth/storage';
+import useLocation from './hooks/useLocation';
+
 
 
 let bus = null;
 let hash = null;
 
-NFC.addListener((payload) => {
+NFC.addListener(async (payload) => {
   switch (payload.type) {
     case NfcDataType.NDEF:
       let messages = payload.data;
@@ -26,10 +29,9 @@ NFC.addListener((payload) => {
           let r = records[j];
           if (r.type === NdefRecordType.TEXT) {
             const rec = r.data.split(" ");
-            bus = rec[1];
-            hash = rec[2];
-            alert(bus);
-            console.log(r);
+            bus = rec[0];
+            hash = rec[1];
+            EventRegister.emit("tagScanned", bus);
           } else {
             ToastAndroid.show(
               `Non-TEXT tag of type ${r.type} with data ${r.data}`,
@@ -48,7 +50,6 @@ NFC.addListener((payload) => {
   }
 });
 
-
 const App = () => {
 
   const [user, setUser] = useState();
@@ -58,9 +59,31 @@ const App = () => {
     if (user) setUser(user);
   }
 
+  const createTrip = async (bus) => {
+    const granted = await Location.requestPermission({ android: { detail: "fine" } });
+    if (!granted) return;
+    const { latitude, longitude } = await Location.getLatestLocation();
+    console.log({ location: { latitude, longitude }, bus });
+  }
+
   useEffect(() => {
+
     restoreUser();
+
+    if (bus != null) {
+      createTrip(bus);
+    };
+
+    EventRegister.addEventListener("tagScanned", bus => {
+      createTrip(bus);
+    });
+
+    return () => {
+      EventRegister.removeAllListeners();
+    }
+
   }, [])
+
 
   return (
     <AuthContext.Provider value={{ user, setUser }}>
