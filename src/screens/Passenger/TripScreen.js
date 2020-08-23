@@ -1,28 +1,37 @@
-import React, { useState } from 'react'
-import { StyleSheet, Text, View, TouchableNativeFeedback } from 'react-native'
+import React, { useState, useEffect, useContext } from 'react'
+import { StyleSheet, Text, View, TouchableOpacity, ScrollView, ActivityIndicator, RefreshControl } from 'react-native'
 
 
 import AppIcon from '../../components/AppIcon'
 import colors from '../../utils/colors'
-import useLocation from '../../hooks/useLocation'
-import { TouchableOpacity } from 'react-native-gesture-handler'
+import tripAPI from '../../api/trip';
 
 
 
 const TripScreen = () => {
 
-    const location = useLocation();
-    console.log(location);
+    const [isRefreshing, setIsRefreshing] = useState(false);
+    const { activeTrip } = useContext(tripAPI.ActiveTripContext);
+
+    const getCurrentTrip = () => {
+        setIsRefreshing(true);
+        console.log(activeTrip);
+        setTimeout(() => {
+            setIsRefreshing(false);
+        }, 2000);
+    }
+
+    useEffect(() => {
+        getCurrentTrip();
+    }, [])
 
     return (
-        <View style={styles.container}>
-            <TouchableOpacity>
-                <AppIcon name="crosshairs-gps" size={80} backgroundColor={colors.secondary} iconColor={colors.white}> </AppIcon>
-            </TouchableOpacity>
 
-            <Text style={styles.helpText}>You don't have any active trips</Text>
-            {/* <Text>Longitude:{cords} Latitude:{cords}</Text> */}
-        </View>
+        <ScrollView contentContainerStyle={styles.container} refreshControl={<RefreshControl colors={[colors.primary, colors.black, colors.success]} refreshing={isRefreshing} onRefresh={getCurrentTrip} progressViewOffset={70} />}>
+            <AppIcon name="crosshairs-gps" size={80} backgroundColor={colors.secondary} iconColor={colors.white}> </AppIcon>
+            <Text style={styles.helpText}>You don't have any active trips </Text>
+            {activeTrip && <Text>{activeTrip._id}</Text>}
+        </ScrollView>
     )
 }
 
