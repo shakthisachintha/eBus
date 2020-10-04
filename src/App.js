@@ -4,6 +4,7 @@ import NFC, { NfcDataType, NdefRecordType } from "react-native-nfc";
 import { ToastAndroid, ActivityIndicator, View, ViewBase, Modal, AppRegistry } from "react-native";
 import { EventRegister } from 'react-native-event-listeners'
 import Location from 'react-native-location';
+import LottieView from 'lottie-react-native';
 
 import AuthNavigator from './navigations/AuthNavigator';
 import DashboardNavigator from './navigations/DashboardNavigator';
@@ -13,9 +14,9 @@ import AuthContext from './auth/context';
 import authStorage from './auth/storage';
 
 import tripAPI from './api/trip';
-import AppModal from './components/AppModal';
 import AppText from './components/AppText';
 import colors from './utils/colors';
+import animations from './utils/animations';
 
 let bus = null;
 let hash = null;
@@ -79,7 +80,7 @@ const App = () => {
       alert("Error occured");
     }
     console.log({ location: { latitude, longitude }, bus });
-    setTripCreating(false);
+    // setTripCreating(false);
   }
 
   useEffect(() => {
@@ -106,6 +107,7 @@ const App = () => {
       <Modal animationType="fade" visible={tripCreating} >
         <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
           <ActivityIndicator size="large" color={colors.primary} />
+          <LottieView style={{ width: "100%" }} source={animations.TRIP_START} loop={false} autoPlay onAnimationFinish={()=>setTripCreating(false)}/>
           <AppText style={{ margin: 15 }}>Creating Trip ...</AppText>
         </View>
       </Modal>
