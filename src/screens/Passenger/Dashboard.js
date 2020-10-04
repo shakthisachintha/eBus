@@ -7,6 +7,7 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import SideLabelDrawer from '../../components/SideLabelDrawer';
 import colors from '../../utils/colors';
 import AppText from '../../components/AppText';
+import TripCard from '../../components/TripCard';
 
 export default class Dashboard extends React.Component {
     payMethods = [
@@ -17,7 +18,7 @@ export default class Dashboard extends React.Component {
     render() {
         return (
             <View style={StyleSheet.container}>
-                <AppText>Dashboard Screen</AppText>
+                <AppText style={styles.title}>Recent Activities</AppText>
                 <SideLabelDrawer
                     rechargeSubmit={(method, amount) => alert(`${method}, ${amount}`)}
                     payMethods={this.payMethods}
@@ -27,6 +28,12 @@ export default class Dashboard extends React.Component {
                     position={65}
                     IconComponent={() => <Icon style={{ marginLeft: 10 }} name="coins" color={colors.white} size={35} />}>
                 </SideLabelDrawer>
+                <View style={{ paddingHorizontal: 5 }}>
+                    <TripCard bus="NB1023" from="Karapitiya Bus Station" to="Galle Bus Station" fare={16.00}></TripCard>
+                    <TripCard bus="NB1023" from="Karapitiya Bus Station" to="Galle Bus Station" fare={16.00}></TripCard>
+                    <TripCard bus="NB1023" from="Karapitiya Bus Station" to="Galle Bus Station" fare={16.00}></TripCard>
+                    <TripCard bus="NB1023" from="Karapitiya Bus Station" to="Galle Bus Station" fare={16.00}></TripCard>
+                </View>
             </View>
         );
     }
@@ -52,5 +59,10 @@ const styles = StyleSheet.create({
         marginTop: 20,
         marginHorizontal: 20,
         marginVertical: 10
+    },
+    title:{
+        fontSize:30,
+        marginBottom:20,
+        marginLeft:5
     }
 });
