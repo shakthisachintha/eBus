@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
 import * as yup from 'yup';
-import _ from "lodash";
 
 import { AppForm, AppFormInput, SubmitButton, ErrorMessage } from '../../../components/forms';
 import useAuth from '../../../auth/useAuth';
@@ -12,7 +11,7 @@ const reviewSchema = yup.object({
     destinantion: yup.string().required('Destination is required')
 });
 
-const SelectRouteScreen = () => {
+const SelectRouteScreen = ({navigation}) => {
 
     const { user } = useAuth();
     const [updateState, setUpdateState] = useState({
@@ -30,6 +29,7 @@ const SelectRouteScreen = () => {
     ]);
 
     const pressHandler = (id) => {
+        navigation.navigate('SeatSelectionScreen', { id: id });
         console.log(id);
     }
 
@@ -67,6 +67,15 @@ const SelectRouteScreen = () => {
                 onSubmit={handleUpdate}
             >
                 <View style={{flexDirection:'row', justifyContent:'space-around'}}>
+                <View style={{flexDirection:'column', justifyContent:'center'}}>
+                <AppFormInput
+                    name=""
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    style={styles.input}
+                    label="Destination"
+                    mode="outlined"
+                />
                 <AppFormInput
                     name="destinantion"
                     autoCapitalize="none"
@@ -75,6 +84,7 @@ const SelectRouteScreen = () => {
                     label="Destination"
                     mode="outlined"
                 />
+                </View>
                 <SubmitButton
                     loading={updateState.updateLoader}
                     style={styles.button}
