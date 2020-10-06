@@ -1,20 +1,22 @@
 import React, { useState,useEffect } from 'react';
-import { StyleSheet, ScrollView, Image, View, Modal, Alert, ActivityIndicator } from 'react-native';
+import { StyleSheet, ScrollView, Image, View, Modal, Alert, ActivityIndicator, Text } from 'react-native';
 import * as yup from 'yup';
-import { IconButton, Colors, Button } from 'react-native-paper';
+import { IconButton, Colors, Button, TextInput } from 'react-native-paper';
 import ImagePicker from 'react-native-image-picker';
 import _ from "lodash";
 
 import { AppForm, AppFormInput, SubmitButton, ErrorMessage } from '../../../components/forms';
 import colors from '../../../utils/colors';
+import { Formik } from 'formik';
+
 import useAuth from '../../../auth/useAuth';
 import userAPI from '../../../api/user';
 
 const reviewSchema = yup.object({
     name: yup.string().required().label("Name"),
     email: yup.string().required().email().label("Email"),
-    address: yup.string(),
-    phoneNumber: yup.string().max(10)
+    address: yup.string().label("Address"),
+    phoneNumber: yup.string().max(10).label("Phone number")
 });
 
 
@@ -78,6 +80,14 @@ const EditUserProfileScreen = ({ navigation }) => {
         if (!result.ok) {
             if (result.data) {
                 setUpdateState({ updateError: result.data.error });
+                Alert.alert(
+                    'Profile Detail Update Error',
+                    `${result.data.error}`,
+                    [
+                      { text: 'OK', onPress: () => navigation.navigate('EditUserProfile') }
+                    ],
+                    { cancelable: false }
+                  );
             }
             else {
                 setUpdateState({ updateError: "An unknown error occurred." });
@@ -112,8 +122,8 @@ const EditUserProfileScreen = ({ navigation }) => {
                     onPress={() => setModal(true)}
                     style={{ position: 'absolute', marginTop: 60, marginLeft: 250 }}
                 />
-                <View style={{paddingTop:130 ,justifyContent: "center",alignItems: 'center',}}>
-                    <AppForm
+                <View style={{paddingTop:150 ,justifyContent: "center",}}>
+                    {/* <AppForm
                         initialValues={{ name: data.name , email: data.email, address: data.address, phoneNumber: data.phoneNumber, image:user.image }}
                         validationSchema={reviewSchema}
                         onSubmit={handleUpdate}
@@ -169,7 +179,38 @@ const EditUserProfileScreen = ({ navigation }) => {
                             contentStyle={styles.buttonContent}
                             title="Update"
                         />
-                    </AppForm>
+                    </AppForm> */}
+                    <Formik
+                        initialValues={{ name: data.name, email: data.email, address: data.address, phoneNumber: data.phoneNumber }}
+                        validationSchema={reviewSchema}
+                        onSubmit={handleUpdate}
+                    >
+                        {(props) => (
+                            <View style={{width:'80%', alignSelf:'center'}}>
+                                <TextInput label="Name" mode="outlined" onChangeText={props.handleChange('name')} value={props.values.name} onBlur={props.handleBlur('name')} />
+                                <Text style={styles.errorText}>{props.touched.name && props.errors.name}</Text>
+
+                                <TextInput label="Email" mode="outlined" keyboardType='email-address' onChangeText={props.handleChange('email')} value={props.values.email} onBlur={props.handleBlur('email')} />
+                                <Text style={styles.errorText}>{props.touched.email && props.errors.email}</Text>
+                                
+                               
+                                <TextInput multiline label="Address" mode="outlined" onChangeText={props.handleChange('address')} value={props.values.address} onBlur={props.handleBlur('address')} />
+                                <Text style={styles.errorText}>{props.touched.address && props.errors.address}</Text>
+                             
+                    
+                                <TextInput label="Phone number" mode="outlined" onChangeText={props.handleChange('phoneNumber')} value={props.values.phoneNumber} onBlur={props.handleBlur('phoneNumber')} keyboardType='numeric' />
+                                <Text style={styles.errorText}>{props.touched.phoneNumber && props.errors.phoneNumber}</Text>
+
+                                <SubmitButton
+                                    loading={updateState.updateLoader}
+                                    style={styles.button}
+                                    color={colors.primary}
+                                    contentStyle={styles.buttonContent}
+                                    title="Update"
+                                />
+                            </View>
+                        )}
+                    </Formik>
                 </View>
                 <Modal
                     animationType="slide"
@@ -216,6 +257,14 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         color: 'purple'
     },
+    buttonContainer: {
+        flexDirection: 'row',
+        width: '100%',
+        justifyContent: 'space-between',
+        paddingHorizontal: 10,
+        paddingTop: 10,
+        paddingBottom: 15
+    },
     buttonContent: {
         height: 40,
         width: 150,
@@ -256,7 +305,12 @@ const styles = StyleSheet.create({
     },
     photobuttons: {
         padding:15
-    }
+    },
+    errorText: {
+        paddingLeft: 40,
+        color: 'crimson',
+        fontWeight: 'bold'
+    },
 });
 
 export default EditUserProfileScreen;
