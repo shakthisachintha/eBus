@@ -29,17 +29,26 @@ const TripScreen = () => {
     return (
 
         <ScrollView contentContainerStyle={styles.container} refreshControl={<RefreshControl colors={[colors.primary, colors.black, colors.success]} refreshing={isRefreshing} onRefresh={getCurrentTrip} progressViewOffset={70} />}>
-            {activeTrip ? <>
-                <LottieView style={{ width: "100%" }} source={animations.TRIP_ANIMATION} autoPlay loop />
+            {activeTrip ?
+                <>
+                    <LottieView style={{ width: "100%" }} source={animations.TRIP_ANIMATION} autoPlay loop />
 
-                
+
                     <AppText style={styles.mainText}>We are tracking your trip...</AppText>
                     <AppText style={styles.secondaryText}>Start location : Karapitiya Central Bus Station</AppText>
-            
 
-                <Text>{activeTrip.start}</Text>
-            </> : <><AppIcon name="crosshairs-gps" size={80} backgroundColor={colors.secondary} iconColor={colors.white}> </AppIcon>
-                    <Text style={styles.helpText}>You don't have any active trips </Text></>}
+
+                    {/* <Text>{activeTrip.start}</Text> */}
+                </>
+                :
+                <>
+                    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+                        <AppIcon name="crosshairs-gps" size={80} backgroundColor={colors.black} iconColor={colors.white}> </AppIcon>
+                        <Text style={styles.helpText}>You don't have any active trips </Text>
+                    </View>
+
+                </>
+            }
         </ScrollView>
     )
 }
@@ -53,20 +62,20 @@ const styles = StyleSheet.create({
         alignItems: "center",
         // flexDirection:"column"
     },
-  
+
     helpText: {
-        color: "tomato",
+        // color: "tomato",
         fontSize: 20,
         marginVertical: 20,
-        textTransform: "uppercase"
+        // textTransform: "uppercase"
     },
     mainText: {
         color: colors.black,
         fontSize: 22,
-        marginBottom:10
+        marginBottom: 10
     },
-    secondaryText:{
-        color:"gray",
-        fontSize:18
+    secondaryText: {
+        color: "gray",
+        fontSize: 18
     }
 })

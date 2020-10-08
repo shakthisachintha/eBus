@@ -58,6 +58,7 @@ const App = () => {
   const [user, setUser] = useState();
   const [activeTrip, setActiveTrip] = useState(null);
   const [tripCreating, setTripCreating] = useState(false);
+  const [tripCompleting, setTripCompleting] = useState(false);
 
   const restoreUser = async () => {
     const user = await authStorage.getUser();
@@ -74,13 +75,18 @@ const App = () => {
       const trip = await tripAPI.create({ bus, start: { lat: latitude, lng: longitude } });
       if (!trip.ok) alert("Error occured");
       setActiveTrip(trip.data);
-      console.log(trip.data);
+      // console.log(trip.data);
       ToastAndroid.show("New trip created.", ToastAndroid.SHORT);
     } catch (error) {
       alert("Error occured");
     }
-    console.log({ location: { latitude, longitude }, bus });
-    // setTripCreating(false);
+    // console.log({ location: { latitude, longitude }, bus });
+  }
+
+  const completeTrip = () => {
+    // bus = null;
+    setActiveTrip(null);
+    setTripCompleting(true);
   }
 
   useEffect(() => {
@@ -92,7 +98,12 @@ const App = () => {
     };
 
     EventRegister.addEventListener("tagScanned", bus => {
-      createTrip(bus);
+      console.log(activeTrip);
+      if (activeTrip == null) {
+        createTrip(bus);
+      } else {
+        completeTrip()
+      }
     });
 
     return () => {
@@ -107,13 +118,22 @@ const App = () => {
       <Modal animationType="fade" visible={tripCreating} >
         <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
           <ActivityIndicator size="large" color={colors.primary} />
-          <LottieView style={{ width: "100%" }} source={animations.TRIP_START} loop={false} autoPlay onAnimationFinish={()=>setTripCreating(false)}/>
+          <LottieView speed={1.5} style={{ width: "100%" }} source={animations.TRIP_START} loop={false} autoPlay onAnimationFinish={() => setTripCreating(false)} />
           <AppText style={{ margin: 15 }}>Creating Trip ...</AppText>
         </View>
       </Modal>
+
+      <Modal animationType="fade" visible={tripCompleting}>
+        <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+          <ActivityIndicator size="large" color={colors.primary} />
+          <LottieView speed={0.5} style={{ width: "100%" }} source={animations.TRIP_COMPLETE} loop={false} autoPlay onAnimationFinish={() => setTripCompleting(false)} />
+          <AppText style={{ margin: 15 }}>Trip Completed!</AppText>
+        </View>
+      </Modal>
+
       <AuthContext.Provider value={{ user, setUser }}>
         <NavigationContainer theme={navigationTheme}>
-          <ActiveTripContext.Provider value={{ activeTrip }}>
+          <ActiveTripContext.Provider value={{ activeTrip, setActiveTrip }}>
             {user ? <DashboardNavigator /> : <AuthNavigator />}
           </ActiveTripContext.Provider>
         </NavigationContainer>
