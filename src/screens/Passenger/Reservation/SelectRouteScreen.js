@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, ActivityIndicator } from 'react-native'
 import * as yup from 'yup';
 
 import { AppForm, AppFormInput, SubmitButton, ErrorMessage } from '../../../components/forms';
@@ -8,6 +8,7 @@ import colors from '../../../utils/colors';
 import { FlatList } from 'react-native-gesture-handler';
 
 const reviewSchema = yup.object({
+    begining: yup.string().required('Begining is required'),
     destinantion: yup.string().required('Destination is required')
 });
 
@@ -28,12 +29,15 @@ const SelectRouteScreen = ({navigation}) => {
         { number: 'NA-9933', id:'7'},
     ]);
 
+    const [loading, setLoading] = useState(true);
+
     const pressHandler = (id) => {
         navigation.navigate('SeatSelectionScreen', { id: id });
         console.log(id);
     }
 
     const handleUpdate = async (values) => {
+        setLoading(false);
         // setUpdateState({ updateLoader: true });
         // const result = await userAPI.updatePassword(_.pick(values, ["oldpassword", "newpassword", "confirmpassword"]));
         // setUpdateState({ updateLoader: false });
@@ -62,18 +66,18 @@ const SelectRouteScreen = ({navigation}) => {
     return (
         <View style={styles.container}>
             <AppForm
-                initialValues={{ destinantion: "" }}
+                initialValues={{ begining:"", destinantion: "" }}
                 validationSchema={reviewSchema}
                 onSubmit={handleUpdate}
             >
                 <View style={{flexDirection:'row', justifyContent:'space-around'}}>
                 <View style={{flexDirection:'column', justifyContent:'center'}}>
                 <AppFormInput
-                    name=""
+                    name="begining"
                     autoCapitalize="none"
                     autoCorrect={false}
                     style={styles.input}
-                    label="Destination"
+                    label="Begining"
                     mode="outlined"
                 />
                 <AppFormInput
@@ -95,7 +99,9 @@ const SelectRouteScreen = ({navigation}) => {
                 {updateState.updateError && <ErrorMessage error={updateState.updateError} />}
             </AppForm>
 
-            
+            {loading ? 
+            <ActivityIndicator size="large" color="#0000ff" />
+            :
             <FlatList
                 keyExtractor={(item) => item.id}
                 data={buses}
@@ -105,7 +111,7 @@ const SelectRouteScreen = ({navigation}) => {
                 </TouchableOpacity>
                 )}
             />
-            
+            }
         </View>
     )
 }
