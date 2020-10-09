@@ -28,7 +28,7 @@ const SelectRouteScreen = ({navigation}) => {
 
     const pressHandler = (id) => {
         navigation.navigate('SelectDateScreen', { id: id });
-        console.log(id);
+        // console.log(id);
     }
 
     const handleUpdate = async (values) => {
@@ -55,8 +55,8 @@ const SelectRouteScreen = ({navigation}) => {
                 setBusCount(true);
             }
             setBuses(result.data);
-            console.log(result.data.length);
-            console.log(result.data);
+            // console.log(result.data.length);
+            // console.log(result.data);
         }
     }
 

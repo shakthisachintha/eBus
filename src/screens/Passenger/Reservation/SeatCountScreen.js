@@ -1,11 +1,8 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, Alert, TouchableOpacity, Icon } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, ScrollView, Alert, ActivityIndicator, Icon } from 'react-native';
 import { Button, TextInput, Card } from 'react-native-paper';
-import images from '../../../utils/images';
-import { AppForm, AppFormInput, SubmitButton, ErrorMessage } from '../../../components/forms';
 import * as yup from 'yup';
-import colors from '../../../utils/colors';
-import DatePicker from 'react-native-date-picker';
+import bookingAPI from '../../../api/reservation';
 
 const reviewSchema = yup.object({
     code: yup.number().required('Verification code is required').min(6)
@@ -14,14 +11,52 @@ const reviewSchema = yup.object({
 const SeatCountScreen = ({ navigation, route }) => {
 
     const [count, setCount] = useState(1);
+    const [busNo, setBusNo] = useState(null);
+    const [freeSeats, setFreeSeats] = useState(0);
+    const [loading, setLoading] = useState(true);
     if(count<=0){
         setCount(1);
+    }
+    if(freeSeats>0){
+        if(count>freeSeats){
+            setCount(freeSeats);
+        }
     }
     if(count>15){
         setCount(15);
     }
+
+    useEffect( () =>{
+        async function fetchData(){
+            // console.log(busId,bookingDate);
+            const result = await bookingAPI.freeSeats(busId,bookingDate);
+            if (!result.ok) {
+                return alert("Error while connecting.");
+            }
+            console.log(result.data);
+            setBusNo("NA2222");
+            setLoading(false);
+            if(result.data.length==0){
+                setFreeSeats(15);
+            }
+            else{
+                var seats =0;
+                var tot=0;
+                result.data.forEach((element) => {
+                    seats = element.numOfSeats;
+                    tot=tot+seats;
+                  })
+                var free = 15-tot;
+                setFreeSeats(free);
+            }
+            return;
+        }
+        fetchData();
+    },[])
+
     const { id, year, month, date } = route.params;
-    const bookingDate = route.params.year+"-"+route.params.month+"-"+route.params.date;
+    const busId = route.params.id;
+    const bookingDate = route.params.year+"-"+(route.params.month+1)+"-"+route.params.date;
     // const handleSubmit = async ({code, email}) => {
     //     setUpdateState({ updateLoader: true });
     //     const result = await authAPI.verify(code,email);
@@ -48,20 +83,27 @@ const SeatCountScreen = ({ navigation, route }) => {
     // }
     return (
         <ScrollView style={styles.container}>
-            <Text style={{ color: 'black', justifyContent: 'center', fontSize: 18, marginTop: 10, textAlign:'center' }}><Text style={{ fontWeight: 'bold' }}>Bus id : {id}</Text></Text>
-            <Text style={{ color: 'black', justifyContent: 'center', fontSize: 18, marginTop: 10, textAlign:'center' }}><Text style={{ fontWeight: 'bold' }}>Booking date : {bookingDate}</Text></Text>
-            <View style={{ paddingTop:20 ,justifyContent: "center", alignItems: 'center',}}>
-                <Button style={styles.input} mode="contained" onPress={() => setCount(count + 1)}>
-                    <Text style={{fontSize: 25, textAlign:'center', fontWeight:'bold'}}>+</Text>
-                </Button>
-                <Text  style={styles.text}>Count : {count}</Text>
-                <Button style={styles.input} mode="contained" onPress={() => setCount(count - 1)}>
-                <Text style={{fontSize: 25, textAlign:'center', fontWeight:'bold'}}>-</Text>
-                </Button>
-                <Button style={styles.button} icon="account-multiple-check" mode="contained" onPress={() => console.log('Pressed')}>
-                    Next
-                </Button>
+            {loading ? 
+            <ActivityIndicator size="large" color="#0000ff" />
+            :
+            <View>
+                <Text style={{ color: 'black', justifyContent: 'center', fontSize: 18, marginTop: 10, textAlign:'center' }}><Text style={{ fontWeight: 'bold' }}>Bus id : {busNo}</Text></Text>
+                <Text style={{ color: 'black', justifyContent: 'center', fontSize: 20, marginTop: 10, textAlign:'center' }}><Text style={{ fontWeight: 'bold' }}>Booking date : {bookingDate}</Text></Text>
+                <Text style={{ color: 'black', justifyContent: 'center', fontSize: 22, marginTop: 10, textAlign:'center' }}><Text style={{ fontWeight: 'bold' }}>Available Seats : {freeSeats}</Text></Text>
+                <View style={{ paddingTop:20 ,justifyContent: "center", alignItems: 'center',}}>
+                    <Button style={styles.input} mode="contained" onPress={() => setCount(count + 1)}>
+                        <Text style={{fontSize: 25, textAlign:'center', fontWeight:'bold'}}>+</Text>
+                    </Button>
+                    <Text  style={styles.text}>Count : {count}</Text>
+                    <Button style={styles.input} mode="contained" onPress={() => setCount(count - 1)}>
+                    <Text style={{fontSize: 25, textAlign:'center', fontWeight:'bold'}}>-</Text>
+                    </Button>
+                    <Button style={styles.button} icon="account-multiple-check" mode="contained" onPress={() => console.log('Pressed')}>
+                        Next
+                    </Button>
+                </View>
             </View>
+            }
         </ScrollView>
     );
 }
