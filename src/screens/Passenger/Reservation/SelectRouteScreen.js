@@ -27,7 +27,7 @@ const SelectRouteScreen = ({navigation}) => {
     const [busCount, setBusCount] = useState(true);
 
     const pressHandler = (id) => {
-        navigation.navigate('SeatSelectionScreen', { id: id });
+        navigation.navigate('SelectDateScreen', { id: id });
         console.log(id);
     }
 

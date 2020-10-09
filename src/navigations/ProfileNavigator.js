@@ -12,6 +12,7 @@ import {
 import WalletNavigator from './WalletNavigator';
 import SelectRouteScreen from '../screens/Passenger/Reservation/SelectRouteScreen';
 import SeatSelectionScreen from '../screens/Passenger/Reservation/SeatSelectionScreen';
+import SelectDateScreen from '../screens/Passenger/Reservation/SelectDateScreen';
 
 const Stack = createStackNavigator();
 
@@ -85,6 +86,15 @@ const ProfileNavigator = () => (
             options={{
                 headerShown: true,
                 title: 'Route Selection'
+            }}
+        />
+
+        <Stack.Screen
+            name="SelectDateScreen"
+            component={SelectDateScreen}
+            options={{
+                headerShown: true,
+                title: 'Select Date'
             }}
         />
 
