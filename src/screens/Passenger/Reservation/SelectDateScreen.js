@@ -5,6 +5,7 @@ import images from '../../../utils/images';
 import { AppForm, AppFormInput, SubmitButton, ErrorMessage } from '../../../components/forms';
 import * as yup from 'yup';
 import colors from '../../../utils/colors';
+import DatePicker from 'react-native-datepicker'
 
 const reviewSchema = yup.object({
     code: yup.number().required('Verification code is required').min(6)
@@ -17,6 +18,8 @@ const SelectDateScreen = ({ navigation, route }) => {
         updateLoader: false,
     });
     const [count, setCount] = useState(1);
+
+    const [date, setDate] = useState(new Date);
 
     // const onIncrement = () => {
     //     this.setState({
@@ -57,7 +60,30 @@ const SelectDateScreen = ({ navigation, route }) => {
     // }
     return (
         <ScrollView style={styles.container}>
-
+            <DatePicker
+                style={{width: 200}}
+                date={date}
+                mode="date"
+                placeholder="select date"
+                format="YYYY-MM-DD"
+                minDate="2016-05-01"
+                maxDate="2016-06-01"
+                confirmBtnText="Confirm"
+                cancelBtnText="Cancel"
+                customStyles={{
+                dateIcon: {
+                    position: 'absolute',
+                    left: 0,
+                    top: 4,
+                    marginLeft: 0
+                },
+                dateInput: {
+                    marginLeft: 36
+                }
+                // ... You can check the source to find the other keys.
+                }}
+                onDateChange={(date) => setDate(date)}
+            />
             
             <Text style={{ color: 'black', justifyContent: 'center', fontSize: 18, marginTop: 10, textAlign:'center' }}><Text style={{ fontWeight: 'bold' }}>Bus id new: {id}</Text></Text>
             <View style={{ paddingTop:20 ,justifyContent: "center",alignItems: 'center',}}>
