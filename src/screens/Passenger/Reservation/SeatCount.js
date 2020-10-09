@@ -11,7 +11,7 @@ const reviewSchema = yup.object({
     code: yup.number().required('Verification code is required').min(6)
 });
 
-const SelectDateScreen = ({ navigation, route }) => {
+const SeatCount = ({ navigation, route }) => {
 
     const [count, setCount] = useState(1);
     const [date, setDate] = useState(new Date);
@@ -34,28 +34,30 @@ const SelectDateScreen = ({ navigation, route }) => {
     
     const { id } = route.params;
 
-    const handleSubmit = async ({code, email}) => {
-        const result = await authAPI.verify(code,email);
-        if (!result.ok) {
-            if (result.data) {
-                setUpdateState({ updateError: result.data.error });
-            }
-            else {
-                setUpdateState({ updateError: "An unknown error occurred." });
-            }
-            return;
-        }
-        if (result.ok){
-            Alert.alert(
-                'Verification Code',
-                'The verification is successful! Please enter a new password to proceed!',
-                [
-                  { text: 'OK', onPress: () => navigation.navigate('PasswordReset', { id: result.data._id })}
-                ],
-                { cancelable: false }
-              );
-        }
-    }
+    // const handleSubmit = async ({code, email}) => {
+    //     setUpdateState({ updateLoader: true });
+    //     const result = await authAPI.verify(code,email);
+    //     setUpdateState({ updateLoader: false });
+    //     if (!result.ok) {
+    //         if (result.data) {
+    //             setUpdateState({ updateError: result.data.error });
+    //         }
+    //         else {
+    //             setUpdateState({ updateError: "An unknown error occurred." });
+    //         }
+    //         return;
+    //     }
+    //     if (result.ok){
+    //         Alert.alert(
+    //             'Verification Code',
+    //             'The verification is successful! Please enter a new password to proceed!',
+    //             [
+    //               { text: 'OK', onPress: () => navigation.navigate('PasswordReset', { id: result.data._id })}
+    //             ],
+    //             { cancelable: false }
+    //           );
+    //     }
+    // }
     return (
         <ScrollView style={styles.container}>
             <View style={styles.timeInput}>
@@ -87,7 +89,7 @@ const SelectDateScreen = ({ navigation, route }) => {
                         icon="check-circle-outline"
                     />
                 </AppForm> */}
-                <Button style={styles.button} icon="update" mode="contained" onPress={() => handleSubmit}>
+                <Button style={styles.button} icon="update" mode="contained" onPress={() => console.log('Pressed')}>
                     Next
                 </Button>
                 </View>
@@ -119,4 +121,4 @@ text: {
 }
 });
 
-export default SelectDateScreen;
+export default SeatCount;
