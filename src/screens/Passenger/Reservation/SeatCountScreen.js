@@ -33,8 +33,7 @@ const SeatCountScreen = ({ navigation, route }) => {
             if (!result.ok) {
                 return alert("Error while connecting.");
             }
-            console.log(result.data);
-            setBusNo("NA2222");
+            // console.log(result.data);
             setLoading(false);
             if(result.data.length==0){
                 setFreeSeats(15);
@@ -49,6 +48,9 @@ const SeatCountScreen = ({ navigation, route }) => {
                 var free = 15-tot;
                 setFreeSeats(free);
             }
+            const bus = await bookingAPI.getBusNo(busId);
+            // console.log(bus.data.busNo);
+            setBusNo(bus.data.busNo);
             return;
         }
         fetchData();
@@ -87,10 +89,10 @@ const SeatCountScreen = ({ navigation, route }) => {
             <ActivityIndicator size="large" color="#0000ff" />
             :
             <View>
-                <Text style={{ color: 'black', justifyContent: 'center', fontSize: 18, marginTop: 10, textAlign:'center' }}><Text style={{ fontWeight: 'bold' }}>Bus id : {busNo}</Text></Text>
+                <Text style={{ color: 'black', justifyContent: 'center', fontSize: 18, marginTop: 10, textAlign:'center' }}><Text style={{ fontWeight: 'bold' }}>Bus Number : {busNo}</Text></Text>
                 <Text style={{ color: 'black', justifyContent: 'center', fontSize: 20, marginTop: 10, textAlign:'center' }}><Text style={{ fontWeight: 'bold' }}>Booking date : {bookingDate}</Text></Text>
                 <Text style={{ color: 'black', justifyContent: 'center', fontSize: 22, marginTop: 10, textAlign:'center' }}><Text style={{ fontWeight: 'bold' }}>Available Seats : {freeSeats}</Text></Text>
-                <View style={{ paddingTop:20 ,justifyContent: "center", alignItems: 'center',}}>
+                <View style={{ paddingTop:50 ,justifyContent: "center", alignItems: 'center',}}>
                     <Button style={styles.input} mode="contained" onPress={() => setCount(count + 1)}>
                         <Text style={{fontSize: 25, textAlign:'center', fontWeight:'bold'}}>+</Text>
                     </Button>
@@ -113,7 +115,7 @@ container: {
     flex: 1,
 },
 button: {
-    marginTop: 50,
+    marginTop: 60,
     alignSelf: 'center',
     marginBottom: 50,
 },

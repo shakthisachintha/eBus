@@ -35,7 +35,7 @@ const SelectDateScreen = ({ navigation, route }) => {
     const { id } = route.params;
 
     const handleSubmit = () => {
-        console.log(date.getFullYear(), date.getMonth(), date.getDate());
+        // console.log(date.getFullYear(), date.getMonth(), date.getDate());
         navigation.navigate('SeatCountScreen', { id: id, year:date.getFullYear(), month: date.getMonth(), date: date.getDate()});
     }
     return (
