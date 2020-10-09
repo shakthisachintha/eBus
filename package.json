@@ -22,7 +22,6 @@
     "native-base": "^2.13.12",
     "react": "16.11.0",
     "react-native": "0.62.2",
-    "react-native-datepicker": "^1.7.2",
     "react-native-fbsdk": "^2.0.0",
     "react-native-gesture-handler": "^1.6.1",
     "react-native-image-picker": "^2.3.2",
