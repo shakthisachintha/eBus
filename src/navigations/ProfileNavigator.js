@@ -13,6 +13,7 @@ import WalletNavigator from './WalletNavigator';
 import SelectRouteScreen from '../screens/Passenger/Reservation/SelectRouteScreen';
 import SeatSelectionScreen from '../screens/Passenger/Reservation/SeatSelectionScreen';
 import SelectDateScreen from '../screens/Passenger/Reservation/SelectDateScreen';
+import SeatCountScreen from '../screens/Passenger/Reservation/SeatCountScreen';
 
 const Stack = createStackNavigator();
 
@@ -95,6 +96,15 @@ const ProfileNavigator = () => (
             options={{
                 headerShown: true,
                 title: 'Select Date'
+            }}
+        />
+
+        <Stack.Screen
+            name="SeatCountScreen"
+            component={SeatCountScreen}
+            options={{
+                headerShown: true,
+                title: 'Set Seat Count'
             }}
         />
 

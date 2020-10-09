@@ -34,27 +34,9 @@ const SelectDateScreen = ({ navigation, route }) => {
     
     const { id } = route.params;
 
-    const handleSubmit = async ({code, email}) => {
-        const result = await authAPI.verify(code,email);
-        if (!result.ok) {
-            if (result.data) {
-                setUpdateState({ updateError: result.data.error });
-            }
-            else {
-                setUpdateState({ updateError: "An unknown error occurred." });
-            }
-            return;
-        }
-        if (result.ok){
-            Alert.alert(
-                'Verification Code',
-                'The verification is successful! Please enter a new password to proceed!',
-                [
-                  { text: 'OK', onPress: () => navigation.navigate('PasswordReset', { id: result.data._id })}
-                ],
-                { cancelable: false }
-              );
-        }
+    const handleSubmit = () => {
+        console.log(date.getFullYear(), date.getMonth(), date.getDate());
+        navigation.navigate('SeatCountScreen', { id: id, year:date.getFullYear(), month: date.getMonth(), date: date.getDate()});
     }
     return (
         <ScrollView style={styles.container}>
@@ -87,7 +69,7 @@ const SelectDateScreen = ({ navigation, route }) => {
                         icon="check-circle-outline"
                     />
                 </AppForm> */}
-                <Button style={styles.button} icon="update" mode="contained" onPress={() => handleSubmit}>
+                <Button style={styles.button} icon="update" mode="contained" onPress={handleSubmit}>
                     Next
                 </Button>
                 </View>
