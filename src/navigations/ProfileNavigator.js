@@ -14,6 +14,8 @@ import SelectRouteScreen from '../screens/Passenger/Reservation/SelectRouteScree
 import SeatSelectionScreen from '../screens/Passenger/Reservation/SeatSelectionScreen';
 import SelectDateScreen from '../screens/Passenger/Reservation/SelectDateScreen';
 import SeatCountScreen from '../screens/Passenger/Reservation/SeatCountScreen';
+import ViewReservationsScreen from '../screens/Passenger/Reservation/ViewReservationsScreen';
+import ReservationDetailsScreen from '../screens/Passenger/Reservation/ReservationDetailsScreen';
 
 const Stack = createStackNavigator();
 
@@ -114,6 +116,24 @@ const ProfileNavigator = () => (
             options={{
                 headerShown: true,
                 title: 'Seat Selection'
+            }}
+        />
+
+        <Stack.Screen
+            name="ViewReservationsScreen"
+            component={ViewReservationsScreen}
+            options={{
+                headerShown: true,
+                title: 'My Reservations'
+            }}
+        />
+
+        <Stack.Screen
+            name="ReservationDetailsScreen"
+            component={ReservationDetailsScreen}
+            options={{
+                headerShown: true,
+                title: 'Reservation Details'
             }}
         />
 
