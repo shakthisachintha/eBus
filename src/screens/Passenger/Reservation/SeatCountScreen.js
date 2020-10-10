@@ -1,19 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, Alert, ActivityIndicator, Icon } from 'react-native';
 import { Button, TextInput, Card } from 'react-native-paper';
-import * as yup from 'yup';
 import bookingAPI from '../../../api/reservation';
-
-const reviewSchema = yup.object({
-    code: yup.number().required('Verification code is required').min(6)
-});
 
 const SeatCountScreen = ({ navigation, route }) => {
 
+    const [updateState, setUpdateState] = useState({
+        updateError: null,
+        updateLoader: false,
+    });
     const [count, setCount] = useState(1);
     const [busNo, setBusNo] = useState(null);
-    const [freeSeats, setFreeSeats] = useState(0);
+    const [freeSeats, setFreeSeats] = useState(1);
     const [loading, setLoading] = useState(true);
+    const [show, setShow] = useState(false);
+
+    
     if(count<=0){
         setCount(1);
     }
@@ -33,10 +35,17 @@ const SeatCountScreen = ({ navigation, route }) => {
             if (!result.ok) {
                 return alert("Error while connecting.");
             }
+            if(freeSeats==0){
+                setShow(false)
+            }
             // console.log(result.data);
             setLoading(false);
+            const bus = await bookingAPI.getBusNo(busId);
+            // console.log(bus.data.busNo);
+            setBusNo(bus.data.busNo);
             if(result.data.length==0){
                 setFreeSeats(15);
+                setShow(true);
             }
             else{
                 var seats =0;
@@ -47,10 +56,10 @@ const SeatCountScreen = ({ navigation, route }) => {
                   })
                 var free = 15-tot;
                 setFreeSeats(free);
+                if(freeSeats==0){
+                    setShow(false)
+                }
             }
-            const bus = await bookingAPI.getBusNo(busId);
-            // console.log(bus.data.busNo);
-            setBusNo(bus.data.busNo);
             return;
         }
         fetchData();
@@ -59,30 +68,31 @@ const SeatCountScreen = ({ navigation, route }) => {
     const { id, year, month, date } = route.params;
     const busId = route.params.id;
     const bookingDate = route.params.year+"-"+(route.params.month+1)+"-"+route.params.date;
-    // const handleSubmit = async ({code, email}) => {
-    //     setUpdateState({ updateLoader: true });
-    //     const result = await authAPI.verify(code,email);
-    //     setUpdateState({ updateLoader: false });
-    //     if (!result.ok) {
-    //         if (result.data) {
-    //             setUpdateState({ updateError: result.data.error });
-    //         }
-    //         else {
-    //             setUpdateState({ updateError: "An unknown error occurred." });
-    //         }
-    //         return;
-    //     }
-    //     if (result.ok){
-    //         Alert.alert(
-    //             'Verification Code',
-    //             'The verification is successful! Please enter a new password to proceed!',
-    //             [
-    //               { text: 'OK', onPress: () => navigation.navigate('PasswordReset', { id: result.data._id })}
-    //             ],
-    //             { cancelable: false }
-    //           );
-    //     }
-    // }
+    const handleSubmit = async () => {
+        setUpdateState({ updateLoader: true });
+        const result = await bookingAPI.bookSeats(busId,bookingDate,count);
+        setUpdateState({ updateLoader: false });
+        if (!result.ok) {
+            if (result.data) {
+                setUpdateState({ updateError: result.data.error });
+            }
+            else {
+                setUpdateState({ updateError: "An unknown error occurred." });
+            }
+            return;
+        }
+        if (result.ok){
+            Alert.alert(
+                'Seat Reservation Success',
+                `You have successfull reserved ${count} seats on ${bookingDate} at ${busNo}`,
+                [
+                  { text: 'OK', onPress: () => navigation.navigate('UserProfile')}
+                ],
+                { cancelable: false }
+              );
+        }
+    }
+
     return (
         <ScrollView style={styles.container}>
             {loading ? 
@@ -92,18 +102,30 @@ const SeatCountScreen = ({ navigation, route }) => {
                 <Text style={{ color: 'black', justifyContent: 'center', fontSize: 18, marginTop: 10, textAlign:'center' }}><Text style={{ fontWeight: 'bold' }}>Bus Number : {busNo}</Text></Text>
                 <Text style={{ color: 'black', justifyContent: 'center', fontSize: 20, marginTop: 10, textAlign:'center' }}><Text style={{ fontWeight: 'bold' }}>Booking date : {bookingDate}</Text></Text>
                 <Text style={{ color: 'black', justifyContent: 'center', fontSize: 22, marginTop: 10, textAlign:'center' }}><Text style={{ fontWeight: 'bold' }}>Available Seats : {freeSeats}</Text></Text>
-                <View style={{ paddingTop:50 ,justifyContent: "center", alignItems: 'center',}}>
-                    <Button style={styles.input} mode="contained" onPress={() => setCount(count + 1)}>
-                        <Text style={{fontSize: 25, textAlign:'center', fontWeight:'bold'}}>+</Text>
-                    </Button>
-                    <Text  style={styles.text}>Count : {count}</Text>
-                    <Button style={styles.input} mode="contained" onPress={() => setCount(count - 1)}>
-                    <Text style={{fontSize: 25, textAlign:'center', fontWeight:'bold'}}>-</Text>
-                    </Button>
-                    <Button style={styles.button} icon="account-multiple-check" mode="contained" onPress={() => console.log('Pressed')}>
-                        Next
-                    </Button>
-                </View>
+                {show ?
+                    <View style={{ paddingTop:50 ,justifyContent: "center", alignItems: 'center',}}>
+                        <Button style={styles.input} mode="contained" onPress={() => setCount(count + 1)}>
+                            <Text style={{fontSize: 25, textAlign:'center', fontWeight:'bold'}}>+</Text>
+                        </Button>
+                        <Text  style={styles.text}>Seats : {count}</Text>
+                        <Button style={styles.input} mode="contained" onPress={() => setCount(count - 1)}>
+                        <Text style={{fontSize: 25, textAlign:'center', fontWeight:'bold'}}>-</Text>
+                        </Button>
+                        <Button style={styles.button} icon="account-multiple-check" mode="contained" onPress={handleSubmit}>
+                            Next
+                        </Button>
+                        {updateState.updateError && <ErrorMessage error={updateState.updateError} />}
+                    </View>
+                :
+                    <View>
+                        <Text style={{ color: 'black', justifyContent: 'center', fontSize: 30, marginTop: 100, textAlign:'center' }}><Text style={{ fontWeight: 'bold' }}>Sorry no more reservations!</Text></Text>
+                        <Text style={{ color: 'black', justifyContent: 'center', fontSize: 30, marginTop: 10, textAlign:'center' }}><Text style={{ fontWeight: 'bold' }}>Reservations are full on {bookingDate}</Text></Text>
+                        <Button style={styles.button} icon="backup-restore" mode="contained" onPress={() => navigation.navigate('SelectRouteScreen')} >
+                            Back to search another bus
+                        </Button>
+                    </View>
+                    
+                }
             </View>
             }
         </ScrollView>
