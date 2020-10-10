@@ -1,3 +1,4 @@
+import { set } from 'lodash';
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, ScrollView, Alert, ActivityIndicator, Icon } from 'react-native';
 import { Button, TextInput, Card } from 'react-native-paper';
@@ -13,8 +14,9 @@ const SeatCountScreen = ({ navigation, route }) => {
     const [busNo, setBusNo] = useState(null);
     const [freeSeats, setFreeSeats] = useState(1);
     const [loading, setLoading] = useState(true);
-    const [show, setShow] = useState(false);
-
+    const [show, setShow] = useState(true);
+    const [startPoint, setStartPoint] = useState(null);
+    const [endPoint, setEndPoint] = useState(null);
     
     if(count<=0){
         setCount(1);
@@ -28,42 +30,62 @@ const SeatCountScreen = ({ navigation, route }) => {
         setCount(15);
     }
 
-    useEffect( () =>{
-        async function fetchData(){
-            // console.log(busId,bookingDate);
-            const result = await bookingAPI.freeSeats(busId,bookingDate);
-            if (!result.ok) {
-                return alert("Error while connecting.");
-            }
+    async function fetchData(){
+        // console.log(busId,bookingDate);
+        const result = await bookingAPI.freeSeats(busId,bookingDate);
+        if (!result.ok) {
+            return alert("Error while connecting.");
+        }
+        if(freeSeats==0){
+            setShow(false)
+        }
+        // console.log(result.data);
+        setLoading(false);
+        const bus = await bookingAPI.getBusNo(busId);
+        // console.log(bus.data.busNo);
+        setBusNo(bus.data.busNo);
+        setStartPoint(bus.data.startPoint);
+        setEndPoint(bus.data.endPoint);
+        if(result.data.length==0){
+            setFreeSeats(15);
+            setShow(true);
+        }
+        else{
+            var seats =0;
+            var tot=0;
+            result.data.forEach((element) => {
+                seats = element.numOfSeats;
+                tot=tot+seats;
+            })
+            var free = 15-tot;
+
+            setFreeSeats(free);
+
             if(freeSeats==0){
                 setShow(false)
             }
-            // console.log(result.data);
-            setLoading(false);
-            const bus = await bookingAPI.getBusNo(busId);
-            // console.log(bus.data.busNo);
-            setBusNo(bus.data.busNo);
-            if(result.data.length==0){
-                setFreeSeats(15);
-                setShow(true);
-            }
-            else{
-                var seats =0;
-                var tot=0;
-                result.data.forEach((element) => {
-                    seats = element.numOfSeats;
-                    tot=tot+seats;
-                  })
-                var free = 15-tot;
-                setFreeSeats(free);
-                if(freeSeats==0){
-                    setShow(false)
-                }
-            }
-            return;
         }
+        if(freeSeats==0){
+            setShow(false)
+        }
+        return;
+    }
+
+    useEffect( () =>{
         fetchData();
-    },[])
+        // console.log(show);
+        if(freeSeats==0){
+            setShow(false)
+        }
+    },[route]);
+    useEffect(() => {
+        if(freeSeats>0){
+            setShow(true);
+        }else{
+            setShow(false)
+        }
+        // console.log("free seats",freeSeats)
+    }, [freeSeats])
 
     const { id, year, month, date } = route.params;
     const busId = route.params.id;
@@ -84,13 +106,29 @@ const SeatCountScreen = ({ navigation, route }) => {
         if (result.ok){
             Alert.alert(
                 'Seat Reservation Success',
-                `You have successfull reserved ${count} seats on ${bookingDate} at ${busNo}`,
+                `You have successfull reserved ${count} seats on ${bookingDate} at ${busNo} route: ${startPoint} - ${endPoint}`,
                 [
                   { text: 'OK', onPress: () => navigation.navigate('UserProfile')}
                 ],
                 { cancelable: false }
               );
         }
+    }
+
+    const handleConfirmation = () => {
+        Alert.alert(
+            'Confirm Submission',
+            `Are you sure you want to submit the reservation?`,
+            [
+                {
+                    text: 'Cancel',
+                    onPress: () => navigation.navigate('SeatCountScreen'),
+                    style: 'cancel',
+                },
+                { text: 'OK', onPress: () => handleSubmit()}
+            ],
+            { cancelable: false }
+        );
     }
 
     return (
@@ -111,7 +149,7 @@ const SeatCountScreen = ({ navigation, route }) => {
                         <Button style={styles.input} mode="contained" onPress={() => setCount(count - 1)}>
                         <Text style={{fontSize: 25, textAlign:'center', fontWeight:'bold'}}>-</Text>
                         </Button>
-                        <Button style={styles.button} icon="account-multiple-check" mode="contained" onPress={handleSubmit}>
+                        <Button style={styles.button} icon="account-multiple-check" mode="contained" onPress={handleConfirmation}>
                             Next
                         </Button>
                         {updateState.updateError && <ErrorMessage error={updateState.updateError} />}
