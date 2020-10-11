@@ -33,7 +33,7 @@ const PayHereWebViewScreen = ({ navigation, route }) => {
 
     const handleRedirect = (event) => {
         const { data } = event.nativeEvent;
-        navigation.goBack();
+        navigation.navigate("Wallet", { item: null });
         alert(data);
     }
 

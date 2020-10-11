@@ -1,7 +1,7 @@
 import React from 'react'
 import { createStackNavigator } from "@react-navigation/stack"
 
-import { PayHereWebViewScreen, WalletScreen } from '../screens/Passenger';
+import { PayHereWebViewScreen, WalletScreen, EditCardScreen, RechargeWalletScreen } from '../screens/Passenger';
 import colors from '../utils/colors';
 import { NONE } from 'apisauce';
 
@@ -34,6 +34,9 @@ const WalletNavigator = () => (
                 title: 'Add payment method'
             }}
         />
+
+        <Stack.Screen name="editCard" component={EditCardScreen} options={({ route }) => ({ title: route.params.title, cardStyle: { backgroundColor: colors.gray } })} />
+        <Stack.Screen name="rechargeWallet" component={RechargeWalletScreen} options={({ route }) => ({ title: route.params.title, cardStyle: { backgroundColor: colors.gray } })} />
     </Stack.Navigator>
 )
 

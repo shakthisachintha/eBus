@@ -9,3 +9,5 @@ export { default as UserAccountScreen } from './Account/UserAccountScreen';
 export { default as UserProfileScreen } from './Account/UserProfileScreen';
 
 export { default as PayHereWebViewScreen } from './Payments/PayHereWebViewScreen';
+export { default as EditCardScreen } from './Payments/EditCardScreen';
+export { default as RechargeWalletScreen } from './Payments/RechargeWalletScreen';
