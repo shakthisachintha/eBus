@@ -7,10 +7,6 @@ import * as yup from 'yup';
 import colors from '../../../utils/colors';
 import DatePicker from 'react-native-date-picker';
 
-const reviewSchema = yup.object({
-    code: yup.number().required('Verification code is required').min(6)
-});
-
 const SelectDateScreen = ({ navigation, route }) => {
 
     const [count, setCount] = useState(1);
