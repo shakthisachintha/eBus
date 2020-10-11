@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import NFC, { NfcDataType, NdefRecordType } from "react-native-nfc";
-import { ToastAndroid, ActivityIndicator, View, ViewBase, Modal, AppRegistry } from "react-native";
+import { ToastAndroid, ActivityIndicator, View, Modal } from "react-native";
 import { EventRegister } from 'react-native-event-listeners'
 import Location from 'react-native-location';
 import LottieView from 'lottie-react-native';
@@ -78,7 +78,7 @@ const App = () => {
       // console.log(trip.data);
       ToastAndroid.show("New trip created.", ToastAndroid.SHORT);
     } catch (error) {
-      alert("Error occured");
+      alert("Error occured when creating trip");
     }
     // console.log({ location: { latitude, longitude }, bus });
   }
