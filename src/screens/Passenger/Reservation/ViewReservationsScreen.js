@@ -48,7 +48,7 @@ const ViewReservationsScreen = ({ navigation, route }) => {
                         data={reservations}
                         renderItem={({item}) => (
                         <TouchableOpacity onPress={() => pressHandler(item._id)}>
-                            <Text style={styles.item}>Date : {item.date} {"\n"}Number of seats reserved : {item.numOfSeats}</Text>
+                            <Text style={styles.item}>Date : {item.date} {"\n"}{item.busNo} route:{item.startPoint}-{item.endPoint} {"\n"}Number of seats reserved : {item.numOfSeats}</Text>
                         </TouchableOpacity>
                         )}
                     />
@@ -80,7 +80,7 @@ input: {
 item: {
     marginTop:24,
     padding:30,
-    backgroundColor:'blue',
+    backgroundColor:'#DA70D6',
     fontSize:18,
     fontWeight:'bold'
 },

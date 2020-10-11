@@ -16,6 +16,7 @@ import SelectDateScreen from '../screens/Passenger/Reservation/SelectDateScreen'
 import SeatCountScreen from '../screens/Passenger/Reservation/SeatCountScreen';
 import ViewReservationsScreen from '../screens/Passenger/Reservation/ViewReservationsScreen';
 import ReservationDetailsScreen from '../screens/Passenger/Reservation/ReservationDetailsScreen';
+import UpdateSeatCountScreen from '../screens/Passenger/Reservation/UpdateSeatCountScreen';
 
 const Stack = createStackNavigator();
 
@@ -137,6 +138,14 @@ const ProfileNavigator = () => (
             }}
         />
 
+        <Stack.Screen
+            name="UpdateSeatCountScreen"
+            component={UpdateSeatCountScreen}
+            options={{
+                headerShown: true,
+                title: 'Update Seat Count'
+            }}
+        />
     </Stack.Navigator>
 
 )

@@ -108,7 +108,7 @@ const SelectRouteScreen = ({navigation}) => {
                         data={buses}
                         renderItem={({item}) => (
                         <TouchableOpacity onPress={() => pressHandler(item._id)}>
-                            <Text style={styles.item}>{item.busNo}</Text>
+                            <Text style={styles.item}>{item.busNo}{"\n"}{item.busRoute}  {item.startPoint}-{item.endPoint}</Text>
                         </TouchableOpacity>
                         )}
                     />
@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
     item: {
         marginTop:24,
         padding:30,
-        backgroundColor:'blue',
+        backgroundColor: '#DA70D6',
         fontSize:18
     },
     search: {

@@ -47,30 +47,9 @@ const ReservationDetailsScreen = ({ navigation, route }) => {
         fetchData();
     },[route]);
 
-    // const handleSubmit = async () => {
-    //     setUpdateState({ updateLoader: true });
-    //     const result = await bookingAPI.bookSeats(busId,bookingDate,count);
-    //     setUpdateState({ updateLoader: false });
-    //     if (!result.ok) {
-    //         if (result.data) {
-    //             setUpdateState({ updateError: result.data.error });
-    //         }
-    //         else {
-    //             setUpdateState({ updateError: "An unknown error occurred." });
-    //         }
-    //         return;
-    //     }
-    //     if (result.ok){
-    //         Alert.alert(
-    //             'Seat Reservation Success',
-    //             `You have successfull reserved ${count} seats on ${bookingDate} at ${busNo} route: ${startPoint} - ${endPoint}`,
-    //             [
-    //               { text: 'OK', onPress: () => navigation.navigate('UserProfile')}
-    //             ],
-    //             { cancelable: false }
-    //           );
-    //     }
-    // }
+    const pressHandler = (id, seats) => {
+        navigation.navigate('UpdateSeatCountScreen', { resId: id, numOfSeats:seats });
+    }
 
     const confirmedDelete = async () => {
         const result = await bookingAPI.deleteRes(resId);
@@ -125,7 +104,7 @@ const ReservationDetailsScreen = ({ navigation, route }) => {
                     <Text style={{ color: 'black', justifyContent: 'center', fontSize: 22, marginTop: 10, textAlign:'center', marginBottom:15 }}><Text style={{ fontWeight: 'bold' }}>Reserved Number of Seats : {seats}</Text></Text>
                     <View style={styles.buttonContainer}>
                         <Button mode="contained" labelStyle={{ fontSize: 11 }} onPress= {deleteReservation}>Cancel Reservation</Button>
-                        <Button mode="contained" labelStyle={{ fontSize: 11 }} onPress={() => navigation.navigate('EditUserProfile')} >Change Seat Count</Button>
+                        {/* <Button mode="contained" labelStyle={{ fontSize: 11 }} onPress={() => pressHandler(resId,seats)} >Change Seat Count</Button> */}
                     </View>
                 </Card>
                 {updateState.updateError && <ErrorMessage error={updateState.updateError} />}
@@ -156,7 +135,8 @@ text: {
 },
 buttonContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    // justifyContent: 'space-between',
+    justifyContent: 'center',
     padding: 30,
 },
 });

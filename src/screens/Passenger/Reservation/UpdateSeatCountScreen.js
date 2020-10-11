@@ -4,7 +4,7 @@ import { View, Text, StyleSheet, ScrollView, Alert, ActivityIndicator, Icon } fr
 import { Button, TextInput, Card } from 'react-native-paper';
 import bookingAPI from '../../../api/reservation';
 
-const SeatCountScreen = ({ navigation, route }) => {
+const UpdateSeatCountScreen = ({ navigation, route }) => {
 
     const [updateState, setUpdateState] = useState({
         updateError: null,
@@ -87,12 +87,12 @@ const SeatCountScreen = ({ navigation, route }) => {
         // console.log("free seats",freeSeats)
     }, [freeSeats])
 
-    const { id, year, month, date } = route.params;
-    const busId = route.params.id;
-    const bookingDate = route.params.year+"-"+(route.params.month+1)+"-"+route.params.date;
+    const { resId,numOfSeats } = route.params;
+    // const resId = route.params.resId;
+    const bookedSeats = route.params.numOfSeats;
     const handleSubmit = async () => {
         setUpdateState({ updateLoader: true });
-        const result = await bookingAPI.bookSeats(busId,bookingDate,count,startPoint,endPoint,busNo);
+        const result = await bookingAPI.bookSeats(busId,bookingDate,count);
         setUpdateState({ updateLoader: false });
         if (!result.ok) {
             if (result.data) {
@@ -191,4 +191,4 @@ text: {
 }
 });
 
-export default SeatCountScreen;
+export default UpdateSeatCountScreen;
