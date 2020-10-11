@@ -116,6 +116,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.7,
         shadowRadius: 82,
         elevation: 12,
+        opacity:0.7
     },
     modalContent: {
         padding: 10,
