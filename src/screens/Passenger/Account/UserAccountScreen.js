@@ -21,6 +21,7 @@ const UserAccountScreen = ({ navigation }) => {
             <View style={styles.container}>
                 <AppCard title="Wallet" onPress={() => navigation.navigate('userWallet')} IconComponent={<AppIcon name="credit-card-multiple" backgroundColor={colors.secondary} />} />
                 <AppCard title="Seat Reservation"  onPress={() => navigation.navigate('SelectRouteScreen')} IconComponent={<AppIcon name="seat-recline-normal" backgroundColor={'#4455ee'} />} />
+                <AppCard title="My Reservations"  onPress={() => navigation.navigate('ViewReservationsScreen')} IconComponent={<AppIcon name="seatbelt" backgroundColor={'#669900'} />} />
                 <AppCard title="My Messages" IconComponent={<AppIcon name="forum-outline" backgroundColor={colors.primary} />} />
                 <AppCard title="Settings" style={{ marginVertical: 30 }} IconComponent={<AppIcon name="settings" backgroundColor={'#5515ee'} />} />
 
