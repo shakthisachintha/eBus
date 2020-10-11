@@ -1,14 +1,17 @@
 import React, { useState } from 'react'
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, ActivityIndicator } from 'react-native'
 import * as yup from 'yup';
+import _ from "lodash";
 
 import { AppForm, AppFormInput, SubmitButton, ErrorMessage } from '../../../components/forms';
 import useAuth from '../../../auth/useAuth';
 import colors from '../../../utils/colors';
 import { FlatList } from 'react-native-gesture-handler';
+import bookingAPI from '../../../api/reservation';
 
 const reviewSchema = yup.object({
-    destinantion: yup.string().required('Destination is required')
+    begining: yup.string().required('Begining is required'),
+    destination: yup.string().required('Destination is required')
 });
 
 const SelectRouteScreen = ({navigation}) => {
@@ -18,66 +21,64 @@ const SelectRouteScreen = ({navigation}) => {
         updateError: null,
         updateLoader: false,
     });
-    const [buses, setBuses]= useState([
-        { number: 'NA-2233', id:'1'},
-        { number: 'NA-2244', id:'2'},
-        { number: 'NA-2255', id:'3'},
-        { number: 'NA-6633', id:'4'},
-        { number: 'NA-7733', id:'5'},
-        { number: 'NA-8833', id:'6'},
-        { number: 'NA-9933', id:'7'},
-    ]);
+    const [buses, setBuses]= useState([]);
+
+    const [loading, setLoading] = useState(true);
+    const [busCount, setBusCount] = useState(true);
 
     const pressHandler = (id) => {
-        navigation.navigate('SeatSelectionScreen', { id: id });
-        console.log(id);
+        navigation.navigate('SelectDateScreen', { id: id });
+        // console.log(id);
     }
 
     const handleUpdate = async (values) => {
-        // setUpdateState({ updateLoader: true });
-        // const result = await userAPI.updatePassword(_.pick(values, ["oldpassword", "newpassword", "confirmpassword"]));
-        // setUpdateState({ updateLoader: false });
-        // if (!result.ok) {
-        //     if (result.data) {
-        //         setUpdateState({ updateError: result.data.error });
-        //     }
-        //     else {
-        //         setUpdateState({ updateError: "An unknown error occurred." });
-        //         console.log(result);
-        //     }
-        //     return;
-        // }
-        // if (result.ok){
-        //     Alert.alert(
-        //         'Password Change',
-        //         'You have successefully changed you password!',
-        //         [
-        //           { text: 'OK', onPress: () => navigation.navigate('Profile') }
-        //         ],
-        //         { cancelable: false }
-        //       );
-        // }
+        setLoading(false);
+        setUpdateState({ updateLoader: true });
+        console.log(_.pick(values, ["begining", "destination"]));
+        const result = await bookingAPI.findBus(_.pick(values, ["begining", "destination"]));
+        setUpdateState({ updateLoader: false });
+        if (!result.ok) {
+            if (result.data) {
+                setUpdateState({ updateError: result.data.error });
+            }
+            else {
+                setUpdateState({ updateError: "An unknown error occurred." });
+                console.log(result);
+            }
+            return;
+        }
+        if (result.ok){
+            if(result.data.length>0){
+                setBusCount(false);
+            }
+            if(result.data.length==0){
+                setBusCount(true);
+            }
+            setBuses(result.data);
+            // console.log(result.data.length);
+            // console.log(result.data);
+        }
     }
 
     return (
         <View style={styles.container}>
             <AppForm
-                initialValues={{ destinantion: "" }}
+                initialValues={{ begining:"", destination: "" }}
                 validationSchema={reviewSchema}
                 onSubmit={handleUpdate}
             >
                 <View style={{flexDirection:'row', justifyContent:'space-around'}}>
                 <View style={{flexDirection:'column', justifyContent:'center'}}>
                 <AppFormInput
-                    name=""
+                    name="begining"
                     autoCapitalize="none"
                     autoCorrect={false}
                     style={styles.input}
-                    label="Destination"
+                    label="Begining"
                     mode="outlined"
                 />
                 <AppFormInput
-                    name="destinantion"
+                    name="destination"
                     autoCapitalize="none"
                     autoCorrect={false}
                     style={styles.input}
@@ -95,17 +96,25 @@ const SelectRouteScreen = ({navigation}) => {
                 {updateState.updateError && <ErrorMessage error={updateState.updateError} />}
             </AppForm>
 
-            
-            <FlatList
-                keyExtractor={(item) => item.id}
-                data={buses}
-                renderItem={({item}) => (
-                <TouchableOpacity onPress={() => pressHandler(item.id)}>
-                    <Text style={styles.item}>{item.number}</Text>
-                </TouchableOpacity>
-                )}
-            />
-            
+            {loading ? 
+                <ActivityIndicator size="large" color="#0000ff" />
+            :
+                <View>
+                {busCount ?
+                    <View><Text style={styles.search}>No Buses Found!!!</Text></View>
+                :
+                    <FlatList
+                        keyExtractor={(item) => item._id}
+                        data={buses}
+                        renderItem={({item}) => (
+                        <TouchableOpacity onPress={() => pressHandler(item._id)}>
+                            <Text style={styles.item}>{item.busNo}{"\n"}{item.busRoute}  {item.startPoint}-{item.endPoint}</Text>
+                        </TouchableOpacity>
+                        )}
+                    />
+                }
+                </View>
+            }
         </View>
     )
 }
@@ -133,7 +142,13 @@ const styles = StyleSheet.create({
     item: {
         marginTop:24,
         padding:30,
-        backgroundColor:'blue',
+        backgroundColor: '#DA70D6',
         fontSize:18
-    }
+    },
+    search: {
+        marginTop:40,
+        textAlign:'center',
+        fontSize:24,
+        fontWeight:'bold'
+    },
 })
