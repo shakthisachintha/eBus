@@ -52,7 +52,7 @@ const WalletScreen = ({ navigation, route }) => {
 
     const editPaymentMethod = async (item) => {
         if (item.method == "Wallet") {
-            navigation.navigate("rechargeWallet", { title: "Recharge Credit Balance", item })
+            navigation.navigate("rechargeWallet", { title: "Recharge Credit Balance", item, payMethods })
         } else {
             navigation.navigate("editCard", { title: item.method, item })
         }
