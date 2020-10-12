@@ -1,4 +1,5 @@
 export default {
+    silver: "#C0C0C0",
     primary: "#a503fc",
     secondary: "#FD8947",
     danger: "#C4392D",

@@ -1,4 +1,5 @@
 export default {
+    HOME_IMAGE: require('../image/HomeScreen.png'),
     FACEBOOK_ICON: require('../image/facebook.png'),
     FORGOT_PASSWORD_BACKROUND: require('../image/forgot.png'),
     GOOGLE_ICON: require('../image/google.png'),
