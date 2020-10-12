@@ -16,7 +16,7 @@ const TripNavigator = () => (
             component={MyTripsScreen}
             options={{
                 headerShown: true,
-                title: 'My trips'
+                title: 'Past trip activities'
             }}
         />
 
