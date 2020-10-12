@@ -10,6 +10,6 @@ export default AppText = ({ children, style }) => {
 
 const styles = StyleSheet.create({
     text: {
-        fontSize: 16
+        fontSize: 16,
     }
 })

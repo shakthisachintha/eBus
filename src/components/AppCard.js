@@ -1,12 +1,12 @@
 import React from 'react'
-import { StyleSheet, TouchableHighlight, Text, View, Image } from 'react-native'
+import { StyleSheet, TouchableHighlight, Text, View, Image, TouchableWithoutFeedback } from 'react-native'
 
 import colors from '../utils/colors'
 
 
 const AppCard = ({ IconComponent, title, image, subTitle, style, titleStyle, onPress }) => {
     return (
-        <TouchableHighlight onPress={onPress} underlayColor={colors.mediumGray}>
+        <TouchableWithoutFeedback onPress={onPress} underlayColor={colors.mediumGray}>
             <View style={[styles.container, style]}>
                 {IconComponent}
                 {image != null && <Image source={{ uri: image }} style={styles.image} />}
@@ -15,7 +15,7 @@ const AppCard = ({ IconComponent, title, image, subTitle, style, titleStyle, onP
                     {subTitle && <Text style={styles.subTitle}>{subTitle}</Text>}
                 </View>
             </View>
-        </TouchableHighlight>
+        </TouchableWithoutFeedback>
     )
 }
 
