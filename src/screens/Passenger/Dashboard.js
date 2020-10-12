@@ -2,23 +2,22 @@ import React from 'react';
 import { View, StyleSheet, ImageBackground } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
-
-
 import SideLabelDrawer from '../../components/SideLabelDrawer';
 import colors from '../../utils/colors';
 import AppText from '../../components/AppText';
 import TripCard from '../../components/TripCard';
 import images from '../../utils/images';
 import TouchableIcon from '../../components/TouchableIcon';
+import useAuth from '../../auth/useAuth';
 
 export default Dashboard = ({ navigation }) => {
-
+    const { user } = useAuth();
     return (
 
         <ImageBackground source={images.HOME_IMAGE} style={styles.backgroundImage}>
             <View style={styles.headerTitleContainer}>
                 <AppText style={{ fontSize: 38, fontWeight: "bold" }}>Good Morning,</AppText>
-                <AppText style={{ fontSize: 30, fontWeight: "bold" }}>Shakthi</AppText>
+                <AppText style={{ fontSize: 30, fontWeight: "bold" }}>{user.name.split(" ")[0]}</AppText>
                 <AppText style={{ fontSize: 24, color: colors.white, opacity: 0.8, marginTop: 10 }}>Looking for a bus ride?</AppText>
                 {/* <AppText style={styles.title}>Recent Activities</AppText> */}
 

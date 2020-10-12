@@ -12,14 +12,14 @@ import tripAPI from '../../api/trip';
 const TripScreen = () => {
 
     const [isRefreshing, setIsRefreshing] = useState(false);
-    const { activeTrip } = useContext(tripAPI.ActiveTripContext);
+    const { activeTrip, setActiveTrip } = useContext(tripAPI.ActiveTripContext);
 
-    const getCurrentTrip = () => {
+    const getCurrentTrip = async () => {
         setIsRefreshing(true);
-        console.log(activeTrip);
-        setTimeout(() => {
-            setIsRefreshing(false);
-        }, 2000);
+        const result = await tripAPI.activeTrip();
+        if (!result.ok) return alert("Active trip fetching failed");
+        setActiveTrip(result.data);
+        return result.data;
     }
 
     useEffect(() => {

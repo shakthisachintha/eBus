@@ -67,7 +67,6 @@ const RechargeWalletScreen = ({ route, navigation }) => {
     const previousTransRender = (item) => {
         let type = 0;
         item.reason.code == "+wallet" ? type = 1 : type = 0;
-        console.log(type);
         return (
             <>
                 <View style={{ backgroundColor: colors.white, paddingHorizontal: 15, paddingVertical: 15 }}>
@@ -100,7 +99,7 @@ const RechargeWalletScreen = ({ route, navigation }) => {
 
                     <View>
                         <View style={styles.modalMargin}>
-                            <AppTextInput onChangeText={(value) => validateAmount(value)} placeholder="Amount to recharge minimum LKR 50" icon="coin" keyboardType="decimal-pad" append="LKR" backgroundColor={colors.white} />
+                            <AppTextInput onChangeText={(value) => validateAmount(value)} placeholder="Amount to recharge minimum LKR 50" icon="cash" keyboardType="decimal-pad" append="LKR" backgroundColor={colors.white} />
                         </View>
 
                         <AppText style={{ marginVertical: 5, fontSize: 20, color: colors.darkGray }}>Select payment method</AppText>

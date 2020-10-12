@@ -34,6 +34,7 @@ NFC.addListener(async (payload) => {
             const rec = r.data.split(" ");
             bus = rec[0];
             hash = rec[1];
+            // EventRegister.removeAllListeners();
             EventRegister.emit("tagScanned", bus);
           } else {
             ToastAndroid.show(
@@ -51,7 +52,7 @@ NFC.addListener(async (payload) => {
       );
       break;
   }
-});
+})
 
 const App = () => {
 
@@ -59,58 +60,80 @@ const App = () => {
   const [activeTrip, setActiveTrip] = useState(null);
   const [tripCreating, setTripCreating] = useState(false);
   const [tripCompleting, setTripCompleting] = useState(false);
+  const [mostRecentTrip, setMostRecentTrip] = useState(null);
 
   const restoreUser = async () => {
     const user = await authStorage.getUser();
     if (user) setUser(user);
   }
 
-  const createTrip = async (bus) => {
-    setTripCreating(true);
+  const handleTrip = async (bus) => {
     const granted = await Location.requestPermission({ android: { detail: "fine" } });
     if (!granted) return;
-    const { latitude, longitude } = await Location.getLatestLocation();
 
-    try {
-      const trip = await tripAPI.create({ bus, start: { lat: latitude, lng: longitude } });
-      if (!trip.ok) alert("Error occured");
-      setActiveTrip(trip.data);
-      // console.log(trip.data);
+    let at = await getActiveTrip();
+    setActiveTrip(at);
+    // If there is no any active trips we will create a new trip
+    if (at == null) {
+      setTripCompleting(false);
+      setTripCreating(true);
+      // const { latitude, longitude } = { latitude: 6.9026259, longitude: 79.8621308 }; //colombo campus bus station
+      const { latitude, longitude } = { latitude: 6.8790514, longitude: 79.8735455 }; //kirulapone bus halt
+      // const { latitude, longitude } = await Location.getLatestLocation();
+
+      console.log("creating trip")
+      const new_trip = await tripAPI.create({ bus, start: { lat: latitude, lng: longitude } });
+      if (!new_trip.ok) alert("Error occured when creating trip");
+      setActiveTrip(new_trip.data);
       ToastAndroid.show("New trip created.", ToastAndroid.SHORT);
-    } catch (error) {
-      alert("Error occured when creating trip");
+      bus = null;
     }
-    // console.log({ location: { latitude, longitude }, bus });
+
+    // If there is an active trip we end the active trip
+    if (at != null) {
+      setTripCreating(false);
+      setTripCompleting(true);
+
+      // const { latitude, longitude } = await Location.getLatestLocation();
+      const { latitude, longitude } = { latitude: 6.9026259, longitude: 79.8621308 }; //colombo campus bus station
+      // const { latitude, longitude } = { latitude: 6.8790514, longitude: 79.8735455 }; //kirulapone bus halt
+
+      const end_trip = await tripAPI.end({ tripID: at._id, location: { lat: latitude, lng: longitude } });
+      if (!end_trip.ok) return alert("Error occured while completing the trip");
+      setMostRecentTrip(end_trip.data);
+      setActiveTrip(null);
+      ToastAndroid.show("Trip Completed Successfully.", ToastAndroid.SHORT);
+      bus = null;
+    }
+
   }
 
-  const completeTrip = () => {
-    // bus = null;
-    setActiveTrip(null);
-    setTripCompleting(true);
+
+
+  const getActiveTrip = async () => {
+    const result = await tripAPI.activeTrip();
+    if (!result.ok) return alert("Active trip fetching failed");
+    setActiveTrip(result.data);
+    return result.data;
   }
 
   useEffect(() => {
-
     restoreUser();
+    getActiveTrip();
 
     if (bus != null) {
-      createTrip(bus);
+      handleTrip(bus);
     };
 
-    EventRegister.addEventListener("tagScanned", bus => {
-      console.log(activeTrip);
-      if (activeTrip == null) {
-        createTrip(bus);
-      } else {
-        completeTrip()
-      }
+    const x = EventRegister.addEventListener("tagScanned", bus => {
+      if (tripCreating || tripCompleting) return;
+      handleTrip(bus);
+      bus = null;
     });
-
     return () => {
-      EventRegister.removeAllListeners();
+      EventRegister.removeEventListener(x);
     }
-
-  }, [])
+  }, []);
 
 
   return (
