@@ -117,11 +117,6 @@ const LoginScreen = ({ navigation }) => {
             <Text style={{ fontSize: 16, alignSelf: "center", color: '#94076e', marginTop: 20 }}>Forgot Password?</Text>
           </TouchableOpacity>
 
-          <TouchableWithoutFeedback onPress={() => navigation.navigate('Dashboard')}>
-            <Text style={{ fontSize: 14, alignSelf: "center", color: '#94076e', marginTop: 20 }}>Dashbard</Text>
-          </TouchableWithoutFeedback>
-
-
         </View>
       </ImageBackground>
     </View>
