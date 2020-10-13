@@ -82,7 +82,7 @@ const TripSummary = ({ navigation, route }) => {
                         <AppText style={{ marginLeft: 10 }}>{trip.bus.conductor.telephone}</AppText>
                     </View>
                     <View>
-                        <TouchableIcon onPress={() => emergCall("077434534")} name="phone" iconColor="black" backgroundColor="red" size={50} />
+                        <TouchableIcon onPress={() => emergCall(trip.bus.conductor.telephone)} name="phone" iconColor="black" backgroundColor="red" size={50} />
                     </View>
                 </View>
                 <View style={{ paddingVertical: 10, backgroundColor: "white" }}>
