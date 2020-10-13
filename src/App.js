@@ -73,12 +73,14 @@ const App = () => {
 
     let at = await getActiveTrip();
     setActiveTrip(at);
+
     // If there is no any active trips we will create a new trip
     if (at == null) {
       setTripCompleting(false);
       setTripCreating(true);
-      // const { latitude, longitude } = { latitude: 6.9026259, longitude: 79.8621308 }; //colombo campus bus station
-      const { latitude, longitude } = { latitude: 6.8790514, longitude: 79.8735455 }; //kirulapone bus halt
+      const { latitude, longitude } = { latitude: 6.9026259, longitude: 79.8621308 }; //colombo campus bus station
+      // const { latitude, longitude } = { latitude: 6.8790514, longitude: 79.8735455 }; //kirulapone bus halt
+      // const { latitude, longitude } = { latitude: 6.8690311, longitude: 79.890053 }; //Nugegoda bus halt
       // const { latitude, longitude } = await Location.getLatestLocation();
 
       console.log("creating trip")
@@ -95,7 +97,8 @@ const App = () => {
       setTripCompleting(true);
 
       // const { latitude, longitude } = await Location.getLatestLocation();
-      const { latitude, longitude } = { latitude: 6.9026259, longitude: 79.8621308 }; //colombo campus bus station
+      // const { latitude, longitude } = { latitude: 6.9026259, longitude: 79.8621308 }; //colombo campus bus station
+      const { latitude, longitude } = { latitude: 6.8572709, longitude: 79.9088819 }; //Wijerama bus station
       // const { latitude, longitude } = { latitude: 6.8790514, longitude: 79.8735455 }; //kirulapone bus halt
 
       const end_trip = await tripAPI.end({ tripID: at._id, location: { lat: latitude, lng: longitude } });
@@ -108,11 +111,9 @@ const App = () => {
 
   }
 
-
-
   const getActiveTrip = async () => {
     const result = await tripAPI.activeTrip();
-    if (!result.ok) return alert("Active trip fetching failed");
+    if (!result.ok) return;
     setActiveTrip(result.data);
     return result.data;
   }

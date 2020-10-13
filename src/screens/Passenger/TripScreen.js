@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react'
-import { StyleSheet, Text, View, TouchableOpacity, ScrollView, ActivityIndicator, RefreshControl } from 'react-native'
+import { StyleSheet, Text, View, TouchableOpacity, ScrollView, ActivityIndicator, RefreshControl, TouchableNativeFeedback, Alert } from 'react-native'
 import LottieView from 'lottie-react-native';
 import moment from 'moment';
 import MapView, { Polyline, PROVIDER_GOOGLE, Marker } from 'react-native-maps';
@@ -8,6 +8,7 @@ import animations from '../../utils/animations';
 import AppIcon from '../../components/AppIcon'
 import colors from '../../utils/colors'
 import tripAPI from '../../api/trip';
+import AppText from '../../components/AppText';
 
 
 
@@ -25,6 +26,28 @@ const TripScreen = () => {
         return result.data;
     }
 
+    const cancelTrip = async () => {
+        const result = await tripAPI.cancel(activeTrip._id);
+        if (!result.ok) return alert("Fail to cancel trip");
+        setActiveTrip(null);
+        Alert.alert("Trip Cancelled", "We have cancelled the trip for you. You can create a new trip now.");
+    }
+
+    const handleCancel = () => {
+        Alert.alert("Cancel trip?", "Are you sure you want to cancel the trip?",
+            [
+                {
+                    text: "Yes",
+                    onPress: () => cancelTrip()
+                },
+                {
+                    text: "No",
+                    onPress: () => { return }
+                }
+            ]
+        )
+    }
+
     useEffect(() => {
         getCurrentTrip();
     }, [])
@@ -32,7 +55,7 @@ const TripScreen = () => {
     return (
 
         <ScrollView refreshControl={<RefreshControl colors={[colors.primary, colors.black, colors.success]} refreshing={isRefreshing} onRefresh={getCurrentTrip} progressViewOffset={70} />}>
-            {activeTrip ?
+            {activeTrip != null ?
                 <>
                     <LottieView style={{ width: "100%" }} source={animations.TRIP_ANIMATION} autoPlay loop />
 
@@ -40,9 +63,10 @@ const TripScreen = () => {
                         <AppText style={styles.mainText}>We are tracking your trip...</AppText>
                         <AppText style={styles.secondaryText}>Start Location : {activeTrip.start.place_name}</AppText>
                         <AppText style={styles.secondaryText}>Start Time : {moment(activeTrip.created_at).format('LT')}</AppText>
+                        <AppText style={{ color: "gray", fontSize: 16, marginTop: 5 }}>Reference ID : {activeTrip._id}</AppText>
                     </View>
 
-                    <MapView style={{ width: "100%", height: 210 }}
+                    <MapView liteMode={true} style={{ width: "100%", height: 210 }}
                         initialRegion={{
                             latitude: parseFloat(activeTrip.start.cordes.lat),
                             longitude: parseFloat(activeTrip.start.cordes.lng),
@@ -54,6 +78,12 @@ const TripScreen = () => {
                             title="Start"
                         />
                     </MapView>
+
+                    <TouchableNativeFeedback onPress={() => handleCancel()}>
+                        <View style={{ marginBottom: 50, marginVertical: 15, backgroundColor: "#eb0c31", padding: 15, justifyContent: "center", alignItems: "center" }}>
+                            <AppText style={{ color: colors.white, fontSize: 18, fontWeight: "bold", }}>Cancel Trip</AppText>
+                        </View>
+                    </TouchableNativeFeedback>
                 </>
                 :
                 <>

@@ -9,6 +9,7 @@ const end = (data) => client.post("/trip/end", data);
 const activeTrip = () => client.post("trip/active");
 const tripSummary = (tripID) => client.post("trip/summary", { trip: tripID });
 const recentTrips = () => client.get("trip/all-trips");
+const cancel = (tripID) => client.post("trip/delete", { tripID });
 
 export default {
     ActiveTripContext,
@@ -16,5 +17,6 @@ export default {
     end,
     activeTrip,
     tripSummary,
-    recentTrips
+    recentTrips,
+    cancel
 }

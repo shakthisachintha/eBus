@@ -88,6 +88,7 @@ const TripSummary = ({ navigation, route }) => {
                 <View style={{ paddingVertical: 10, backgroundColor: "white" }}>
                     <AppText style={{ fontSize: 18, fontWeight: "bold" }}>Bus License Number</AppText>
                     <AppText style={{ marginTop: 3, marginLeft: 10, fontSize: 18, color: colors.darkGray }}>{trip.bus.number}</AppText>
+                    <AppText style={{ marginTop: 3, marginLeft: 10, fontSize: 18, color: colors.darkGray }}>Reference ID : {trip._id}</AppText>
                 </View>
 
             </View>
