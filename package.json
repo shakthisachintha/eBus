@@ -22,7 +22,7 @@
     "jwt-decode": "^2.2.0",
     "lodash": "^4.17.15",
     "lottie-react-native": "^3.5.0",
-    "moment": "^2.29.1",
+    "moment": "^2.29.2",
     "native-base": "^2.13.12",
     "react": "16.11.0",
     "react-native": "0.62.2",
